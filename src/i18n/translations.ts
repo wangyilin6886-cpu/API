@@ -137,6 +137,9 @@ export const translations: Record<Lang, Dict> = {
     'profile.copy': '复制',
     'profile.copied': '已复制',
     'profile.recharge': '去充值',
+    'profile.dist': '模型用量占比',
+    'profile.estimate': '本月预计账单',
+    'profile.estimateNote': '按当前用量趋势预估',
 
     'recharge.title': '账户充值',
     'recharge.subtitle': '选择套餐或自定义金额',
@@ -145,6 +148,7 @@ export const translations: Record<Lang, Dict> = {
     'recharge.confirm': '确认支付',
     'recharge.bonus': '赠送',
     'recharge.total': '应付金额',
+    'recharge.tokens': '预计到账 Tokens',
 
     'login.title': '欢迎回来',
     'login.subtitle': '登录以管理你的 API 与账户',
@@ -161,6 +165,10 @@ export const translations: Record<Lang, Dict> = {
     'chat.model': '模型',
     'chat.welcome': '你好！我是 EcoAPI AI 助手，有什么可以帮你的吗？',
     'chat.demo': '（演示回复）这是一个前端演示界面，正式接入后将连接真实大模型 API。你刚才说：',
+    'chat.tryAsk': '试试这样问：',
+    'chat.preset1': '用 Python 写一个快速排序',
+    'chat.preset2': '帮我润色一段产品介绍文案',
+    'chat.preset3': '用通俗的话解释什么是 Transformer',
 
     'api.title': 'API 接入文档',
     'api.subtitle': '兼容 OpenAI 格式，三步快速接入',
@@ -343,6 +351,9 @@ export const translations: Record<Lang, Dict> = {
     'profile.copy': 'Copy',
     'profile.copied': 'Copied',
     'profile.recharge': 'Top Up',
+    'profile.dist': 'Model Usage Split',
+    'profile.estimate': 'Est. Monthly Bill',
+    'profile.estimateNote': 'Projected from current usage',
 
     'recharge.title': 'Top Up',
     'recharge.subtitle': 'Pick a plan or enter a custom amount',
@@ -351,6 +362,7 @@ export const translations: Record<Lang, Dict> = {
     'recharge.confirm': 'Confirm Payment',
     'recharge.bonus': 'Bonus',
     'recharge.total': 'Total Due',
+    'recharge.tokens': 'Est. Tokens Credited',
 
     'login.title': 'Welcome Back',
     'login.subtitle': 'Log in to manage your API and account',
@@ -367,6 +379,10 @@ export const translations: Record<Lang, Dict> = {
     'chat.model': 'Model',
     'chat.welcome': 'Hi! I’m the EcoAPI AI assistant. How can I help you?',
     'chat.demo': '(Demo reply) This is a frontend demo. Once connected it will reach a real LLM API. You said: ',
+    'chat.tryAsk': 'Try asking:',
+    'chat.preset1': 'Write a quicksort in Python',
+    'chat.preset2': 'Polish this product description for me',
+    'chat.preset3': 'Explain what a Transformer is in simple terms',
 
     'api.title': 'API Documentation',
     'api.subtitle': 'OpenAI-compatible, integrate in three steps',
@@ -549,6 +565,9 @@ export const translations: Record<Lang, Dict> = {
     'profile.copy': 'Salin',
     'profile.copied': 'Tersalin',
     'profile.recharge': 'Isi Saldo',
+    'profile.dist': 'Distribusi Pemakaian Model',
+    'profile.estimate': 'Estimasi Tagihan Bulan Ini',
+    'profile.estimateNote': 'Diproyeksikan dari pemakaian saat ini',
 
     'recharge.title': 'Isi Saldo',
     'recharge.subtitle': 'Pilih paket atau masukkan jumlah khusus',
@@ -557,6 +576,7 @@ export const translations: Record<Lang, Dict> = {
     'recharge.confirm': 'Konfirmasi Pembayaran',
     'recharge.bonus': 'Bonus',
     'recharge.total': 'Total Bayar',
+    'recharge.tokens': 'Estimasi Token Diterima',
 
     'login.title': 'Selamat Datang Kembali',
     'login.subtitle': 'Masuk untuk mengelola API dan akun Anda',
@@ -573,6 +593,10 @@ export const translations: Record<Lang, Dict> = {
     'chat.model': 'Model',
     'chat.welcome': 'Halo! Saya asisten AI EcoAPI. Ada yang bisa saya bantu?',
     'chat.demo': '(Balasan demo) Ini antarmuka demo frontend. Setelah terhubung akan memakai API LLM nyata. Anda berkata: ',
+    'chat.tryAsk': 'Coba tanyakan:',
+    'chat.preset1': 'Tulis quicksort dengan Python',
+    'chat.preset2': 'Bantu poles deskripsi produk ini',
+    'chat.preset3': 'Jelaskan apa itu Transformer secara sederhana',
 
     'api.title': 'Dokumentasi API',
     'api.subtitle': 'Kompatibel OpenAI, integrasi dalam tiga langkah',

@@ -17,8 +17,8 @@ export default function Chat() {
     bodyRef.current?.scrollTo({ top: bodyRef.current.scrollHeight, behavior: 'smooth' })
   }, [msgs])
 
-  const send = () => {
-    const text = input.trim()
+  const send = (raw?: string) => {
+    const text = (raw ?? input).trim()
     if (!text) return
     setMsgs((m) => [...m, { role: 'user', text }])
     setInput('')
@@ -44,6 +44,18 @@ export default function Chat() {
               <div className="msg-bubble">{m.text}</div>
             </motion.div>
           ))}
+          {msgs.length === 1 && (
+            <motion.div className="chat-presets" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+              <span className="chat-presets-label">{t('chat.tryAsk')}</span>
+              <div className="chat-presets-row">
+                {[1, 2, 3].map((p) => (
+                  <button key={p} className="chat-preset" onClick={() => send(t(`chat.preset${p}`))}>
+                    {t(`chat.preset${p}`)}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
         </div>
       </div>
 
@@ -56,7 +68,7 @@ export default function Chat() {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}
           />
-          <button className="chat-send" onClick={send} aria-label="send">
+          <button className="chat-send" onClick={() => send()} aria-label="send">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" /></svg>
           </button>
         </div>

@@ -141,3 +141,24 @@ input, textarea, select { font-family: inherit; }
   z-index: 0;
   pointer-events: none;
 }
+
+/* mouse-following 3D tilt + spotlight */
+.tilt3d {
+  height: 100%;
+  position: relative;
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transform-style: preserve-3d;
+  transition: transform 0.18s ease;
+}
+.tilt3d::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.4), transparent 42%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 3;
+}
+.tilt3d:hover::after { opacity: 1; }

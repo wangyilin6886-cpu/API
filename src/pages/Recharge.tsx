@@ -62,6 +62,7 @@ export default function Recharge() {
               <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 18 }}>{t('recharge.confirm')}</h3>
               <div className="summary-row"><span>{t('recharge.title')}</span><span>¥{base.toFixed(2)}</span></div>
               <div className="summary-row"><span>{t('recharge.bonus')}</span><span style={{ color: 'var(--teal)', fontWeight: 700 }}>+ ¥{bonus.toFixed(2)}</span></div>
+              <div className="summary-row"><span>{t('recharge.tokens')}</span><span style={{ fontWeight: 700 }}>≈ {((base + bonus) * 0.1).toFixed(1)}M</span></div>
               <div className="summary-total"><span>{t('recharge.total')}</span><strong className="gradient-text">¥{base.toFixed(2)}</strong></div>
               <button className="btn-grad" style={{ width: '100%', justifyContent: 'center' }}>{t('recharge.confirm')}</button>
             </div>

@@ -5,6 +5,7 @@ import { useI18n } from '../i18n/I18nContext'
 import Sphere3D from '../components/Sphere3D'
 import Reveal from '../components/Reveal'
 import CountUp from '../components/CountUp'
+import Tilt from '../components/Tilt'
 import { models, modelCats, partners, consumeRank, abilityRank, rankTotals, rootWall, testimonials } from '../data'
 import './Home.css'
 
@@ -77,7 +78,7 @@ export default function Home() {
         <div className="container why-grid">
           {[1, 2, 3, 4].map((n, i) => (
             <Reveal key={n} delay={i * 0.1} className="why-card-wrap">
-              <div className="why-card glass">
+              <Tilt className="why-card glass">
                 <span className="why-num">0{n}</span>
                 <div className="why-top">
                   <div className="why-icon">{whyIcons[i]}</div>
@@ -93,7 +94,7 @@ export default function Home() {
                   <li><CheckIcon />{t(`why.${n}.b2`)}</li>
                 </ul>
                 <div className="why-glow" />
-              </div>
+              </Tilt>
             </Reveal>
           ))}
         </div>
@@ -166,7 +167,7 @@ export default function Home() {
                 transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                 className="model-wrap"
               >
-                <div className="model-card glass tilt">
+                <Tilt className="model-card glass">
                   <div className="model-head">
                     <span className="model-dot" style={{ background: m.color }} />
                     <div>
@@ -181,7 +182,7 @@ export default function Home() {
                     <div><span>{t('models.out')}</span><strong>{m.cout}</strong></div>
                   </div>
                   <button className="model-call" onClick={() => nav('/chat')}>{t('models.call')} →</button>
-                </div>
+                </Tilt>
               </motion.div>
             ))}
           </AnimatePresence>
@@ -305,6 +306,9 @@ export default function Home() {
         </Reveal>
 
         <div className="container steps">
+          <div className="steps-track">
+            <motion.div className="steps-track-fill" initial={{ width: 0 }} whileInView={{ width: '100%' }} viewport={{ once: true }} transition={{ duration: 1.4, ease: 'easeOut' }} />
+          </div>
           {[1, 2, 3].map((s, i) => (
             <Reveal key={s} delay={i * 0.12} className="step-wrap">
               <div className="step glass">
@@ -312,7 +316,6 @@ export default function Home() {
                 <h3>{t(`root.step${s}.t`)}</h3>
                 <p>{t(`root.step${s}.d`)}</p>
               </div>
-              {i < 2 && <div className="step-line" />}
             </Reveal>
           ))}
         </div>
