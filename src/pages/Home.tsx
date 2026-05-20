@@ -40,9 +40,18 @@ export default function Home() {
               <span className="pulse-dot" /> {t('hero.tag')}
             </motion.span>
             <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }}>
-              {t('hero.title').split('，')[0]}
-              <br />
-              <span className="gradient-text">{t('hero.title').split('，')[1] || t('hero.title')}</span>
+              {(() => {
+                const title = t('hero.title')
+                const ci = title.search(/[，,]/)
+                const first = ci >= 0 ? title.slice(0, ci) : ''
+                const second = ci >= 0 ? title.slice(ci + 1).trim() : title
+                return (
+                  <>
+                    {first && <>{first}<br /></>}
+                    <span className="gradient-text">{second}</span>
+                  </>
+                )
+              })()}
             </motion.h1>
             <motion.p className="hero-sub" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }}>
               {t('hero.subtitle')}
