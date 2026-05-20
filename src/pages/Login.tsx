@@ -20,7 +20,7 @@ export default function Login() {
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       >
         <div className="logo" style={{ justifyContent: 'center', marginBottom: 18 }}>
-          <span className="logo-mark" /><span className="logo-text gradient-text">NexToken</span>
+          <span className="logo-mark" /><span className="logo-text gradient-text">EcoAPI</span>
         </div>
         <h1>{reg ? t('login.register') : t('login.title')}</h1>
         <p className="sub">{t('login.subtitle')}</p>

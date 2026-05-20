@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { useI18n } from '../i18n/I18nContext'
 import Sphere3D from '../components/Sphere3D'
 import Reveal from '../components/Reveal'
-import { models, partners, consumeRank, abilityRank } from '../data'
+import { models, partners, consumeRank, abilityRank, rankTotals } from '../data'
 import './Home.css'
 
 export default function Home() {
@@ -48,16 +48,30 @@ export default function Home() {
 
       {/* ===== 2. WHY US ===== */}
       <section className="section why" id="why">
+        <div className="blob" style={{ width: 420, height: 420, background: '#5dcaa5', top: -60, left: -100 }} />
+        <div className="blob" style={{ width: 380, height: 380, background: '#185fa5', bottom: -80, right: -60 }} />
         <Reveal><h2 className="section-title">{t('why.title')}</h2></Reveal>
-        <Reveal delay={0.1}><p className="section-subtitle">{t('why.subtitle')}</p></Reveal>
+        <Reveal delay={0.08}><p className="section-subtitle">{t('why.subtitle')}</p></Reveal>
+        <Reveal delay={0.14}><p className="why-fill">{t('why.fill')}</p></Reveal>
         <div className="container why-grid">
           {[1, 2, 3, 4].map((n, i) => (
             <Reveal key={n} delay={i * 0.1} className="why-card-wrap">
-              <div className="why-card glass tilt">
-                <div className="why-icon">{whyIcons[i]}</div>
+              <div className="why-card glass">
+                <span className="why-num">0{n}</span>
+                <div className="why-top">
+                  <div className="why-icon">{whyIcons[i]}</div>
+                  <div className="why-stat">
+                    <strong className="gradient-text">{t(`why.${n}.stat`)}</strong>
+                    <span>{t(`why.${n}.statLabel`)}</span>
+                  </div>
+                </div>
                 <h3>{t(`why.${n}.title`)}</h3>
                 <p>{t(`why.${n}.desc`)}</p>
-                <span className="why-num">0{n}</span>
+                <ul className="why-points">
+                  <li><CheckIcon />{t(`why.${n}.b1`)}</li>
+                  <li><CheckIcon />{t(`why.${n}.b2`)}</li>
+                </ul>
+                <div className="why-glow" />
               </div>
             </Reveal>
           ))}
@@ -124,61 +138,113 @@ export default function Home() {
 
       {/* ===== 5. PARTNERS ===== */}
       <section className="section partners" id="partners">
-        <div className="blob" style={{ width: 400, height: 400, background: '#185fa5', bottom: -60, left: -60 }} />
+        <div className="blob" style={{ width: 460, height: 460, background: '#185fa5', bottom: -80, left: -80 }} />
+        <div className="blob" style={{ width: 420, height: 420, background: '#5dcaa5', top: -40, right: -80 }} />
         <Reveal><h2 className="section-title">{t('partners.title')}</h2></Reveal>
         <Reveal delay={0.1}><p className="section-subtitle">{t('partners.subtitle')}</p></Reveal>
-        <div className="container partners-grid">
-          {partners.map((p, i) => (
-            <motion.div
-              key={p}
-              className="partner glass"
-              initial={{ opacity: 0, scale: 0.6 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: (i % 5) * 0.06 }}
-              whileHover={{ scale: 1.12, rotate: [0, -3, 3, 0] }}
-              style={{ animationDelay: `${i * 0.25}s` }}
-            >
-              <span className="partner-logo" style={{ background: i % 2 ? 'var(--grad)' : 'linear-gradient(120deg,#185fa5,#5dcaa5)' }}>
-                {p[0]}
-              </span>
-              <span className="partner-name">{p}</span>
-            </motion.div>
-          ))}
+        <div className="partners-orbit">
+          <div className="orbit-ring r1" />
+          <div className="orbit-ring r2" />
+          <div className="orbit-ring r3" />
+          <motion.div
+            className="orbit-center"
+            initial={{ opacity: 0, scale: 0.6 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <span className="orbit-count gradient-text">{t('partners.count')}</span>
+            <span className="orbit-eco">{t('partners.eco')}</span>
+          </motion.div>
+          {partners.map((p, i) => {
+            const inner = i < 6
+            const idx = inner ? i : i - 6
+            const total = inner ? 6 : 9
+            const radius = inner ? 27 : 44
+            const angle = (idx / total) * Math.PI * 2 - Math.PI / 2 + (inner ? 0 : 0.34)
+            const x = 50 + radius * Math.cos(angle)
+            const y = 50 + radius * Math.sin(angle) * 0.96
+            return (
+              <div
+                key={p}
+                className="orbit-slot"
+                style={{ left: `${x}%`, top: `${y}%`, ['--d' as string]: `${i * 0.16}s` }}
+              >
+                <div className="orbit-float" style={{ ['--d' as string]: `${i * 0.3}s` }}>
+                  <div className="orbit-chip glass">
+                    <span className="orbit-logo" style={{ background: i % 2 ? 'var(--grad)' : 'linear-gradient(120deg,#185fa5,#5dcaa5)' }}>{p[0]}</span>
+                    <span className="orbit-name">{p}</span>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
         </div>
       </section>
 
       {/* ===== 6. LEADERBOARD ===== */}
       <section className="section rank" id="rank">
+        <div className="blob" style={{ width: 440, height: 440, background: '#185fa5', top: -40, right: -100 }} />
         <Reveal><h2 className="section-title">{t('rank.title')}</h2></Reveal>
-        <Reveal delay={0.1}><p className="section-subtitle">{t('rank.subtitle')}</p></Reveal>
+        <Reveal delay={0.08}><p className="section-subtitle">{t('rank.subtitle')}</p></Reveal>
+        <Reveal delay={0.14}><p className="rank-intro">{t('rank.intro')}</p></Reveal>
+
+        <Reveal delay={0.18} className="rank-totals-wrap">
+          <div className="container rank-totals">
+            {rankTotals.map((s) => (
+              <div className="rank-total" key={s.key}>
+                <strong className="gradient-text">{s.value}</strong>
+                <span>{t(s.key)}</span>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+
         <div className="container rank-grid">
           <Reveal className="rank-col">
             <div className="rank-card glass">
-              <h3><FireIcon /> {t('rank.consume')}</h3>
+              <div className="rank-card-head">
+                <span className="rank-icon"><FireIcon /></span>
+                <h3>{t('rank.consume')}</h3>
+              </div>
               {consumeRank.map((r, i) => (
-                <div className="rank-row" key={r.name}>
+                <div className={`rank-row ${i < 3 ? 'top' : ''}`} key={r.name}>
                   <span className={`rank-pos p${i + 1}`}>{i + 1}</span>
-                  <span className="rank-name">{r.name}</span>
-                  <div className="rank-bar">
-                    <motion.div className="rank-fill" initial={{ width: 0 }} whileInView={{ width: `${r.value}%` }} viewport={{ once: true }} transition={{ duration: 1, delay: i * 0.1 }} />
+                  <div className="rank-meta">
+                    <span className="rank-name">{r.name}</span>
+                    <span className="rank-vendor">{r.vendor}</span>
                   </div>
-                  <span className="rank-val">{r.tokens}</span>
+                  <div className="rank-bar">
+                    <motion.div className="rank-fill" initial={{ width: 0 }} whileInView={{ width: `${r.value}%` }} viewport={{ once: true }} transition={{ duration: 1.1, delay: i * 0.1, ease: 'easeOut' }} />
+                  </div>
+                  <div className="rank-num">
+                    <span className="rank-val">{r.tokens}</span>
+                    <span className={`rank-trend ${r.up ? 'up' : 'down'}`}>{r.up ? '▲' : '▼'} {r.trend}</span>
+                  </div>
                 </div>
               ))}
             </div>
           </Reveal>
           <Reveal delay={0.15} className="rank-col">
             <div className="rank-card glass">
-              <h3><StarIcon /> {t('rank.ability')}</h3>
+              <div className="rank-card-head">
+                <span className="rank-icon"><StarIcon /></span>
+                <h3>{t('rank.ability')}</h3>
+              </div>
               {abilityRank.map((r, i) => (
-                <div className="rank-row" key={r.name}>
+                <div className={`rank-row ${i < 3 ? 'top' : ''}`} key={r.name}>
                   <span className={`rank-pos p${i + 1}`}>{i + 1}</span>
-                  <span className="rank-name">{r.name}</span>
-                  <div className="rank-bar">
-                    <motion.div className="rank-fill" initial={{ width: 0 }} whileInView={{ width: `${r.score}%` }} viewport={{ once: true }} transition={{ duration: 1, delay: i * 0.1 }} />
+                  <div className="rank-meta">
+                    <span className="rank-name">{r.name}</span>
+                    <span className="rank-vendor">{r.vendor}</span>
                   </div>
-                  <span className="rank-val">{r.score}</span>
+                  <div className="rank-bar">
+                    <motion.div className="rank-fill" initial={{ width: 0 }} whileInView={{ width: `${r.score}%` }} viewport={{ once: true }} transition={{ duration: 1.1, delay: i * 0.1, ease: 'easeOut' }} />
+                  </div>
+                  <div className="rank-num">
+                    <span className="rank-val">{r.score}</span>
+                    <span className={`rank-trend ${r.up ? 'up' : 'down'}`}>{r.up ? '▲' : '▼'} {r.trend}</span>
+                  </div>
                 </div>
               ))}
             </div>
@@ -227,7 +293,7 @@ export default function Home() {
           <div className="footer-brand">
             <div className="logo">
               <span className="logo-mark" />
-              <span className="logo-text gradient-text">NexToken</span>
+              <span className="logo-text gradient-text">EcoAPI</span>
             </div>
             <p>{t('hero.tag')}</p>
           </div>

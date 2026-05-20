@@ -40,7 +40,7 @@ export default function Navbar() {
     >
       <button className="logo" onClick={() => goHome()}>
         <span className="logo-mark" />
-        <span className="logo-text gradient-text">NexToken</span>
+        <span className="logo-text gradient-text">EcoAPI</span>
       </button>
 
       <div className={`nav-links ${menuOpen ? 'open' : ''}`}>

@@ -17,19 +17,25 @@ export const partners = [
 ]
 
 export const consumeRank = [
-  { name: 'GPT-4o', value: 100, tokens: '8.4B' },
-  { name: 'DeepSeek-V3', value: 86, tokens: '7.2B' },
-  { name: 'Claude Opus 4.7', value: 74, tokens: '6.2B' },
-  { name: 'Gemini 2.5 Pro', value: 61, tokens: '5.1B' },
-  { name: 'Qwen-Max', value: 48, tokens: '4.0B' },
-  { name: 'Llama 4 405B', value: 39, tokens: '3.3B' },
+  { name: 'GPT-4o', vendor: 'OpenAI', value: 100, tokens: '8.4B', trend: '+12%', up: true },
+  { name: 'DeepSeek-V3', vendor: 'DeepSeek', value: 86, tokens: '7.2B', trend: '+28%', up: true },
+  { name: 'Claude Opus 4.7', vendor: 'Anthropic', value: 74, tokens: '6.2B', trend: '+19%', up: true },
+  { name: 'Gemini 2.5 Pro', vendor: 'Google', value: 61, tokens: '5.1B', trend: '+7%', up: true },
+  { name: 'Qwen-Max', vendor: '阿里云', value: 48, tokens: '4.0B', trend: '-3%', up: false },
+  { name: 'Llama 4 405B', vendor: 'Meta', value: 39, tokens: '3.3B', trend: '+5%', up: true },
 ]
 
 export const abilityRank = [
-  { name: 'Claude Opus 4.7', score: 96.8 },
-  { name: 'GPT-4o', score: 95.2 },
-  { name: 'Gemini 2.5 Pro', score: 93.7 },
-  { name: 'Grok-3', score: 91.4 },
-  { name: 'DeepSeek-V3', score: 90.1 },
-  { name: 'Qwen-Max', score: 88.6 },
+  { name: 'Claude Opus 4.7', vendor: 'Anthropic', score: 96.8, trend: '+1.4', up: true },
+  { name: 'GPT-4o', vendor: 'OpenAI', score: 95.2, trend: '+0.8', up: true },
+  { name: 'Gemini 2.5 Pro', vendor: 'Google', score: 93.7, trend: '+2.1', up: true },
+  { name: 'Grok-3', vendor: 'xAI', score: 91.4, trend: '+3.0', up: true },
+  { name: 'DeepSeek-V3', vendor: 'DeepSeek', score: 90.1, trend: '+4.2', up: true },
+  { name: 'Qwen-Max', vendor: '阿里云', score: 88.6, trend: '-0.5', up: false },
+]
+
+export const rankTotals = [
+  { key: 'rank.totalTokens', value: '34.2B' },
+  { key: 'rank.totalCalls', value: '92.6M' },
+  { key: 'rank.modelsCount', value: '50+' },
 ]
