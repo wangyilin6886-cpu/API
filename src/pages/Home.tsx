@@ -5,7 +5,7 @@ import { useI18n } from '../i18n/I18nContext'
 import Reveal from '../components/Reveal'
 import CountUp from '../components/CountUp'
 import Tilt from '../components/Tilt'
-import { models, modelCats, partners, consumeRank, abilityRank, rankTotals, rootWall, testimonials } from '../data'
+import { models, modelCats, partners, consumeRank, abilityRank, rankTotals, rootWall, testimonials, scenarios, compareRows, comparePlans, compliance } from '../data'
 import './Home.css'
 
 const Sphere3D = lazy(() => import('../components/Sphere3D'))
@@ -15,10 +15,14 @@ export default function Home() {
   const nav = useNavigate()
   const [yearly, setYearly] = useState(false)
   const [cat, setCat] = useState<string>('all')
-  const [quote, setQuote] = useState(0)
+  const [online, setOnline] = useState(1287)
+  const [callsToday, setCallsToday] = useState(2384012)
 
   useEffect(() => {
-    const id = setInterval(() => setQuote((q) => (q + 1) % testimonials.length), 5000)
+    const id = setInterval(() => {
+      setOnline((o) => Math.max(900, o + Math.floor(Math.random() * 11) - 4))
+      setCallsToday((c) => c + Math.floor(Math.random() * 40) + 5)
+    }, 2200)
     return () => clearInterval(id)
   }, [])
 
@@ -60,6 +64,11 @@ export default function Home() {
               {['OpenAI', 'Anthropic', 'Google', 'DeepSeek', 'Qwen'].map((v) => (
                 <span className="hero-trust-logo" key={v}>{v}</span>
               ))}
+            </motion.div>
+            <motion.div className="hero-live" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.8 }}>
+              <span className="live-dot" /> <strong>{online.toLocaleString()}</strong> {t('live.online')}
+              <span className="live-sep">·</span>
+              <strong>{callsToday.toLocaleString()}</strong> {t('live.today')}
             </motion.div>
           </div>
           <motion.div className="hero-sphere" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.3 }}>
@@ -103,13 +112,65 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ===== SCENARIOS + CONSOLE PREVIEW ===== */}
+      <section className="section scen" id="scenarios">
+        <Reveal><span className="eyebrow">{t('preview.tag')}</span></Reveal>
+        <Reveal delay={0.06}><h2 className="section-title" style={{ marginTop: 18 }}>{t('preview.title')}</h2></Reveal>
+        <Reveal delay={0.1}><p className="section-subtitle">{t('preview.desc')}</p></Reveal>
+
+        <Reveal delay={0.14} className="preview-wrap">
+          <div className="console glass">
+            <div className="console-bar">
+              <span className="dot r" /><span className="dot y" /><span className="dot g" />
+              <span className="console-url">app.ecoapi.ai/dashboard</span>
+            </div>
+            <div className="console-body">
+              <div className="console-side">
+                <span className="console-logo"><span className="logo-mark" /></span>
+                <span className="cs-item active" /><span className="cs-item" /><span className="cs-item" /><span className="cs-item" />
+              </div>
+              <div className="console-main">
+                <div className="console-cards">
+                  <div className="cc"><span className="cc-label">{t('profile.balance')}</span><strong className="gradient-text">¥1,284</strong></div>
+                  <div className="cc"><span className="cc-label">{t('profile.used')}</span><strong>42.6M</strong></div>
+                  <div className="cc"><span className="cc-label">{t('profile.calls')}</span><strong>18,392</strong></div>
+                </div>
+                <div className="console-chart">
+                  <svg viewBox="0 0 400 120" preserveAspectRatio="none">
+                    <defs>
+                      <linearGradient id="cf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#5dcaa5" stopOpacity="0.5" /><stop offset="1" stopColor="#185fa5" stopOpacity="0.04" /></linearGradient>
+                    </defs>
+                    <path d="M0 90 L50 70 L100 80 L150 45 L200 58 L250 30 L300 48 L350 22 L400 38 L400 120 L0 120 Z" fill="url(#cf)" />
+                    <path d="M0 90 L50 70 L100 80 L150 45 L200 58 L250 30 L300 48 L350 22 L400 38" fill="none" stroke="#185fa5" strokeWidth="2.5" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.1}><h2 className="section-title" style={{ marginTop: 90 }}>{t('scen.title')}</h2></Reveal>
+        <Reveal delay={0.14}><p className="section-subtitle">{t('scen.subtitle')}</p></Reveal>
+        <div className="container scen-grid">
+          {scenarios.map((s, i) => (
+            <Reveal key={s.id} delay={(i % 3) * 0.08} className="scen-wrap">
+              <Tilt className="scen-card glass">
+                <span className="scen-icon" style={{ background: s.color }}>{scenIcons[i]}</span>
+                <h3>{t(`scen.${s.id}.t`)}</h3>
+                <p>{t(`scen.${s.id}.d`)}</p>
+              </Tilt>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
       {/* ===== 3. PRICING ===== */}
       <section className="section pricing" id="pricing">
         <div className="blob" style={{ width: 380, height: 380, background: '#5dcaa5', top: 40, right: -80 }} />
         <Reveal><h2 className="section-title">{t('pricing.title')}</h2></Reveal>
         <Reveal delay={0.1}><p className="section-subtitle">{t('pricing.subtitle')}</p></Reveal>
         <Reveal delay={0.14}>
-          <div className="bill-toggle" onClick={() => setYearly((y) => !y)} role="switch" aria-checked={yearly}>
+          <div className="bill-toggle" onClick={() => setYearly((y) => !y)} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setYearly((y) => !y) } }} role="switch" aria-checked={yearly} tabIndex={0}>
             <span className={!yearly ? 'active' : ''}>{t('pricing.monthly')}</span>
             <span className={`bill-knob ${yearly ? 'on' : ''}`} />
             <span className={yearly ? 'active' : ''}>{t('pricing.yearly')}</span>
@@ -143,6 +204,28 @@ export default function Home() {
             )
           })}
         </div>
+
+        <Reveal delay={0.1} className="compare-wrap">
+          <h3 className="compare-title">{t('compare.title')}</h3>
+          <div className="compare-table glass">
+            <div className="compare-row compare-head">
+              <span />
+              {comparePlans.map((p) => <span key={p} className="compare-plan">{t(`pricing.${p}.name`)}</span>)}
+            </div>
+            {compareRows.map((row) => (
+              <div className="compare-row" key={row.key}>
+                <span className="compare-feat">{t(row.key)}</span>
+                {row.vals.map((v, i) => (
+                  <span className="compare-cell" key={i}>
+                    {typeof v === 'boolean'
+                      ? (v ? <CheckIcon /> : <span className="compare-x">—</span>)
+                      : (typeof v === 'string' && v.startsWith('compare.') ? t(v) : v)}
+                  </span>
+                ))}
+              </div>
+            ))}
+          </div>
+        </Reveal>
       </section>
 
       {/* ===== 4. MODELS ===== */}
@@ -237,26 +320,30 @@ export default function Home() {
           })}
         </div>
 
-        <Reveal delay={0.2} className="testi-wrap">
-          <div className="testi glass">
-            <span className="testi-mark">“</span>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={quote}
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -14 }}
-                transition={{ duration: 0.45 }}
-              >
-                <p className="testi-quote">{t(`partners.q${quote + 1}`)}</p>
-                <p className="testi-author">{t(`partners.a${quote + 1}`)}</p>
-              </motion.div>
-            </AnimatePresence>
-            <div className="testi-dots">
-              {testimonials.map((_, i) => (
-                <button key={i} className={i === quote ? 'on' : ''} onClick={() => setQuote(i)} aria-label={`quote ${i + 1}`} />
-              ))}
-            </div>
+        <div className="container testi-grid">
+          {testimonials.map((tm, i) => (
+            <Reveal key={tm.company} delay={i * 0.1} className="testi-wrap">
+              <div className="testi-card glass">
+                <span className="testi-mark">“</span>
+                <p className="testi-quote">{t(tm.q)}</p>
+                <div className="testi-foot">
+                  <span className="testi-avatar" style={{ background: tm.color }}>{tm.company[0]}</span>
+                  <div>
+                    <span className="testi-author">{t(tm.a)}</span>
+                    <span className="testi-company">{tm.company}</span>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        <Reveal delay={0.1} className="compliance-wrap">
+          <span className="compliance-title">{t('compliance.title')}</span>
+          <div className="compliance-row">
+            {compliance.map((c) => (
+              <span className="compliance-badge" key={c}><ShieldIcon /> {c}</span>
+            ))}
           </div>
         </Reveal>
       </section>
@@ -349,6 +436,15 @@ export default function Home() {
               <span className="logo-text gradient-text">EcoAPI</span>
             </div>
             <p>{t('footer.tagline')}</p>
+            <div className="footer-res">
+              <h4 className="footer-res-title">{t('footer.resources')}</h4>
+              <a onClick={() => nav('/api')}>{t('footer.docs')}</a>
+              <a href="#" onClick={(e) => e.preventDefault()}>{t('footer.blog')}</a>
+              <a href="#" onClick={(e) => e.preventDefault()}>{t('footer.changelog')}</a>
+              <a href="#" onClick={(e) => e.preventDefault()} className="footer-status">
+                <span className="status-dot" /> {t('footer.status')} · {t('footer.operational')}
+              </a>
+            </div>
           </div>
 
           <div className="footer-offices">
@@ -386,6 +482,19 @@ const whyIcons = [
   <svg key={2} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /></svg>,
   <svg key={3} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z" /><path d="M9 12l2 2 4-4" /></svg>,
 ]
+
+const scenIcons = [
+  <svg key={0} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4L3 21l1.1-3.6A8.4 8.4 0 1 1 21 11.5z" /></svg>,
+  <svg key={1} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 4h16v12H7l-3 4z" /><path d="M8 9h8M8 12h5" /></svg>,
+  <svg key={2} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M8 9l-4 3 4 3M16 9l4 3-4 3M13 6l-2 12" /></svg>,
+  <svg key={3} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" /></svg>,
+  <svg key={4} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 5h12M9 3v2M5 5c0 6 3 9 7 11M11 11c-1 3-3 5-6 6M14 21l4-9 4 9M16 18h4" /></svg>,
+  <svg key={5} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="9" y="2" width="6" height="12" rx="3" /><path d="M5 11a7 7 0 0 0 14 0M12 18v3" /></svg>,
+]
+
+function ShieldIcon() {
+  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="15" height="15"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z" /><path d="M9 12l2 2 4-4" /></svg>
+}
 
 interface RankItem { name: string; vendor: string; bar: number; val: string; trend: string; up: boolean }
 

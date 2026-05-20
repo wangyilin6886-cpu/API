@@ -19,7 +19,34 @@ export const rootWall = [
   { to: 12, prefix: '', suffix: 'K+', key: 'root.wall4' },
 ]
 
-export const testimonials = [1, 2, 3]
+export const scenarios = [
+  { id: 'chat', color: '#5dcaa5' },
+  { id: 'content', color: '#185fa5' },
+  { id: 'code', color: '#7c5cff' },
+  { id: 'data', color: '#10a37f' },
+  { id: 'translate', color: '#f5a623' },
+  { id: 'voice', color: '#d9534f' },
+]
+
+// values: boolean | literal string (numbers) | i18n key starting with 'compare.'
+export const compareRows: { key: string; vals: (boolean | string)[] }[] = [
+  { key: 'compare.r1', vals: [false, true, true, true] },
+  { key: 'compare.r2', vals: [false, true, true, true] },
+  { key: 'compare.r3', vals: [false, false, true, true] },
+  { key: 'compare.r4', vals: [false, false, false, true] },
+  { key: 'compare.r5', vals: [false, false, false, true] },
+  { key: 'compare.r6', vals: ['1', '5', 'compare.unlimited', 'compare.unlimited'] },
+  { key: 'compare.r7', vals: ['5', '50', '500', 'compare.unlimited'] },
+]
+export const comparePlans = ['free', 'std', 'pro', 'ent']
+
+export const testimonials = [
+  { q: 'partners.q1', a: 'partners.a1', company: 'NovaCloud', color: 'linear-gradient(135deg,#5dcaa5,#1aa179)' },
+  { q: 'partners.q2', a: 'partners.a2', company: 'NeuralPay', color: 'linear-gradient(135deg,#185fa5,#5dcaa5)' },
+  { q: 'partners.q3', a: 'partners.a3', company: 'VertexLabs', color: 'linear-gradient(135deg,#7c5cff,#185fa5)' },
+]
+
+export const compliance = ['SOC 2', 'ISO 27001', 'GDPR', 'TLS 1.3', '99.99% SLA']
 
 export const partners = [
   'NovaCloud', 'QuantumByte', 'DataForge', 'NeuralPay', 'StellarAI',

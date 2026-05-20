@@ -16,6 +16,18 @@
 .stat-card .value { font-size: 32px; font-weight: 800; margin-top: 8px; }
 .stat-card .sub { font-size: 13px; color: var(--teal); margin-top: 6px; font-weight: 600; }
 .profile-cols { display: grid; grid-template-columns: 1.3fr 1fr; gap: 20px; }
+.tab-bar { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+.tab-btn { padding: 11px 22px; border-radius: 12px; font-size: 14.5px; font-weight: 600; color: var(--ink-soft); border: 1.5px solid transparent; transition: all 0.22s; }
+.tab-btn:hover { color: var(--blue); background: var(--grad-soft); }
+.tab-btn.active { background: var(--grad); color: #fff; box-shadow: 0 12px 26px -12px rgba(24,95,165,0.55); }
+.setting-row { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; border-top: 1px solid var(--border); font-size: 15px; font-weight: 500; }
+.switch { position: relative; display: inline-block; width: 46px; height: 26px; flex-shrink: 0; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.switch-track { position: absolute; inset: 0; border-radius: 999px; background: var(--bg-alt); border: 1px solid var(--border); transition: background 0.25s; cursor: pointer; }
+.switch-track::after { content: ''; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: transform 0.25s; }
+.switch input:checked + .switch-track { background: var(--grad); border-color: transparent; }
+.switch input:checked + .switch-track::after { transform: translateX(20px); }
+.switch input:focus-visible + .switch-track { outline: 3px solid var(--teal); outline-offset: 2px; }
 .panel { padding: 28px; margin-bottom: 20px; }
 .panel-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 .panel-head h3 { font-size: 18px; font-weight: 700; }
