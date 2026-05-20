@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useI18n } from '../i18n/I18nContext'
@@ -14,12 +14,22 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const loc = useLocation()
   const nav = useNavigate()
+  const langRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30)
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  useEffect(() => {
+    if (!langOpen) return
+    const onClick = (e: MouseEvent) => {
+      if (langRef.current && !langRef.current.contains(e.target as Node)) setLangOpen(false)
+    }
+    document.addEventListener('mousedown', onClick)
+    return () => document.removeEventListener('mousedown', onClick)
+  }, [langOpen])
 
   const goHome = (hash?: string) => {
     setMenuOpen(false)
@@ -50,7 +60,7 @@ export default function Navbar() {
         <Link to="/profile" onClick={() => setMenuOpen(false)}>{t('nav.profile')}</Link>
         <Link to="/recharge" onClick={() => setMenuOpen(false)}>{t('nav.recharge')}</Link>
 
-        <div className="lang-wrap" onMouseLeave={() => setLangOpen(false)}>
+        <div className="lang-wrap" ref={langRef}>
           <button className="lang-btn" onClick={() => setLangOpen((o) => !o)}>
             <GlobeIcon /> {LANGS.find((l) => l.code === lang)?.label}
           </button>

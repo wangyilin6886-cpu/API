@@ -410,10 +410,17 @@ export default function Home() {
           </div>
           {[1, 2, 3].map((s, i) => (
             <Reveal key={s} delay={i * 0.12} className="step-wrap">
-              <div className="step glass">
+              <div
+                className="step glass clickable"
+                onClick={() => nav(stepRoutes[i])}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); nav(stepRoutes[i]) } }}
+                role="link"
+                tabIndex={0}
+              >
                 <span className="step-num gradient-text">0{s}</span>
                 <h3>{t(`root.step${s}.t`)}</h3>
                 <p>{t(`root.step${s}.d`)}</p>
+                <span className="step-go">{t('hero.getApi') && '→'}</span>
               </div>
             </Reveal>
           ))}
@@ -477,6 +484,8 @@ export default function Home() {
     </main>
   )
 }
+
+const stepRoutes = ['/login', '/api', '/chat']
 
 const plans = [
   { id: 'free', price: '0', popular: false },
