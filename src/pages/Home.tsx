@@ -1,17 +1,26 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useI18n } from '../i18n/I18nContext'
 import Sphere3D from '../components/Sphere3D'
 import Reveal from '../components/Reveal'
 import CountUp from '../components/CountUp'
-import { models, partners, consumeRank, abilityRank, rankTotals } from '../data'
+import { models, modelCats, partners, consumeRank, abilityRank, rankTotals, rootWall, testimonials } from '../data'
 import './Home.css'
 
 export default function Home() {
   const { t } = useI18n()
   const nav = useNavigate()
   const [yearly, setYearly] = useState(false)
+  const [cat, setCat] = useState<string>('all')
+  const [quote, setQuote] = useState(0)
+
+  useEffect(() => {
+    const id = setInterval(() => setQuote((q) => (q + 1) % testimonials.length), 5000)
+    return () => clearInterval(id)
+  }, [])
+
+  const shownModels = models.filter((m) => cat === 'all' || m.cats.includes(cat))
 
   return (
     <main className="home">
@@ -36,10 +45,19 @@ export default function Home() {
               <button className="btn-grad" onClick={() => nav('/api')}>{t('hero.getApi')} →</button>
               <button className="btn-ghost" onClick={() => nav('/chat')}>{t('hero.tryNow')}</button>
             </motion.div>
+            <motion.p className="hero-note" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.7, delay: 0.4 }}>
+              <CheckIcon /> {t('hero.note')}
+            </motion.p>
             <motion.div className="hero-stats" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.5 }}>
               <div><strong className="gradient-text"><CountUp to={50} suffix="+" /></strong><span>{t('hero.stat1')}</span></div>
               <div><strong className="gradient-text"><CountUp to={200} suffix="ms" /></strong><span>{t('hero.stat2')}</span></div>
               <div><strong className="gradient-text"><CountUp to={99.99} decimals={2} suffix="%" /></strong><span>{t('hero.stat3')}</span></div>
+            </motion.div>
+            <motion.div className="hero-trust" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.65 }}>
+              <span className="hero-trust-label">{t('hero.trustedBy')}</span>
+              {['OpenAI', 'Anthropic', 'Google', 'DeepSeek', 'Qwen'].map((v) => (
+                <span className="hero-trust-logo" key={v}>{v}</span>
+              ))}
             </motion.div>
           </div>
           <motion.div className="hero-sphere" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.3 }}>
@@ -127,28 +145,47 @@ export default function Home() {
       <section className="section models" id="models">
         <Reveal><h2 className="section-title">{t('models.title')}</h2></Reveal>
         <Reveal delay={0.1}><p className="section-subtitle">{t('models.subtitle')}</p></Reveal>
-        <div className="container models-grid">
-          {models.map((m, i) => (
-            <Reveal key={m.name} delay={(i % 3) * 0.08} className="model-wrap">
-              <div className="model-card glass tilt">
-                <div className="model-head">
-                  <span className="model-dot" style={{ background: m.color }} />
-                  <div>
-                    <h3>{m.name}</h3>
-                    <span className="model-vendor">{m.vendor}</span>
+        <Reveal delay={0.14}>
+          <div className="model-filters">
+            {modelCats.map((c) => (
+              <button key={c} className={`model-filter ${cat === c ? 'active' : ''}`} onClick={() => setCat(c)}>
+                {t(`models.cat.${c}`)}
+              </button>
+            ))}
+          </div>
+        </Reveal>
+        <motion.div layout className="container models-grid">
+          <AnimatePresence mode="popLayout">
+            {shownModels.map((m) => (
+              <motion.div
+                key={m.name}
+                layout
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                className="model-wrap"
+              >
+                <div className="model-card glass tilt">
+                  <div className="model-head">
+                    <span className="model-dot" style={{ background: m.color }} />
+                    <div>
+                      <h3>{m.name}</h3>
+                      <span className="model-vendor">{m.vendor}</span>
+                    </div>
+                    <span className="model-tag">{m.tag}</span>
                   </div>
-                  <span className="model-tag">{m.tag}</span>
+                  <div className="model-stats">
+                    <div><span>{t('models.ctx')}</span><strong>{m.ctx}</strong></div>
+                    <div><span>{t('models.in')}</span><strong>{m.cin}</strong></div>
+                    <div><span>{t('models.out')}</span><strong>{m.cout}</strong></div>
+                  </div>
+                  <button className="model-call" onClick={() => nav('/chat')}>{t('models.call')} →</button>
                 </div>
-                <div className="model-stats">
-                  <div><span>{t('models.ctx')}</span><strong>{m.ctx}</strong></div>
-                  <div><span>{t('models.in')}</span><strong>{m.cin}</strong></div>
-                  <div><span>{t('models.out')}</span><strong>{m.cout}</strong></div>
-                </div>
-                <button className="model-call" onClick={() => nav('/chat')}>{t('models.call')} →</button>
-              </div>
-            </Reveal>
-          ))}
-        </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
       </section>
 
       {/* ===== 5. PARTNERS ===== */}
@@ -195,6 +232,29 @@ export default function Home() {
             )
           })}
         </div>
+
+        <Reveal delay={0.2} className="testi-wrap">
+          <div className="testi glass">
+            <span className="testi-mark">“</span>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={quote}
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -14 }}
+                transition={{ duration: 0.45 }}
+              >
+                <p className="testi-quote">{t(`partners.q${quote + 1}`)}</p>
+                <p className="testi-author">{t(`partners.a${quote + 1}`)}</p>
+              </motion.div>
+            </AnimatePresence>
+            <div className="testi-dots">
+              {testimonials.map((_, i) => (
+                <button key={i} className={i === quote ? 'on' : ''} onClick={() => setQuote(i)} aria-label={`quote ${i + 1}`} />
+              ))}
+            </div>
+          </div>
+        </Reveal>
       </section>
 
       {/* ===== 6. LEADERBOARD ===== */}
@@ -232,6 +292,17 @@ export default function Home() {
       <section className="section root" id="root">
         <Reveal><h2 className="section-title">{t('root.title')}</h2></Reveal>
         <Reveal delay={0.1}><p className="section-subtitle">{t('root.subtitle')}</p></Reveal>
+
+        <Reveal delay={0.14} className="data-wall-wrap">
+          <div className="container data-wall glass">
+            {rootWall.map((w) => (
+              <div className="data-cell" key={w.key}>
+                <strong className="gradient-text"><CountUp to={w.to} prefix={w.prefix} suffix={w.suffix} /></strong>
+                <span>{t(w.key)}</span>
+              </div>
+            ))}
+          </div>
+        </Reveal>
 
         <div className="container steps">
           {[1, 2, 3].map((s, i) => (

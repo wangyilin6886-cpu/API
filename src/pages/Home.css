@@ -22,6 +22,12 @@
 .hero-stats div { display: flex; flex-direction: column; }
 .hero-stats strong { font-size: 30px; font-weight: 800; }
 .hero-stats span { font-size: 13px; color: var(--ink-soft); margin-top: 2px; }
+.hero-note { display: flex; align-items: center; gap: 8px; margin-top: -22px; margin-bottom: 26px; font-size: 13.5px; color: var(--ink-soft); font-weight: 500; }
+.hero-note svg { color: var(--teal); }
+.hero-trust { display: flex; align-items: center; gap: 16px; margin-top: 30px; flex-wrap: wrap; }
+.hero-trust-label { font-size: 12px; font-weight: 700; letter-spacing: 1px; color: var(--ink-soft); text-transform: uppercase; }
+.hero-trust-logo { font-size: 14px; font-weight: 700; color: var(--ink); opacity: 0.55; transition: opacity 0.25s, color 0.25s; }
+.hero-trust-logo:hover { opacity: 1; color: var(--blue); }
 .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 0 0 rgba(93,202,165,0.6); animation: pulse 2s infinite; }
 @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(93,202,165,0.5); } 70% { box-shadow: 0 0 0 9px rgba(93,202,165,0); } 100% { box-shadow: 0 0 0 0 rgba(93,202,165,0); } }
 
@@ -132,6 +138,13 @@
 .plan.popular .btn-grad { background: #fff; color: var(--blue); }
 
 /* ===== MODELS ===== */
+.model-filters { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin: -34px auto 42px; z-index: 2; position: relative; }
+.model-filter {
+  padding: 9px 20px; border-radius: 999px; font-size: 14px; font-weight: 600; color: var(--ink-soft);
+  border: 1.5px solid var(--border); background: var(--card); backdrop-filter: blur(8px); transition: all 0.22s;
+}
+.model-filter:hover { border-color: var(--teal); color: var(--blue); transform: translateY(-2px); }
+.model-filter.active { background: var(--grad); color: #fff; border-color: transparent; box-shadow: 0 12px 26px -10px rgba(24,95,165,0.55); }
 .models-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; z-index: 2; }
 .model-card { padding: 24px; transition: transform 0.35s, box-shadow 0.35s; }
 .model-card:hover { transform: translateY(-8px); box-shadow: 0 28px 56px -22px rgba(24,95,165,0.4); }
@@ -216,6 +229,16 @@
   box-shadow: 0 8px 20px -8px rgba(24,95,165,0.5);
 }
 .orbit-name { font-size: 14px; font-weight: 700; color: var(--ink); }
+
+/* ===== TESTIMONIALS ===== */
+.testi-wrap { width: 100%; z-index: 3; margin-top: 24px; }
+.testi { max-width: 680px; margin: 0 auto; padding: 38px 44px 30px; text-align: center; position: relative; }
+.testi-mark { position: absolute; top: 6px; left: 28px; font-size: 80px; line-height: 1; color: rgba(24,95,165,0.12); font-family: Georgia, serif; }
+.testi-quote { font-size: clamp(16px, 2vw, 19px); font-weight: 600; line-height: 1.6; color: var(--ink); min-height: 60px; }
+.testi-author { margin-top: 16px; font-size: 14px; color: var(--ink-soft); font-weight: 600; }
+.testi-dots { display: flex; gap: 8px; justify-content: center; margin-top: 22px; }
+.testi-dots button { width: 8px; height: 8px; border-radius: 999px; background: var(--border); transition: all 0.25s; }
+.testi-dots button.on { width: 24px; background: var(--grad); }
 
 /* ===== RANK ===== */
 .rank-intro { text-align: center; max-width: 760px; margin: -32px auto 36px; color: var(--ink-soft); font-size: clamp(14px, 1.5vw, 16.5px); line-height: 1.7; z-index: 2; position: relative; }
@@ -304,6 +327,16 @@
 
 /* ===== ROOT / STEPS / FAQ / FOOTER ===== */
 .root { background: linear-gradient(180deg, transparent, rgba(24,95,165,0.04)); }
+.data-wall-wrap { width: 100%; z-index: 2; }
+.data-wall { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 30px 24px; margin-bottom: 60px; }
+.data-cell { text-align: center; position: relative; }
+.data-cell:not(:last-child)::after { content: ''; position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: 1px; height: 50%; background: var(--border); }
+.data-cell strong { display: block; font-size: clamp(28px, 3.5vw, 40px); font-weight: 850; letter-spacing: -1px; }
+.data-cell span { font-size: 13.5px; color: var(--ink-soft); margin-top: 6px; display: block; }
+@media (max-width: 680px) {
+  .data-wall { grid-template-columns: 1fr 1fr; gap: 24px 10px; }
+  .data-cell:nth-child(2)::after { display: none; }
+}
 .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-bottom: 70px; position: relative; z-index: 2; }
 .step-wrap { position: relative; }
 .step { padding: 32px 26px; height: 100%; transition: transform 0.35s; }
