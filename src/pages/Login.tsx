@@ -2,12 +2,28 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useI18n } from '../i18n/I18nContext'
+import { useToast } from '../components/Toast'
 import './pages.css'
 
 export default function Login() {
   const { t } = useI18n()
   const nav = useNavigate()
+  const toast = useToast()
   const [reg, setReg] = useState(false)
+  const [email, setEmail] = useState('')
+  const [pwd, setPwd] = useState('')
+  const [errs, setErrs] = useState<{ email?: string; pwd?: string }>({})
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault()
+    const next: { email?: string; pwd?: string } = {}
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) next.email = t('login.errEmail')
+    if (pwd.length < 6) next.pwd = t('login.errPwd')
+    setErrs(next)
+    if (Object.keys(next).length) return
+    toast(t('login.success'), 'success')
+    setTimeout(() => nav('/profile'), 700)
+  }
 
   return (
     <div className="auth">
@@ -25,14 +41,16 @@ export default function Login() {
         <h1>{reg ? t('login.register') : t('login.title')}</h1>
         <p className="sub">{t('login.subtitle')}</p>
 
-        <form onSubmit={(e) => { e.preventDefault(); nav('/profile') }}>
+        <form onSubmit={submit} noValidate>
           <div className="field">
             <label>{t('login.email')}</label>
-            <input type="email" placeholder="you@example.com" required />
+            <input className={errs.email ? 'invalid' : ''} type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+            {errs.email && <span className="field-err">{errs.email}</span>}
           </div>
           <div className="field">
             <label>{t('login.password')}</label>
-            <input type="password" placeholder="••••••••" required />
+            <input className={errs.pwd ? 'invalid' : ''} type="password" placeholder="••••••••" value={pwd} onChange={(e) => setPwd(e.target.value)} />
+            {errs.pwd && <span className="field-err">{errs.pwd}</span>}
           </div>
           <button className="btn-grad" type="submit">{reg ? t('login.register') : t('login.submit')} →</button>
         </form>

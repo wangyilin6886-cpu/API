@@ -1,24 +1,32 @@
+import { lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
-import Profile from './pages/Profile'
-import Recharge from './pages/Recharge'
-import Login from './pages/Login'
-import Chat from './pages/Chat'
-import ApiDocs from './pages/ApiDocs'
+
+const Profile = lazy(() => import('./pages/Profile'))
+const Recharge = lazy(() => import('./pages/Recharge'))
+const Login = lazy(() => import('./pages/Login'))
+const Chat = lazy(() => import('./pages/Chat'))
+const ApiDocs = lazy(() => import('./pages/ApiDocs'))
+
+function PageLoader() {
+  return <div className="route-loader"><span className="route-spinner" /></div>
+}
 
 export default function App() {
   return (
     <>
       <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/recharge" element={<Recharge />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/chat" element={<Chat />} />
-        <Route path="/api" element={<ApiDocs />} />
-      </Routes>
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/recharge" element={<Recharge />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/chat" element={<Chat />} />
+          <Route path="/api" element={<ApiDocs />} />
+        </Routes>
+      </Suspense>
     </>
   )
 }

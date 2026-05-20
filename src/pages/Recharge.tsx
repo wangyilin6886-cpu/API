@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useI18n } from '../i18n/I18nContext'
+import { useToast } from '../components/Toast'
 import Reveal from '../components/Reveal'
 import './pages.css'
 
@@ -14,12 +15,18 @@ const amounts = [
 
 export default function Recharge() {
   const { t } = useI18n()
+  const toast = useToast()
   const [sel, setSel] = useState(2)
   const [custom, setCustom] = useState('')
   const [method, setMethod] = useState('alipay')
 
   const base = custom ? Number(custom) || 0 : amounts[sel].v
   const bonus = custom ? Math.floor(Number(custom) * 0.1) || 0 : amounts[sel].bonus
+
+  const pay = () => {
+    if (!base || base <= 0) { toast(t('recharge.errAmount'), 'error'); return }
+    toast(t('recharge.success'), 'success')
+  }
 
   return (
     <div className="page">
@@ -64,7 +71,7 @@ export default function Recharge() {
               <div className="summary-row"><span>{t('recharge.bonus')}</span><span style={{ color: 'var(--teal)', fontWeight: 700 }}>+ ¥{bonus.toFixed(2)}</span></div>
               <div className="summary-row"><span>{t('recharge.tokens')}</span><span style={{ fontWeight: 700 }}>≈ {((base + bonus) * 0.1).toFixed(1)}M</span></div>
               <div className="summary-total"><span>{t('recharge.total')}</span><strong className="gradient-text">¥{base.toFixed(2)}</strong></div>
-              <button className="btn-grad" style={{ width: '100%', justifyContent: 'center' }}>{t('recharge.confirm')}</button>
+              <button className="btn-grad" style={{ width: '100%', justifyContent: 'center' }} onClick={pay}>{t('recharge.confirm')}</button>
             </div>
           </Reveal>
         </div>

@@ -6,5 +6,14 @@ export default defineConfig({
   server: {
     host: true,
     port: 5173,
+    proxy: {
+      // dev-only proxy to dodge browser CORS when calling DeepSeek
+      '/deepseek': {
+        target: 'https://api.deepseek.com',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (p) => p.replace(/^\/deepseek/, ''),
+      },
+    },
   },
 })

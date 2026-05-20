@@ -1,13 +1,14 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useI18n } from '../i18n/I18nContext'
-import Sphere3D from '../components/Sphere3D'
 import Reveal from '../components/Reveal'
 import CountUp from '../components/CountUp'
 import Tilt from '../components/Tilt'
 import { models, modelCats, partners, consumeRank, abilityRank, rankTotals, rootWall, testimonials } from '../data'
 import './Home.css'
+
+const Sphere3D = lazy(() => import('../components/Sphere3D'))
 
 export default function Home() {
   const { t } = useI18n()
@@ -62,7 +63,9 @@ export default function Home() {
             </motion.div>
           </div>
           <motion.div className="hero-sphere" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.3 }}>
-            <Sphere3D />
+            <Suspense fallback={<div className="sphere-fallback" />}>
+              <Sphere3D />
+            </Suspense>
             <div className="sphere-glow" />
           </motion.div>
         </div>
