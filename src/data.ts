@@ -35,7 +35,7 @@ export const abilityRank = [
 ]
 
 export const rankTotals = [
-  { key: 'rank.totalTokens', value: '34.2B' },
-  { key: 'rank.totalCalls', value: '92.6M' },
-  { key: 'rank.modelsCount', value: '50+' },
+  { key: 'rank.totalTokens', to: 34.2, decimals: 1, suffix: 'B' },
+  { key: 'rank.totalCalls', to: 92.6, decimals: 1, suffix: 'M' },
+  { key: 'rank.modelsCount', to: 50, decimals: 0, suffix: '+' },
 ]

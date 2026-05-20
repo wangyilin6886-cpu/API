@@ -1,14 +1,17 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useI18n } from '../i18n/I18nContext'
 import Sphere3D from '../components/Sphere3D'
 import Reveal from '../components/Reveal'
+import CountUp from '../components/CountUp'
 import { models, partners, consumeRank, abilityRank, rankTotals } from '../data'
 import './Home.css'
 
 export default function Home() {
   const { t } = useI18n()
   const nav = useNavigate()
+  const [yearly, setYearly] = useState(false)
 
   return (
     <main className="home">
@@ -34,9 +37,9 @@ export default function Home() {
               <button className="btn-ghost" onClick={() => nav('/chat')}>{t('hero.tryNow')}</button>
             </motion.div>
             <motion.div className="hero-stats" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.5 }}>
-              <div><strong className="gradient-text">50+</strong><span>{t('hero.stat1')}</span></div>
-              <div><strong className="gradient-text">200ms</strong><span>{t('hero.stat2')}</span></div>
-              <div><strong className="gradient-text">99.99%</strong><span>{t('hero.stat3')}</span></div>
+              <div><strong className="gradient-text"><CountUp to={50} suffix="+" /></strong><span>{t('hero.stat1')}</span></div>
+              <div><strong className="gradient-text"><CountUp to={200} suffix="ms" /></strong><span>{t('hero.stat2')}</span></div>
+              <div><strong className="gradient-text"><CountUp to={99.99} decimals={2} suffix="%" /></strong><span>{t('hero.stat3')}</span></div>
             </motion.div>
           </div>
           <motion.div className="hero-sphere" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.3 }}>
@@ -83,8 +86,19 @@ export default function Home() {
         <div className="blob" style={{ width: 380, height: 380, background: '#5dcaa5', top: 40, right: -80 }} />
         <Reveal><h2 className="section-title">{t('pricing.title')}</h2></Reveal>
         <Reveal delay={0.1}><p className="section-subtitle">{t('pricing.subtitle')}</p></Reveal>
+        <Reveal delay={0.14}>
+          <div className="bill-toggle" onClick={() => setYearly((y) => !y)} role="switch" aria-checked={yearly}>
+            <span className={!yearly ? 'active' : ''}>{t('pricing.monthly')}</span>
+            <span className={`bill-knob ${yearly ? 'on' : ''}`} />
+            <span className={yearly ? 'active' : ''}>{t('pricing.yearly')}</span>
+            <em className="bill-save">{t('pricing.save')}</em>
+          </div>
+        </Reveal>
         <div className="container pricing-grid">
-          {plans.map((p, i) => (
+          {plans.map((p, i) => {
+            const base = Number(p.price)
+            const shown = yearly ? Math.round(base * 0.8) : base
+            return (
             <Reveal key={p.id} delay={i * 0.08} className="plan-wrap">
               <div className={`plan glass ${p.popular ? 'popular' : ''}`}>
                 {p.popular && <span className="plan-badge">{t('pricing.popular')}</span>}
@@ -92,7 +106,7 @@ export default function Home() {
                 <div className="plan-price">
                   {p.id === 'ent'
                     ? <span className="contact">{t('pricing.ent.price')}</span>
-                    : <><span className="cur">¥</span><strong>{p.price}</strong><span className="unit">{t('pricing.unit')}</span></>}
+                    : <><span className="cur">¥</span><strong>{shown}</strong><span className="unit">{t('pricing.unit')}</span></>}
                 </div>
                 <ul>
                   {[1, 2, 3, 4].map((f) => (
@@ -104,7 +118,8 @@ export default function Home() {
                 </button>
               </div>
             </Reveal>
-          ))}
+            )
+          })}
         </div>
       </section>
 
@@ -183,8 +198,9 @@ export default function Home() {
       </section>
 
       {/* ===== 6. LEADERBOARD ===== */}
-      <section className="section rank" id="rank">
-        <div className="blob" style={{ width: 440, height: 440, background: '#185fa5', top: -40, right: -100 }} />
+      <section className="section rank dark" id="rank">
+        <div className="blob" style={{ width: 440, height: 440, background: '#185fa5', top: -40, right: -100, opacity: 0.5 }} />
+        <div className="blob" style={{ width: 380, height: 380, background: '#5dcaa5', bottom: -80, left: -80, opacity: 0.35 }} />
         <Reveal><h2 className="section-title">{t('rank.title')}</h2></Reveal>
         <Reveal delay={0.08}><p className="section-subtitle">{t('rank.subtitle')}</p></Reveal>
         <Reveal delay={0.14}><p className="rank-intro">{t('rank.intro')}</p></Reveal>
@@ -193,7 +209,7 @@ export default function Home() {
           <div className="container rank-totals">
             {rankTotals.map((s) => (
               <div className="rank-total" key={s.key}>
-                <strong className="gradient-text">{s.value}</strong>
+                <strong className="gradient-text"><CountUp to={s.to} decimals={s.decimals} suffix={s.suffix} /></strong>
                 <span>{t(s.key)}</span>
               </div>
             ))}
@@ -202,52 +218,12 @@ export default function Home() {
 
         <div className="container rank-grid">
           <Reveal className="rank-col">
-            <div className="rank-card glass">
-              <div className="rank-card-head">
-                <span className="rank-icon"><FireIcon /></span>
-                <h3>{t('rank.consume')}</h3>
-              </div>
-              {consumeRank.map((r, i) => (
-                <div className={`rank-row ${i < 3 ? 'top' : ''}`} key={r.name}>
-                  <span className={`rank-pos p${i + 1}`}>{i + 1}</span>
-                  <div className="rank-meta">
-                    <span className="rank-name">{r.name}</span>
-                    <span className="rank-vendor">{r.vendor}</span>
-                  </div>
-                  <div className="rank-bar">
-                    <motion.div className="rank-fill" initial={{ width: 0 }} whileInView={{ width: `${r.value}%` }} viewport={{ once: true }} transition={{ duration: 1.1, delay: i * 0.1, ease: 'easeOut' }} />
-                  </div>
-                  <div className="rank-num">
-                    <span className="rank-val">{r.tokens}</span>
-                    <span className={`rank-trend ${r.up ? 'up' : 'down'}`}>{r.up ? '▲' : '▼'} {r.trend}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <RankCard t={t} icon={<FireIcon />} title={t('rank.consume')}
+              items={consumeRank.map((r) => ({ name: r.name, vendor: r.vendor, bar: r.value, val: r.tokens, trend: r.trend, up: r.up }))} />
           </Reveal>
           <Reveal delay={0.15} className="rank-col">
-            <div className="rank-card glass">
-              <div className="rank-card-head">
-                <span className="rank-icon"><StarIcon /></span>
-                <h3>{t('rank.ability')}</h3>
-              </div>
-              {abilityRank.map((r, i) => (
-                <div className={`rank-row ${i < 3 ? 'top' : ''}`} key={r.name}>
-                  <span className={`rank-pos p${i + 1}`}>{i + 1}</span>
-                  <div className="rank-meta">
-                    <span className="rank-name">{r.name}</span>
-                    <span className="rank-vendor">{r.vendor}</span>
-                  </div>
-                  <div className="rank-bar">
-                    <motion.div className="rank-fill" initial={{ width: 0 }} whileInView={{ width: `${r.score}%` }} viewport={{ once: true }} transition={{ duration: 1.1, delay: i * 0.1, ease: 'easeOut' }} />
-                  </div>
-                  <div className="rank-num">
-                    <span className="rank-val">{r.score}</span>
-                    <span className={`rank-trend ${r.up ? 'up' : 'down'}`}>{r.up ? '▲' : '▼'} {r.trend}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <RankCard t={t} icon={<StarIcon />} title={t('rank.ability')}
+              items={abilityRank.map((r) => ({ name: r.name, vendor: r.vendor, bar: r.score, val: String(r.score), trend: r.trend, up: r.up }))} />
           </Reveal>
         </div>
       </section>
@@ -334,6 +310,58 @@ const whyIcons = [
   <svg key={3} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z" /><path d="M9 12l2 2 4-4" /></svg>,
 ]
 
+interface RankItem { name: string; vendor: string; bar: number; val: string; trend: string; up: boolean }
+
+function RankCard({ t, icon, title, items }: { t: (k: string) => string; icon: JSX.Element; title: string; items: RankItem[] }) {
+  const [champ, ...rest] = items
+  return (
+    <div className="rank-card glass">
+      <div className="rank-card-head">
+        <span className="rank-icon">{icon}</span>
+        <h3>{title}</h3>
+      </div>
+
+      <div className="champion">
+        <span className="champ-crown"><CrownIcon /></span>
+        <span className="champ-tag">{t('rank.champion')}</span>
+        <div className="champ-body">
+          <div className="champ-meta">
+            <span className="champ-name">{champ.name}</span>
+            <span className="champ-vendor">{champ.vendor}</span>
+          </div>
+          <div className="champ-num">
+            <span className="champ-val">{champ.val}</span>
+            <span className={`rank-trend ${champ.up ? 'up' : 'down'}`}>{champ.up ? '▲' : '▼'} {champ.trend}</span>
+          </div>
+        </div>
+        <div className="rank-bar champ-bar">
+          <motion.div className="rank-fill" initial={{ width: 0 }} whileInView={{ width: `${champ.bar}%` }} viewport={{ once: true }} transition={{ duration: 1.2, ease: 'easeOut' }} />
+        </div>
+      </div>
+
+      {rest.map((r, i) => (
+        <div className="rank-row" key={r.name}>
+          <span className={`rank-pos p${i + 2}`}>{i + 2}</span>
+          <div className="rank-meta">
+            <span className="rank-name">{r.name}</span>
+            <span className="rank-vendor">{r.vendor}</span>
+          </div>
+          <div className="rank-bar">
+            <motion.div className="rank-fill" initial={{ width: 0 }} whileInView={{ width: `${r.bar}%` }} viewport={{ once: true }} transition={{ duration: 1.1, delay: i * 0.1, ease: 'easeOut' }} />
+          </div>
+          <div className="rank-num">
+            <span className="rank-val">{r.val}</span>
+            <span className={`rank-trend ${r.up ? 'up' : 'down'}`}>{r.up ? '▲' : '▼'} {r.trend}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function CrownIcon() {
+  return <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M3 18h18l-1.5-9-4.5 4-3.5-6-3.5 6-4.5-4L3 18z" /></svg>
+}
 function CheckIcon() {
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="16" height="16"><path d="M5 12l4 4L19 6" /></svg>
 }
