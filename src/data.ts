@@ -49,9 +49,9 @@ export const testimonials = [
 export const compliance = ['SOC 2', 'ISO 27001', 'GDPR', 'TLS 1.3', '99.99% SLA']
 
 export const partners = [
-  'NovaCloud', 'QuantumByte', 'DataForge', 'NeuralPay', 'StellarAI',
-  'CodeNimbus', 'PixelWave', 'SynthCore', 'VertexLabs', 'OrbitDev',
-  'Flux Systems', 'ByteHarbor', 'AetherStack', 'LumenWorks', 'ZenithAI',
+  'Google Cloud', '阿里云', '华为 HUAWEI', '拓邦 Topband', '碧桂园',
+  '华润置地', '怪兽充电', '荔枝 LIZHI', '芯天下 XTX', '聚焦网络',
+  '小黑鱼', '未知君 XBIOME', '广州酒家', '泉峰 CHERVON', 'FTL Cloud',
 ]
 
 export const consumeRank = [
