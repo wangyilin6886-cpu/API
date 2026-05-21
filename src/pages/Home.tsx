@@ -6,6 +6,7 @@ import Reveal from '../components/Reveal'
 import CountUp from '../components/CountUp'
 import Tilt from '../components/Tilt'
 import LogoMark from '../components/LogoMark'
+import ContactModal from '../components/ContactModal'
 import { models, modelCats, partners, consumeRank, abilityRank, rankTotals, rootWall, testimonials, scenarios, compareRows, comparePlans, compliance } from '../data'
 import './Home.css'
 
@@ -16,6 +17,7 @@ export default function Home() {
   const nav = useNavigate()
   const [yearly, setYearly] = useState(false)
   const [cat, setCat] = useState<string>('all')
+  const [contactOpen, setContactOpen] = useState(false)
   const [online, setOnline] = useState(1287)
   const [callsToday, setCallsToday] = useState(2384012)
 
@@ -206,8 +208,8 @@ export default function Home() {
                     <li key={f}><CheckIcon />{t(`pricing.${p.id}.f${f}`)}</li>
                   ))}
                 </ul>
-                <button className={p.popular ? 'btn-grad' : 'btn-ghost'} onClick={() => nav('/recharge')}>
-                  {t('pricing.buy')}
+                <button className={p.popular ? 'btn-grad' : 'btn-ghost'} onClick={() => p.id === 'ent' ? setContactOpen(true) : nav('/recharge')}>
+                  {p.id === 'ent' ? t('pricing.contactBtn') : t('pricing.buy')}
                 </button>
               </div>
             </Reveal>
@@ -496,6 +498,8 @@ export default function Home() {
         </div>
         <div className="sf-copyright">{t('footer.copyright')}</div>
       </footer>
+
+      <ContactModal open={contactOpen} onClose={() => setContactOpen(false)} />
     </main>
   )
 }
