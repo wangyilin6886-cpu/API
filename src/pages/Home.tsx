@@ -315,14 +315,14 @@ export default function Home() {
             const y = 50 + radius * Math.sin(angle) * 0.96
             return (
               <div
-                key={p}
+                key={p.name}
                 className="orbit-slot"
                 style={{ left: `${x}%`, top: `${y}%`, ['--d' as string]: `${i * 0.16}s` }}
               >
                 <div className="orbit-float" style={{ ['--d' as string]: `${i * 0.3}s` }}>
                   <div className="orbit-chip glass">
-                    <span className="orbit-logo" style={{ background: i % 2 ? 'var(--grad)' : 'linear-gradient(120deg,#185fa5,#5dcaa5)' }}>{p[0]}</span>
-                    <span className="orbit-name">{p}</span>
+                    <PartnerLogo name={p.name} logo={p.logo} alt={i} />
+                    <span className="orbit-name">{p.name}</span>
                   </div>
                 </div>
               </div>
@@ -524,6 +524,16 @@ const scenIcons = [
   <svg key={4} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 5h12M9 3v2M5 5c0 6 3 9 7 11M11 11c-1 3-3 5-6 6M14 21l4-9 4 9M16 18h4" /></svg>,
   <svg key={5} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="9" y="2" width="6" height="12" rx="3" /><path d="M5 11a7 7 0 0 0 14 0M12 18v3" /></svg>,
 ]
+
+function PartnerLogo({ name, logo, alt }: { name: string; logo: string; alt: number }) {
+  const [err, setErr] = useState(false)
+  if (logo && !err) {
+    return <img className="orbit-logo-img" src={logo} alt={name} loading="lazy" onError={() => setErr(true)} />
+  }
+  return (
+    <span className="orbit-logo" style={{ background: alt % 2 ? 'var(--grad)' : 'linear-gradient(120deg,#185fa5,#5dcaa5)' }}>{name[0]}</span>
+  )
+}
 
 function ShieldIcon() {
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="15" height="15"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z" /><path d="M9 12l2 2 4-4" /></svg>
