@@ -508,3 +508,31 @@
   .compare-row { grid-template-columns: 1.4fr repeat(4, 1fr); font-size: 12px; padding: 12px 2px; }
   .compare-plan, .compare-feat, .compare-cell { font-size: 11.5px; }
 }
+
+/* ===== BLACK SITE FOOTER (image style) ===== */
+.site-footer { background: #050608; color: #c7d2dd; padding: 80px 6vw 0; }
+.site-footer .container { max-width: 1200px; margin: 0 auto; }
+.sf-top { display: grid; grid-template-columns: 1.4fr 2.2fr; gap: 50px; padding-bottom: 50px; }
+.sf-brand .logo { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; }
+.sf-brand .logo-text { font-size: 26px; font-weight: 800; }
+.sf-brand p { font-size: 14.5px; line-height: 1.7; color: #8b97a4; max-width: 320px; }
+.sf-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+.sf-col h4 { font-size: 13px; font-weight: 800; letter-spacing: 1.5px; color: #fff; margin-bottom: 18px; position: relative; padding-bottom: 12px; }
+.sf-col h4::after { content: ''; position: absolute; left: 0; bottom: 0; width: 38px; height: 2px; background: var(--grad); border-radius: 2px; }
+.sf-col a { display: block; font-size: 14px; color: #95a2af; margin-bottom: 14px; cursor: pointer; transition: color 0.2s; width: fit-content; }
+.sf-col a:hover { color: var(--teal); }
+.sf-offices { padding: 44px 0 50px; border-top: 1px solid rgba(255,255,255,0.08); }
+.sf-office-title { font-size: 13px; font-weight: 800; letter-spacing: 1.5px; color: #fff; margin-bottom: 26px; position: relative; padding-bottom: 12px; display: inline-block; }
+.sf-office-title::after { content: ''; position: absolute; left: 0; bottom: 0; width: 38px; height: 2px; background: var(--grad); border-radius: 2px; }
+.site-footer .offices-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+.site-footer .office-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.site-footer .office-cc { font-size: 11px; font-weight: 800; color: #fff; background: var(--grad); padding: 3px 8px; border-radius: 7px; }
+.site-footer .office-head strong { font-size: 15px; font-weight: 700; color: #fff; }
+.site-footer .office p { font-size: 13.5px; color: #8b97a4; line-height: 1.65; }
+.sf-copyright { text-align: center; padding: 26px 6vw; font-size: 13.5px; color: #6b7682; border-top: 1px solid rgba(255,255,255,0.08); margin: 0 -6vw; }
+
+@media (max-width: 860px) {
+  .sf-top { grid-template-columns: 1fr; gap: 36px; }
+  .sf-cols { grid-template-columns: 1fr 1fr; }
+  .site-footer .offices-grid { grid-template-columns: 1fr; gap: 26px; }
+}

@@ -1,8 +1,8 @@
 :root {
   --teal: #5dcaa5;
   --blue: #185fa5;
-  --grad: linear-gradient(120deg, #5dcaa5 0%, #185fa5 100%);
-  --grad-soft: linear-gradient(120deg, rgba(93, 202, 165, 0.14) 0%, rgba(24, 95, 165, 0.14) 100%);
+  --grad: linear-gradient(120deg, #185fa5 0%, #5dcaa5 100%);
+  --grad-soft: linear-gradient(120deg, rgba(24, 95, 165, 0.14) 0%, rgba(93, 202, 165, 0.14) 100%);
   --bg: #f5f7f9;
   --bg-alt: #eef2f5;
   --ink: #0f2540;
@@ -22,7 +22,7 @@
   --card: rgba(22, 33, 50, 0.72);
   --border: rgba(255, 255, 255, 0.10);
   --shadow: 0 18px 50px -20px rgba(0, 0, 0, 0.6);
-  --grad-soft: linear-gradient(120deg, rgba(93, 202, 165, 0.16) 0%, rgba(24, 95, 165, 0.16) 100%);
+  --grad-soft: linear-gradient(120deg, rgba(24, 95, 165, 0.16) 0%, rgba(93, 202, 165, 0.16) 100%);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }

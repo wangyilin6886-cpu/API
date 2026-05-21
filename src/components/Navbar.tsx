@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useI18n } from '../i18n/I18nContext'
 import { useTheme } from '../theme/ThemeContext'
+import LogoMark from './LogoMark'
 import { LANGS, Lang } from '../i18n/translations'
 import './Navbar.css'
 
@@ -51,7 +52,7 @@ export default function Navbar() {
       transition={{ duration: 0.6, ease: 'easeOut' }}
     >
       <button className="logo" onClick={() => goHome()}>
-        <span className="logo-mark" />
+        <LogoMark />
         <span className="logo-text gradient-text">EcoAPI</span>
       </button>
 

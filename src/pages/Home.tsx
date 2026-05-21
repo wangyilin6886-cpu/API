@@ -5,6 +5,7 @@ import { useI18n } from '../i18n/I18nContext'
 import Reveal from '../components/Reveal'
 import CountUp from '../components/CountUp'
 import Tilt from '../components/Tilt'
+import LogoMark from '../components/LogoMark'
 import { models, modelCats, partners, consumeRank, abilityRank, rankTotals, rootWall, testimonials, scenarios, compareRows, comparePlans, compliance } from '../data'
 import './Home.css'
 
@@ -135,7 +136,7 @@ export default function Home() {
             </div>
             <div className="console-body">
               <div className="console-side">
-                <span className="console-logo"><span className="logo-mark" /></span>
+                <span className="console-logo"><LogoMark /></span>
                 <span className="cs-item active" /><span className="cs-item" /><span className="cs-item" /><span className="cs-item" />
               </div>
               <div className="console-main">
@@ -358,7 +359,7 @@ export default function Home() {
       </section>
 
       {/* ===== 6. LEADERBOARD ===== */}
-      <section className="section rank dark" id="rank">
+      <section className="section rank" id="rank">
         <div className="blob" style={{ width: 440, height: 440, background: '#185fa5', top: -40, right: -100, opacity: 0.5 }} />
         <div className="blob" style={{ width: 380, height: 380, background: '#5dcaa5', bottom: -80, left: -80, opacity: 0.35 }} />
         <Reveal><h2 className="section-title">{t('rank.title')}</h2></Reveal>
@@ -445,26 +446,40 @@ export default function Home() {
           </div>
         </Reveal>
 
-        <footer className="footer container">
-          <div className="footer-brand">
-            <div className="logo">
-              <span className="logo-mark" />
-              <span className="logo-text gradient-text">EcoAPI</span>
+      </section>
+
+      {/* ===== BLACK FOOTER ===== */}
+      <footer className="site-footer">
+        <div className="container">
+          <div className="sf-top">
+            <div className="sf-brand">
+              <div className="logo"><LogoMark /><span className="logo-text gradient-text">EcoAPI</span></div>
+              <p>{t('footer.tagline')}</p>
             </div>
-            <p>{t('footer.tagline')}</p>
-            <div className="footer-res">
-              <h4 className="footer-res-title">{t('footer.resources')}</h4>
-              <a onClick={() => nav('/api')}>{t('footer.docs')}</a>
-              <a href="#" onClick={(e) => e.preventDefault()}>{t('footer.blog')}</a>
-              <a href="#" onClick={(e) => e.preventDefault()}>{t('footer.changelog')}</a>
-              <a href="#" onClick={(e) => e.preventDefault()} className="footer-status">
-                <span className="status-dot" /> {t('footer.status')} · {t('footer.operational')}
-              </a>
+            <div className="sf-cols">
+              <div className="sf-col">
+                <h4>{t('foot.infra')}</h4>
+                {['foot.infra1', 'foot.infra2', 'foot.infra3', 'foot.infra4', 'foot.infra5'].map((k) => (
+                  <a key={k} href="#" onClick={(e) => e.preventDefault()}>{t(k)}</a>
+                ))}
+              </div>
+              <div className="sf-col">
+                <h4>{t('foot.agent')}</h4>
+                {['foot.agent1', 'foot.agent2', 'foot.agent3', 'foot.agent4'].map((k) => (
+                  <a key={k} href="#" onClick={(e) => e.preventDefault()}>{t(k)}</a>
+                ))}
+              </div>
+              <div className="sf-col">
+                <h4>{t('foot.token')}</h4>
+                {['DeepSeek', 'Qwen', 'GLM', 'OpenAI', 'Anthropic'].map((m) => (
+                  <a key={m} onClick={() => nav('/api')}>{m}</a>
+                ))}
+              </div>
             </div>
           </div>
 
-          <div className="footer-offices">
-            <h4 className="footer-offices-title">{t('footer.offices')}</h4>
+          <div className="sf-offices">
+            <h4 className="sf-office-title">{t('footer.offices')}</h4>
             <div className="offices-grid">
               {[
                 { cc: 'SG', name: t('footer.sg'), addr: '4 Fourth Avenue, #06-10, Singapore 268672' },
@@ -478,9 +493,9 @@ export default function Home() {
               ))}
             </div>
           </div>
-        </footer>
-        <div className="copyright">{t('footer.copyright')}</div>
-      </section>
+        </div>
+        <div className="sf-copyright">{t('footer.copyright')}</div>
+      </footer>
     </main>
   )
 }

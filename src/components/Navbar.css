@@ -23,19 +23,10 @@
 
 .logo { display: flex; align-items: center; gap: 10px; }
 .logo-mark {
-  width: 30px;
-  height: 30px;
-  border-radius: 9px;
-  background: var(--grad);
-  box-shadow: 0 6px 16px -4px rgba(24, 95, 165, 0.6);
-  position: relative;
-}
-.logo-mark::after {
-  content: '';
-  position: absolute;
-  inset: 7px;
-  border-radius: 5px;
-  border: 2px solid rgba(255, 255, 255, 0.85);
+  width: 32px;
+  height: 32px;
+  display: block;
+  filter: drop-shadow(0 5px 12px rgba(24, 95, 165, 0.45));
 }
 .logo-text { font-size: 21px; font-weight: 800; letter-spacing: -0.5px; }
 
