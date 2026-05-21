@@ -33,8 +33,8 @@ export default function Home() {
     <main className="home">
       {/* ===== 1. HERO ===== */}
       <section className="section hero" id="hero">
-        <div className="blob" style={{ width: 460, height: 460, background: '#5dcaa5', top: -120, left: -100 }} />
-        <div className="blob" style={{ width: 420, height: 420, background: '#185fa5', bottom: -120, right: 60 }} />
+        <div className="blob" style={{ width: 460, height: 460, background: '#185fa5', top: -120, left: -100 }} />
+        <div className="blob" style={{ width: 420, height: 420, background: '#5dcaa5', bottom: -120, right: 60 }} />
         <div className="container hero-grid">
           <div className="hero-text">
             <motion.span className="eyebrow" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
