@@ -317,14 +317,14 @@ export default function Home() {
             const y = 50 + radius * Math.sin(angle) * 0.92
             return (
               <div
-                key={p.name}
+                key={p.nameKey}
                 className="orbit-slot"
                 style={{ left: `${x}%`, top: `${y}%`, ['--d' as string]: `${i * 0.16}s` }}
               >
                 <div className="orbit-float" style={{ ['--d' as string]: `${i * 0.3}s` }}>
                   <div className="orbit-chip glass">
-                    <PartnerLogo name={p.name} logo={p.logo} alt={i} />
-                    <span className="orbit-name">{p.name}</span>
+                    <PartnerLogo name={t(p.nameKey)} logo={p.logo} alt={i} />
+                    <span className="orbit-name">{t(p.nameKey)}</span>
                   </div>
                 </div>
               </div>

@@ -48,15 +48,15 @@ export const testimonials = [
 
 export const compliance = ['SOC 2', 'ISO 27001', 'GDPR', 'TLS 1.3', '99.99% SLA']
 
-export const partners: { name: string; logo: string }[] = [
-  { name: 'Google Cloud', logo: '/partners/google-cloud.png' },
-  { name: '阿里云', logo: '/partners/aliyun.png' },
-  { name: '华为 HUAWEI', logo: '/partners/huawei.png' },
-  { name: '腾讯', logo: '/partners/tencent.png' },
-  { name: '字节跳动', logo: '/partners/bytedance.png' },
-  { name: 'AWS', logo: '/partners/aws.png' },
-  { name: 'OpenAI', logo: '/partners/openai.png' },
-  { name: 'Anthropic', logo: '/partners/anthropic.png' },
+export const partners: { nameKey: string; logo: string }[] = [
+  { nameKey: 'partner.google', logo: '/partners/google-cloud.png' },
+  { nameKey: 'partner.aliyun', logo: '/partners/aliyun.png' },
+  { nameKey: 'partner.huawei', logo: '/partners/huawei.png' },
+  { nameKey: 'partner.tencent', logo: '/partners/tencent.png' },
+  { nameKey: 'partner.bytedance', logo: '/partners/bytedance.png' },
+  { nameKey: 'partner.aws', logo: '/partners/aws.png' },
+  { nameKey: 'partner.openai', logo: '/partners/openai.png' },
+  { nameKey: 'partner.anthropic', logo: '/partners/anthropic.png' },
 ]
 
 export const consumeRank = [
