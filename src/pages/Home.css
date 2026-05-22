@@ -193,19 +193,19 @@
 .orbit-center {
   position: absolute; top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  width: 200px; height: 200px; border-radius: 50%;
+  width: 164px; height: 164px; border-radius: 50%;
   background: var(--grad);
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   color: #fff; text-align: center;
   box-shadow: 0 30px 70px -20px rgba(24,95,165,0.6), inset 0 0 40px rgba(255,255,255,0.18);
-  z-index: 5;
+  z-index: 1;
 }
 .orbit-center::after {
   content: ''; position: absolute; inset: -14px; border-radius: 50%;
   border: 1.5px solid rgba(93,202,165,0.5); animation: breathe 4s ease-in-out infinite;
 }
-.orbit-count { font-size: 52px; font-weight: 850; line-height: 1; -webkit-text-fill-color: #fff; }
-.orbit-eco { font-size: 14px; font-weight: 600; margin-top: 8px; opacity: 0.95; padding: 0 18px; }
+.orbit-count { font-size: 42px; font-weight: 850; line-height: 1; -webkit-text-fill-color: #fff; }
+.orbit-eco { font-size: 13px; font-weight: 600; margin-top: 7px; opacity: 0.95; padding: 0 20px; }
 
 .orbit-slot {
   position: absolute;
