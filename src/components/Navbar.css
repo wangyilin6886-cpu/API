@@ -9,16 +9,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background: #ffffff;
+  border-bottom: 1px solid var(--border);
   transition: background 0.3s ease, box-shadow 0.3s ease, height 0.3s ease;
 }
 .navbar.scrolled {
-  background: rgba(247, 249, 250, 0.78);
+  background: #ffffff;
   backdrop-filter: blur(18px);
   box-shadow: 0 6px 24px -16px rgba(24, 95, 165, 0.5);
   height: 62px;
   border-bottom: 1px solid var(--border);
 }
-:root[data-theme='dark'] .navbar.scrolled { background: rgba(10, 19, 32, 0.82); }
+:root[data-theme='dark'] .navbar { background: var(--bg); }
+:root[data-theme='dark'] .navbar.scrolled { background: rgba(10, 19, 32, 0.92); }
 :root[data-theme='dark'] .theme-btn { background: rgba(255, 255, 255, 0.06); }
 
 .logo { display: flex; align-items: center; gap: 10px; }
