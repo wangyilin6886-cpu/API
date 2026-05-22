@@ -232,7 +232,7 @@
 .orbit-logo-img {
   width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
   background: #fff; padding: 6px; object-fit: contain;
-  box-shadow: 0 8px 20px -8px rgba(24,95,165,0.4); border: 1px solid var(--border);
+  box-shadow: 0 6px 16px -8px rgba(0,0,0,0.18); border: 1px solid var(--border);
 }
 
 /* ===== TESTIMONIALS ===== */

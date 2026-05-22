@@ -29,7 +29,6 @@
   width: 32px;
   height: 32px;
   display: block;
-  filter: drop-shadow(0 5px 12px rgba(24, 95, 165, 0.45));
 }
 .logo-text { font-size: 21px; font-weight: 800; letter-spacing: -0.5px; }
 
