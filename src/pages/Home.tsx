@@ -67,7 +67,7 @@ export default function Home() {
               <CheckIcon /> {t('hero.note')}
             </motion.p>
             <motion.div className="hero-stats" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.5 }}>
-              <div><strong className="gradient-text"><CountUp to={50} suffix="+" /></strong><span>{t('hero.stat1')}</span></div>
+              <div><strong className="gradient-text"><CountUp to={100} suffix="+" /></strong><span>{t('hero.stat1')}</span></div>
               <div><strong className="gradient-text"><CountUp to={200} suffix="ms" /></strong><span>{t('hero.stat2')}</span></div>
               <div><strong className="gradient-text"><CountUp to={99.99} decimals={2} suffix="%" /></strong><span>{t('hero.stat3')}</span></div>
             </motion.div>

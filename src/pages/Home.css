@@ -531,7 +531,7 @@
 .sf-office-title::after { content: ''; position: absolute; left: 0; bottom: 0; width: 38px; height: 2px; background: var(--grad); border-radius: 2px; }
 .site-footer .offices-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
 .site-footer .office-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-.site-footer .office-cc { font-size: 11px; font-weight: 800; color: #fff; background: var(--grad); padding: 3px 8px; border-radius: 7px; }
+.site-footer .office-cc { font-size: 13px; font-weight: 700; color: #8b97a4; background: none; padding: 0; }
 .site-footer .office-head strong { font-size: 15px; font-weight: 700; color: #fff; }
 .site-footer .office p { font-size: 13.5px; color: #8b97a4; line-height: 1.65; }
 .sf-copyright { text-align: center; padding: 26px 6vw; font-size: 13.5px; color: #6b7682; border-top: 1px solid rgba(255,255,255,0.08); margin: 0 -6vw; }

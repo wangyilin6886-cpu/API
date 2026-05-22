@@ -87,7 +87,7 @@ export const abilityRank = [
 export const rankTotals = [
   { key: 'rank.totalTokens', to: 34.2, decimals: 1, suffix: 'B' },
   { key: 'rank.totalCalls', to: 92.6, decimals: 1, suffix: 'M' },
-  { key: 'rank.modelsCount', to: 50, decimals: 0, suffix: '+' },
+  { key: 'rank.modelsCount', to: 100, decimals: 0, suffix: '+' },
 ]
 
 /* ===== MODEL CATALOG (sample data) ===== */
