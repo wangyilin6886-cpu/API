@@ -311,13 +311,10 @@ export default function Home() {
             <span className="orbit-eco">{t('partners.eco')}</span>
           </motion.div>
           {partners.map((p, i) => {
-            const inner = i < 6
-            const idx = inner ? i : i - 6
-            const total = inner ? 6 : 9
-            const radius = inner ? 36 : 47
-            const angle = (idx / total) * Math.PI * 2 - Math.PI / 2 + (inner ? 0 : 0.34)
+            const radius = 43
+            const angle = (i / partners.length) * Math.PI * 2 - Math.PI / 2
             const x = 50 + radius * Math.cos(angle)
-            const y = 50 + radius * Math.sin(angle) * 0.96
+            const y = 50 + radius * Math.sin(angle) * 0.92
             return (
               <div
                 key={p.name}

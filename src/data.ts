@@ -52,18 +52,11 @@ export const partners: { name: string; logo: string }[] = [
   { name: 'Google Cloud', logo: '/partners/google-cloud.png' },
   { name: '阿里云', logo: '/partners/aliyun.png' },
   { name: '华为 HUAWEI', logo: '/partners/huawei.png' },
-  { name: '拓邦 Topband', logo: '/partners/topband.png' },
-  { name: '碧桂园', logo: '/partners/country-garden.png' },
-  { name: '华润置地', logo: '/partners/cr-land.png' },
-  { name: '怪兽充电', logo: '/partners/energy-monster.png' },
-  { name: '荔枝 FM', logo: '/partners/lizhi.png' },
-  { name: '芯天下 XTX', logo: '/partners/xtx.png' },
-  { name: '聚焦网络', logo: '/partners/jujiao.png' },
-  { name: '小黑鱼', logo: '/partners/blackfish.png' },
-  { name: '未知君 XBIOME', logo: '/partners/xbiome.png' },
-  { name: '广州酒家', logo: '/partners/guangzhou-restaurant.png' },
-  { name: '泉峰 CHERVON', logo: '/partners/chervon.png' },
-  { name: 'FTL Cloud', logo: '/partners/ftl-cloud.png' },
+  { name: '腾讯', logo: '/partners/tencent.png' },
+  { name: '字节跳动', logo: '/partners/bytedance.png' },
+  { name: 'AWS', logo: '/partners/aws.png' },
+  { name: 'OpenAI', logo: '/partners/openai.png' },
+  { name: 'Anthropic', logo: '/partners/anthropic.png' },
 ]
 
 export const consumeRank = [
