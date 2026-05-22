@@ -211,6 +211,13 @@ export const allModels: CatModel[] = RAW.map(([name, vendor, ctxK, cin, cout, sc
   ctxK, cin, cout, score, cats: cats.split(','), tags: tags ? tags.split(',') : [],
 }))
 
+const VENDOR_EN: Record<string, string> = {
+  '阿里云 Qwen': 'Alibaba Qwen', '智谱 GLM': 'Zhipu GLM', '月之暗面 Kimi': 'Moonshot Kimi',
+  '百川': 'Baichuan', '腾讯混元': 'Tencent Hunyuan', '字节豆包': 'ByteDance Doubao',
+  '零一万物 Yi': '01.AI Yi', '阶跃星辰': 'StepFun',
+}
+export const vendorLabel = (v: string, zh: boolean): string => (zh ? v : (VENDOR_EN[v] || v))
+
 export const catVendors = Array.from(new Set(allModels.map((m) => m.vendor)))
 export const catCats = ['all', 'text', 'multimodal', 'reasoning', 'image', 'embedding', 'audio']
 export const catTags = ['cheap', 'fast', 'open', 'cn', 'vision', 'function', 'json', 'web', 'longctx']

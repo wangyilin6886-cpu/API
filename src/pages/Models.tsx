@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useI18n } from '../i18n/I18nContext'
-import { allModels, catVendors, catCats, catTags, fmtCtx, CatModel } from '../data'
+import { allModels, catVendors, catCats, catTags, fmtCtx, vendorLabel, CatModel } from '../data'
 import './pages.css'
 
 const PAGE_SIZE = 12
@@ -10,7 +10,8 @@ const FAV_KEY = 'eco-fav-models'
 const MAX_CMP = 4
 
 export default function Models() {
-  const { t } = useI18n()
+  const { t, lang } = useI18n()
+  const zh = lang === 'zh'
   const nav = useNavigate()
   const [q, setQ] = useState('')
   const [sort, setSort] = useState('score')
@@ -115,7 +116,7 @@ export default function Models() {
               {catVendors.map((v) => (
                 <label key={v} className="cat-check">
                   <input type="checkbox" checked={vendors.includes(v)} onChange={() => toggle(vendors, v, setVendors)} />
-                  <span>{v}</span>
+                  <span>{vendorLabel(v, zh)}</span>
                 </label>
               ))}
             </div>
@@ -140,7 +141,7 @@ export default function Models() {
                       <span className="model-dot" style={{ background: m.color }} />
                       <div>
                         <h3>{m.name}</h3>
-                        <span className="model-vendor">{m.vendor}</span>
+                        <span className="model-vendor">{vendorLabel(m.vendor, zh)}</span>
                       </div>
                       <Star id={m.id} />
                     </div>
@@ -169,7 +170,7 @@ export default function Models() {
                 {shown.map((m) => (
                   <motion.div key={m.id} layout className="cat-row" onClick={() => setDetail(m)}>
                     <span className="cr-name"><span className="model-dot" style={{ background: m.color }} />{m.name}</span>
-                    <span className="cr-dim">{m.vendor}</span>
+                    <span className="cr-dim">{vendorLabel(m.vendor, zh)}</span>
                     <span>{fmtCtx(m.ctxK)}</span>
                     <span>${m.cin}</span>
                     <span>${m.cout}</span>
@@ -221,7 +222,7 @@ export default function Models() {
               <button className="modal-close" onClick={() => setDetail(null)} aria-label="close">×</button>
               <div className="drawer-title">
                 <span className="model-dot" style={{ background: detail.color }} />
-                <div><h2>{detail.name}</h2><span className="model-vendor">{detail.vendor}</span></div>
+                <div><h2>{detail.name}</h2><span className="model-vendor">{vendorLabel(detail.vendor, zh)}</span></div>
                 <Star id={detail.id} />
               </div>
               <div className="cat-tags-row" style={{ marginBottom: 22 }}>
@@ -262,7 +263,7 @@ export default function Models() {
                 <span className="cmp-rh" />
                 {cmpModels.map((m) => <span key={m.id} className="cmp-ch"><span className="model-dot" style={{ background: m.color }} />{m.name}</span>)}
                 <span className="cmp-rh">{t('catalog.vendor')}</span>
-                {cmpModels.map((m) => <span key={m.id}>{m.vendor}</span>)}
+                {cmpModels.map((m) => <span key={m.id}>{vendorLabel(m.vendor, zh)}</span>)}
                 <span className="cmp-rh">{t('models.ctx')}</span>
                 {cmpModels.map((m) => <span key={m.id}>{fmtCtx(m.ctxK)}</span>)}
                 <span className="cmp-rh">{t('models.in')}</span>
