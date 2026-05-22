@@ -285,6 +285,9 @@ export default function Home() {
             ))}
           </AnimatePresence>
         </motion.div>
+        <Reveal delay={0.1}>
+          <button className="btn-grad models-all" onClick={() => nav('/models')}>{t('models.allBtn')} →</button>
+        </Reveal>
       </section>
 
       {/* ===== 5. PARTNERS ===== */}

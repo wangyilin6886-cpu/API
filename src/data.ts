@@ -89,3 +89,97 @@ export const rankTotals = [
   { key: 'rank.totalCalls', to: 92.6, decimals: 1, suffix: 'M' },
   { key: 'rank.modelsCount', to: 50, decimals: 0, suffix: '+' },
 ]
+
+/* ===== MODEL CATALOG (sample data) ===== */
+export interface CatModel {
+  id: string; name: string; vendor: string; color: string
+  cats: string[]; ctxK: number; cin: number; cout: number; score: number; tags: string[]
+}
+
+const VCOLOR: Record<string, string> = {
+  'OpenAI': '#10a37f', 'Anthropic': '#d97757', 'Google': '#4285f4', 'DeepSeek': '#5b6cff',
+  '阿里云 Qwen': '#615ced', '智谱 GLM': '#3859ff', 'Meta Llama': '#0668e1', 'Mistral': '#ff7000',
+  'xAI': '#1a1a1a', '月之暗面 Kimi': '#16a34a', '百川': '#e11d48', 'Cohere': '#7c3aed',
+  'Stability AI': '#a855f7', 'ElevenLabs': '#0f172a',
+}
+
+// [name, vendor, ctxK, cin, cout, score, cats(csv), tags(csv)]
+const RAW: [string, string, number, number, number, number, string, string][] = [
+  ['GPT-4o', 'OpenAI', 128, 2.5, 10, 93, 'text,multimodal', 'vision,function,json,web'],
+  ['GPT-4o mini', 'OpenAI', 128, 0.15, 0.6, 86, 'text,multimodal', 'cheap,fast,vision'],
+  ['GPT-4.1', 'OpenAI', 1000, 2, 8, 93, 'text,multimodal', 'longctx,vision,function'],
+  ['GPT-4.1 mini', 'OpenAI', 1000, 0.4, 1.6, 88, 'text', 'cheap,longctx'],
+  ['o3', 'OpenAI', 200, 10, 40, 96, 'text,reasoning', 'reasoning,function'],
+  ['o4-mini', 'OpenAI', 200, 1.1, 4.4, 91, 'text,reasoning', 'reasoning,cheap'],
+  ['GPT-3.5 Turbo', 'OpenAI', 16, 0.5, 1.5, 78, 'text', 'cheap,fast'],
+  ['text-embedding-3-large', 'OpenAI', 8, 0.13, 0, 80, 'embedding', 'cheap'],
+  ['DALL·E 3', 'OpenAI', 0, 40, 0, 85, 'image', 'vision'],
+  ['Whisper', 'OpenAI', 0, 6, 0, 82, 'audio', ''],
+  ['Claude Opus 4.7', 'Anthropic', 200, 3, 15, 97, 'text,multimodal,reasoning', 'reasoning,vision,function,json'],
+  ['Claude Sonnet 4.6', 'Anthropic', 200, 3, 15, 95, 'text,multimodal', 'vision,function,fast'],
+  ['Claude Haiku 4.5', 'Anthropic', 200, 0.8, 4, 89, 'text', 'cheap,fast'],
+  ['Claude Opus 4.1', 'Anthropic', 200, 15, 75, 95, 'text,reasoning', 'reasoning'],
+  ['Claude 3.5 Sonnet', 'Anthropic', 200, 3, 15, 93, 'text,multimodal', 'vision'],
+  ['Claude 3 Haiku', 'Anthropic', 200, 0.25, 1.25, 84, 'text', 'cheap,fast'],
+  ['Gemini 2.5 Pro', 'Google', 1000, 1.25, 5, 94, 'text,multimodal,reasoning', 'longctx,vision,reasoning'],
+  ['Gemini 2.5 Flash', 'Google', 1000, 0.3, 2.5, 90, 'text,multimodal', 'fast,longctx,vision'],
+  ['Gemini 2.0 Flash', 'Google', 1000, 0.1, 0.4, 87, 'text,multimodal', 'cheap,fast,longctx'],
+  ['Gemini 1.5 Pro', 'Google', 2000, 1.25, 5, 90, 'text,multimodal', 'longctx,vision'],
+  ['Imagen 3', 'Google', 0, 40, 0, 86, 'image', 'vision'],
+  ['text-embedding-004', 'Google', 2, 0.025, 0, 79, 'embedding', 'cheap'],
+  ['DeepSeek-V3', 'DeepSeek', 128, 0.27, 1.1, 90, 'text', 'cheap,cn'],
+  ['DeepSeek-R1', 'DeepSeek', 128, 0.55, 2.19, 93, 'text,reasoning', 'reasoning,cn,cheap'],
+  ['DeepSeek-Coder', 'DeepSeek', 128, 0.27, 1.1, 88, 'text', 'cn,cheap'],
+  ['DeepSeek-VL', 'DeepSeek', 64, 0.4, 1.2, 86, 'multimodal', 'vision,cn'],
+  ['Qwen-Max', '阿里云 Qwen', 128, 1.6, 6.4, 89, 'text', 'cn'],
+  ['Qwen-Plus', '阿里云 Qwen', 128, 0.4, 1.2, 86, 'text', 'cn,cheap'],
+  ['Qwen-Turbo', '阿里云 Qwen', 1000, 0.05, 0.2, 82, 'text', 'cn,cheap,fast,longctx'],
+  ['Qwen2.5-VL', '阿里云 Qwen', 128, 0.8, 2.4, 87, 'multimodal', 'vision,cn'],
+  ['Qwen2.5-Coder', '阿里云 Qwen', 128, 0.3, 0.9, 87, 'text', 'cn,open,cheap'],
+  ['QwQ-32B', '阿里云 Qwen', 32, 0.2, 0.6, 88, 'text,reasoning', 'reasoning,cn,open'],
+  ['GLM-4-Plus', '智谱 GLM', 128, 0.7, 2.1, 88, 'text', 'cn'],
+  ['GLM-4-Air', '智谱 GLM', 128, 0.1, 0.1, 84, 'text', 'cn,cheap'],
+  ['GLM-4V', '智谱 GLM', 8, 0.7, 2.1, 85, 'multimodal', 'vision,cn'],
+  ['CogView-3', '智谱 GLM', 0, 30, 0, 83, 'image', 'vision,cn'],
+  ['Llama 4 Maverick', 'Meta Llama', 1000, 0.9, 0.9, 90, 'text,multimodal', 'open,longctx,vision'],
+  ['Llama 4 Scout', 'Meta Llama', 10000, 0.5, 0.5, 88, 'text', 'open,longctx,cheap'],
+  ['Llama 3.3 70B', 'Meta Llama', 128, 0.6, 0.6, 87, 'text', 'open'],
+  ['Llama 3.1 405B', 'Meta Llama', 128, 0.9, 0.9, 89, 'text', 'open'],
+  ['Llama 3.1 8B', 'Meta Llama', 128, 0.05, 0.05, 80, 'text', 'open,cheap,fast'],
+  ['Mistral Large 2', 'Mistral', 128, 2, 6, 89, 'text', 'open,function'],
+  ['Mistral Small 3', 'Mistral', 32, 0.2, 0.6, 84, 'text', 'open,cheap,fast'],
+  ['Codestral', 'Mistral', 32, 0.3, 0.9, 86, 'text', 'open'],
+  ['Pixtral Large', 'Mistral', 128, 2, 6, 87, 'multimodal', 'vision,open'],
+  ['Mistral Embed', 'Mistral', 8, 0.1, 0, 78, 'embedding', 'cheap'],
+  ['Grok-3', 'xAI', 131, 2, 10, 92, 'text,reasoning', 'web,reasoning'],
+  ['Grok-3 mini', 'xAI', 131, 0.3, 0.5, 87, 'text', 'cheap,fast,web'],
+  ['Grok-2 Vision', 'xAI', 32, 2, 10, 88, 'multimodal', 'vision'],
+  ['Kimi k2', '月之暗面 Kimi', 256, 0.6, 2.5, 90, 'text', 'cn,longctx'],
+  ['Moonshot v1 128k', '月之暗面 Kimi', 128, 1.7, 1.7, 85, 'text', 'cn,longctx'],
+  ['Kimi-VL', '月之暗面 Kimi', 128, 0.5, 1.5, 85, 'multimodal', 'vision,cn'],
+  ['Baichuan4', '百川', 32, 1.7, 1.7, 84, 'text', 'cn'],
+  ['Baichuan3-Turbo', '百川', 32, 0.17, 0.17, 80, 'text', 'cn,cheap,fast'],
+  ['Command R+', 'Cohere', 128, 2.5, 10, 87, 'text', 'function'],
+  ['Command R', 'Cohere', 128, 0.15, 0.6, 83, 'text', 'cheap'],
+  ['Embed v3', 'Cohere', 512, 0.1, 0, 79, 'embedding', 'cheap'],
+  ['Rerank 3', 'Cohere', 4, 2, 0, 80, 'embedding', ''],
+  ['Stable Diffusion 3.5', 'Stability AI', 0, 35, 0, 84, 'image', 'vision,open'],
+  ['Stable Image Ultra', 'Stability AI', 0, 80, 0, 86, 'image', 'vision'],
+  ['ElevenLabs v3', 'ElevenLabs', 0, 0, 0, 88, 'audio', ''],
+  ['Scribe v1', 'ElevenLabs', 0, 0, 0, 84, 'audio', ''],
+]
+
+export const allModels: CatModel[] = RAW.map(([name, vendor, ctxK, cin, cout, score, cats, tags], i) => ({
+  id: String(i), name, vendor, color: VCOLOR[vendor] || '#185fa5',
+  ctxK, cin, cout, score, cats: cats.split(','), tags: tags ? tags.split(',') : [],
+}))
+
+export const catVendors = Array.from(new Set(allModels.map((m) => m.vendor)))
+export const catCats = ['all', 'text', 'multimodal', 'reasoning', 'image', 'embedding', 'audio']
+export const catTags = ['cheap', 'fast', 'open', 'cn', 'vision', 'function', 'json', 'web', 'longctx']
+
+export function fmtCtx(k: number): string {
+  if (k === 0) return '—'
+  if (k >= 1000) return `${k / 1000}M`
+  return `${k}K`
+}

@@ -235,3 +235,54 @@
   .kt-key { grid-column: 1 / -1; }
   .api-two { grid-template-columns: 1fr; gap: 0; }
 }
+
+/* ===== MODEL CATALOG ===== */
+.models-all { display: block; margin: 44px auto 0; }
+.cat-toolbar { display: flex; align-items: center; gap: 14px; padding: 14px 18px; margin-bottom: 24px; flex-wrap: wrap; }
+.cat-search { flex: 1; min-width: 200px; padding: 12px 16px; border-radius: 12px; border: 1.5px solid var(--border); background: var(--bg-alt); color: var(--ink); font-size: 15px; outline: none; }
+.cat-search:focus { border-color: var(--teal); }
+.cat-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.cat-chip { padding: 8px 15px; border-radius: 999px; font-size: 13.5px; font-weight: 600; color: var(--ink-soft); border: 1.5px solid var(--border); transition: all 0.2s; }
+.cat-chip:hover { color: var(--blue); border-color: var(--teal); }
+.cat-chip.active { background: var(--grad); color: #fff; border-color: transparent; }
+.cat-sort { padding: 11px 14px; border-radius: 12px; border: 1.5px solid var(--border); background: var(--bg-alt); color: var(--ink); font-size: 14px; font-weight: 600; outline: none; }
+
+.cat-layout { display: grid; grid-template-columns: 240px 1fr; gap: 24px; align-items: start; }
+.cat-side { padding: 20px; position: sticky; top: 96px; }
+.cat-side-head { display: flex; align-items: center; justify-content: space-between; font-size: 13.5px; color: var(--ink-soft); padding-bottom: 14px; border-bottom: 1px solid var(--border); margin-bottom: 14px; }
+.cat-side-head strong { color: var(--blue); font-size: 16px; }
+.cat-reset { font-size: 12.5px; font-weight: 600; color: var(--blue); }
+.cat-reset:hover { text-decoration: underline; }
+.cat-group { margin-bottom: 20px; }
+.cat-group h4 { font-size: 13px; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 12px; }
+.cat-check { display: flex; align-items: center; gap: 9px; padding: 6px 0; font-size: 13.5px; color: var(--ink-soft); cursor: pointer; }
+.cat-check input { accent-color: var(--blue); width: 15px; height: 15px; }
+.cat-check:hover { color: var(--ink); }
+.cat-tagwrap { display: flex; flex-wrap: wrap; gap: 8px; }
+.cat-tag { padding: 6px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 600; color: var(--ink-soft); border: 1.5px solid var(--border); transition: all 0.2s; }
+.cat-tag.active { background: var(--grad); color: #fff; border-color: transparent; }
+
+.cat-results { min-height: 400px; }
+.cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.cat-card { padding: 22px; transition: transform 0.3s, box-shadow 0.3s; }
+.cat-card:hover { transform: translateY(-6px); box-shadow: 0 26px 52px -24px rgba(24,95,165,0.4); }
+.cat-card-head { display: flex; align-items: center; gap: 11px; margin-bottom: 14px; }
+.cat-card-head h3 { font-size: 15.5px; font-weight: 700; }
+.cat-score { margin-left: auto; font-size: 13px; font-weight: 800; color: var(--blue); background: var(--grad-soft); padding: 3px 10px; border-radius: 999px; }
+.cat-tags-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; min-height: 22px; }
+.cat-minitag { font-size: 11px; font-weight: 600; color: var(--ink-soft); background: var(--bg-alt); padding: 3px 9px; border-radius: 7px; }
+.cat-empty { padding: 60px 20px; text-align: center; color: var(--ink-soft); font-size: 15px; }
+.cat-pager { display: flex; justify-content: center; gap: 8px; margin-top: 34px; flex-wrap: wrap; }
+.cat-pager button { min-width: 38px; height: 38px; padding: 0 12px; border-radius: 11px; border: 1.5px solid var(--border); font-size: 14px; font-weight: 600; color: var(--ink); transition: all 0.2s; }
+.cat-pager button:hover:not(:disabled) { border-color: var(--teal); color: var(--blue); }
+.cat-pager button.active { background: var(--grad); color: #fff; border-color: transparent; }
+.cat-pager button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+@media (max-width: 900px) {
+  .cat-layout { grid-template-columns: 1fr; }
+  .cat-side { position: relative; top: 0; }
+  .cat-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px) {
+  .cat-grid { grid-template-columns: 1fr; }
+}
