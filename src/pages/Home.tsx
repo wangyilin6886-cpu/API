@@ -334,15 +334,14 @@ export default function Home() {
 
         <div className="container testi-grid">
           {testimonials.map((tm, i) => (
-            <Reveal key={tm.company} delay={i * 0.1} className="testi-wrap">
+            <Reveal key={tm.avatar} delay={i * 0.1} className="testi-wrap">
               <div className="testi-card glass">
                 <span className="testi-mark">“</span>
                 <p className="testi-quote">{t(tm.q)}</p>
                 <div className="testi-foot">
-                  <span className="testi-avatar" style={{ background: tm.color }}>{tm.company[0]}</span>
+                  <span className="testi-avatar" style={{ background: tm.color }}>{tm.avatar}</span>
                   <div>
                     <span className="testi-author">{t(tm.a)}</span>
-                    <span className="testi-company">{tm.company}</span>
                   </div>
                 </div>
               </div>
@@ -455,7 +454,7 @@ export default function Home() {
         <div className="container">
           <div className="sf-top">
             <div className="sf-brand">
-              <div className="logo"><img className="logo-mark" src="/rootlogo.png" alt="EcoAPI" /><span className="logo-text gradient-text">EcoAPI</span></div>
+              <div className="logo"><img className="logo-mark" src="/rootlogo.png" alt="EcoTech" /><span className="logo-text gradient-text">EcoTech</span></div>
               <p>{t('footer.tagline')}</p>
             </div>
             <div className="sf-cols">
