@@ -41,9 +41,9 @@ export const compareRows: { key: string; vals: (boolean | string)[] }[] = [
 export const comparePlans = ['free', 'std', 'pro', 'ent']
 
 export const testimonials = [
-  { q: 'partners.q1', a: 'partners.a1', company: 'NovaCloud', color: 'linear-gradient(135deg,#5dcaa5,#1aa179)' },
-  { q: 'partners.q2', a: 'partners.a2', company: 'NeuralPay', color: 'linear-gradient(135deg,#185fa5,#5dcaa5)' },
-  { q: 'partners.q3', a: 'partners.a3', company: 'VertexLabs', color: 'linear-gradient(135deg,#7c5cff,#185fa5)' },
+  { q: 'partners.q1', a: 'partners.a1', avatar: 'L', color: 'linear-gradient(135deg,#5dcaa5,#1aa179)' },
+  { q: 'partners.q2', a: 'partners.a2', avatar: 'A', color: 'linear-gradient(135deg,#185fa5,#5dcaa5)' },
+  { q: 'partners.q3', a: 'partners.a3', avatar: 'W', color: 'linear-gradient(135deg,#7c5cff,#185fa5)' },
 ]
 
 export const compliance = ['SOC 2', 'ISO 27001', 'GDPR', 'TLS 1.3', '99.99% SLA']
