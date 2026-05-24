@@ -223,3 +223,43 @@
 @media (max-width: 600px) {
   .infra-sectors-grid { grid-template-columns: 1fr; }
 }
+
+/* ===== AMBIENT BLOBS (gateway-style blue/teal glows) ===== */
+.infra-hero,
+.infra-section {
+  position: relative;
+  overflow: hidden;
+}
+.infra-hero-inner,
+.infra-section-inner {
+  position: relative;
+  z-index: 1;
+}
+.infra-hero::before,
+.infra-section::before {
+  content: '';
+  position: absolute;
+  top: -130px;
+  left: -150px;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(24, 95, 165, 0.16), transparent 70%);
+  filter: blur(70px);
+  pointer-events: none;
+  z-index: 0;
+}
+.infra-hero::after,
+.infra-section::after {
+  content: '';
+  position: absolute;
+  bottom: -150px;
+  right: -130px;
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(93, 202, 165, 0.18), transparent 70%);
+  filter: blur(78px);
+  pointer-events: none;
+  z-index: 0;
+}

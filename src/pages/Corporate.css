@@ -662,3 +662,51 @@
   .sf-cols { grid-template-columns: 1fr 1fr; }
   .sf-offices .offices-grid { grid-template-columns: 1fr; gap: 26px; }
 }
+
+/* ===== AMBIENT BLOBS (gateway-style blue/teal glows) ===== */
+.corp-eco-section,
+.corp-pillars-section,
+.corp-news-section,
+.biz-section {
+  position: relative;
+  overflow: hidden;
+}
+.corp-eco-section > .container,
+.corp-pillars-section > .container,
+.corp-news-section > .container,
+.biz-section > .container {
+  position: relative;
+  z-index: 1;
+}
+.corp-eco-section::before,
+.corp-pillars-section::before,
+.corp-news-section::before,
+.biz-section::before {
+  content: '';
+  position: absolute;
+  top: -130px;
+  left: -150px;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(24, 95, 165, 0.16), transparent 70%);
+  filter: blur(70px);
+  pointer-events: none;
+  z-index: 0;
+}
+.corp-eco-section::after,
+.corp-pillars-section::after,
+.corp-news-section::after,
+.biz-section::after {
+  content: '';
+  position: absolute;
+  bottom: -150px;
+  right: -130px;
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(93, 202, 165, 0.18), transparent 70%);
+  filter: blur(78px);
+  pointer-events: none;
+  z-index: 0;
+}
