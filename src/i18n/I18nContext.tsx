@@ -7,7 +7,7 @@ interface I18nCtx {
   t: (key: string) => string
 }
 
-const Ctx = createContext<I18nCtx>({ lang: 'zh', setLang: () => {}, t: (k) => k })
+const Ctx = createContext<I18nCtx>({ lang: 'en', setLang: () => {}, t: (k) => k })
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>(() => {

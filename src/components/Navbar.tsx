@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useI18n } from '../i18n/I18nContext'
 import { useTheme } from '../theme/ThemeContext'
 import LogoMark from './LogoMark'
+import ContactModal from './ContactModal'
 import { LANGS, Lang } from '../i18n/translations'
 import './Navbar.css'
 
@@ -13,9 +14,12 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [langOpen, setLangOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [contactOpen, setContactOpen] = useState(false)
   const loc = useLocation()
   const nav = useNavigate()
   const langRef = useRef<HTMLDivElement>(null)
+
+  const isCorporate = loc.pathname === '/'
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30)
@@ -32,75 +36,123 @@ export default function Navbar() {
     return () => document.removeEventListener('mousedown', onClick)
   }, [langOpen])
 
-  const goHome = (hash?: string) => {
+  const scrollToSection = (hash: string) => {
     setMenuOpen(false)
     if (loc.pathname !== '/') {
-      nav('/' + (hash ? '#' + hash : ''))
-      if (hash) setTimeout(() => document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth' }), 80)
-    } else if (hash) {
-      document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth' })
+      nav('/')
+      setTimeout(() => document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth' }), 120)
     } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth' })
     }
   }
 
+  const goGateway = () => {
+    setMenuOpen(false)
+    if (loc.pathname !== '/ecoapi') nav('/ecoapi')
+    else window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const handleLogo = () => {
+    setMenuOpen(false)
+    if (isCorporate) window.scrollTo({ top: 0, behavior: 'smooth' })
+    else nav('/')
+  }
+
   return (
-    <motion.nav
-      className={`navbar ${scrolled ? 'scrolled' : ''}`}
-      initial={{ y: -80, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
-    >
-      <button className="logo" onClick={() => goHome()}>
-        <LogoMark />
-        <span className="logo-text gradient-text">EcoAPI</span>
-      </button>
-
-      <div className={`nav-links ${menuOpen ? 'open' : ''}`}>
-        <button onClick={() => goHome()}>{t('nav.home')}</button>
-        <Link to="/profile" onClick={() => setMenuOpen(false)}>{t('nav.profile')}</Link>
-        <Link to="/recharge" onClick={() => setMenuOpen(false)}>{t('nav.recharge')}</Link>
-
-        <div className="lang-wrap" ref={langRef}>
-          <button className="lang-btn" onClick={() => setLangOpen((o) => !o)}>
-            <GlobeIcon /> {LANGS.find((l) => l.code === lang)?.label}
-          </button>
-          <AnimatePresence>
-            {langOpen && (
-              <motion.div
-                className="lang-menu glass"
-                initial={{ opacity: 0, y: 8, scale: 0.96 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 8, scale: 0.96 }}
-                transition={{ duration: 0.18 }}
-              >
-                {LANGS.map((l) => (
-                  <button
-                    key={l.code}
-                    className={l.code === lang ? 'active' : ''}
-                    onClick={() => { setLang(l.code as Lang); setLangOpen(false) }}
-                  >
-                    {l.label}
-                  </button>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        <button className="theme-btn" onClick={toggle} aria-label="toggle theme">
-          {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
+    <>
+      <motion.nav
+        className={`navbar ${scrolled ? 'scrolled' : ''}`}
+        initial={{ y: -80, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+      >
+        <button className="logo" onClick={handleLogo}>
+          <LogoMark />
+          <span className="logo-text gradient-text">{isCorporate ? 'EcoTech' : 'EcoAPI'}</span>
         </button>
 
-        <Link to="/login" className="login-btn" onClick={() => setMenuOpen(false)}>
-          {t('nav.login')}
-        </Link>
-      </div>
+        <div className={`nav-links ${menuOpen ? 'open' : ''}`}>
+          {isCorporate ? (
+            <>
+              <button onClick={() => scrollToSection('ai-infra')} className="nav-chevron-item">
+                {t('corp.nav.infra')}<ChevronDown />
+              </button>
+              <button onClick={() => scrollToSection('ai-agent')} className="nav-chevron-item">
+                {t('corp.nav.agent')}<ChevronDown />
+              </button>
+              <Link to="/ecoapi" onClick={() => setMenuOpen(false)} className="nav-chevron-item">
+                {t('corp.nav.token')}<ChevronDown />
+              </Link>
+              <button onClick={() => scrollToSection('about')}>{t('corp.nav.about')}</button>
+            </>
+          ) : (
+            <>
+              <button onClick={goGateway}>{t('nav.home')}</button>
+              <Link to="/profile" onClick={() => setMenuOpen(false)}>{t('nav.profile')}</Link>
+              <Link to="/recharge" onClick={() => setMenuOpen(false)}>{t('nav.recharge')}</Link>
+            </>
+          )}
 
-      <button className="burger" onClick={() => setMenuOpen((o) => !o)} aria-label="menu">
-        <span /><span /><span />
-      </button>
-    </motion.nav>
+          <div className="lang-wrap" ref={langRef}>
+            <button className="lang-btn" onClick={() => setLangOpen((o) => !o)}>
+              <GlobeIcon /> {LANGS.find((l) => l.code === lang)?.label}
+            </button>
+            <AnimatePresence>
+              {langOpen && (
+                <motion.div
+                  className="lang-menu glass"
+                  initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                  transition={{ duration: 0.18 }}
+                >
+                  {LANGS.map((l) => (
+                    <button
+                      key={l.code}
+                      className={l.code === lang ? 'active' : ''}
+                      onClick={() => { setLang(l.code as Lang); setLangOpen(false) }}
+                    >
+                      {l.label}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          <button className="theme-btn" onClick={toggle} aria-label="toggle theme">
+            {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
+          </button>
+
+          {isCorporate ? (
+            <button
+              className="btn-grad nav-demo-btn"
+              onClick={() => { setMenuOpen(false); setContactOpen(true) }}
+            >
+              {t('corp.getDemo')}
+            </button>
+          ) : (
+            <Link to="/login" className="login-btn" onClick={() => setMenuOpen(false)}>
+              {t('nav.login')}
+            </Link>
+          )}
+        </div>
+
+        <button className="burger" onClick={() => setMenuOpen((o) => !o)} aria-label="menu">
+          <span /><span /><span />
+        </button>
+      </motion.nav>
+
+      <ContactModal open={contactOpen} onClose={() => setContactOpen(false)} />
+    </>
+  )
+}
+
+function ChevronDown() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ marginLeft: 3, marginTop: 1, flexShrink: 0 }}>
+      <path d="M6 9l6 6 6-6" />
+    </svg>
   )
 }
 

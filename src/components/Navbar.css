@@ -106,6 +106,19 @@
 .lang-menu button:hover { background: var(--grad-soft); }
 .lang-menu button.active { background: var(--grad); color: #fff; }
 
+.nav-chevron-item {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 2px;
+}
+
+.nav-demo-btn {
+  padding: 9px 22px !important;
+  font-size: 14px !important;
+  box-shadow: 0 8px 20px -8px rgba(24, 95, 165, 0.55) !important;
+}
+.nav-demo-btn::after { display: none; }
+
 .burger { display: none; flex-direction: column; gap: 5px; }
 .burger span {
   width: 24px; height: 2px; background: var(--ink); border-radius: 2px;
