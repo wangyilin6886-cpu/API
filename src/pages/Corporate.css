@@ -684,13 +684,14 @@
 .biz-section::before {
   content: '';
   position: absolute;
-  top: -130px;
-  left: -150px;
-  width: 480px;
-  height: 480px;
+  top: 50%;
+  left: -260px;
+  width: 560px;
+  height: 560px;
+  transform: translateY(-50%);
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(24, 95, 165, 0.16), transparent 70%);
-  filter: blur(70px);
+  background: radial-gradient(circle, rgba(24, 95, 165, 0.30), transparent 68%);
+  filter: blur(90px);
   pointer-events: none;
   z-index: 0;
 }
@@ -700,13 +701,14 @@
 .biz-section::after {
   content: '';
   position: absolute;
-  bottom: -150px;
-  right: -130px;
-  width: 520px;
-  height: 520px;
+  top: 50%;
+  right: -260px;
+  width: 600px;
+  height: 600px;
+  transform: translateY(-50%);
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(93, 202, 165, 0.18), transparent 70%);
-  filter: blur(78px);
+  background: radial-gradient(circle, rgba(93, 202, 165, 0.32), transparent 68%);
+  filter: blur(95px);
   pointer-events: none;
   z-index: 0;
 }
