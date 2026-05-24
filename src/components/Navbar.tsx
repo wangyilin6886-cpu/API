@@ -67,8 +67,14 @@ export default function Navbar() {
         transition={{ duration: 0.6, ease: 'easeOut' }}
       >
         <button className="logo" onClick={handleLogo}>
-          <LogoMark />
-          <span className="logo-text gradient-text">{isCorporate ? 'EcoTech' : 'EcoAPI'}</span>
+          {isCorporate ? (
+            <img src={theme === 'dark' ? '/logoblack.png' : '/logowhite.png'} alt="EcoTech" style={{ height: 38, width: 'auto', display: 'block' }} />
+          ) : (
+            <>
+              <LogoMark />
+              <span className="logo-text gradient-text">EcoAPI</span>
+            </>
+          )}
         </button>
 
         <div className={`nav-links ${menuOpen ? 'open' : ''}`}>
