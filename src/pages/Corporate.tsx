@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useI18n } from '../i18n/I18nContext'
 import ContactModal from '../components/ContactModal'
+import SiteFooter from '../components/SiteFooter'
 import './Corporate.css'
 
 const Sphere3D = lazy(() => import('../components/Sphere3D'))
@@ -101,9 +102,9 @@ export default function Corporate() {
             >
               {t('corp.hero.cta1')}
             </motion.button>
-            <button className="btn-ghost" style={{ opacity: 0.55, cursor: 'default', pointerEvents: 'none' }}>
+            <Link to="/ai-infra" className="btn-ghost">
               {t('corp.hero.cta2')}
-            </button>
+            </Link>
           </div>
         </motion.div>
 
@@ -268,7 +269,7 @@ export default function Corporate() {
                     <h3 className="biz-card-title">{t(card.titleKey)}</h3>
                     <p className="biz-card-desc">{t(card.descKey)}</p>
                     {card.linkKey && (
-                      <span className="biz-card-link">{t(card.linkKey)}</span>
+                      <Link to="/ai-infra" className="biz-card-link">{t(card.linkKey)}</Link>
                     )}
                   </div>
                 </Reveal>
@@ -278,59 +279,7 @@ export default function Corporate() {
         </section>
       ))}
 
-      {/* ===== FOOTER ===== */}
-      <footer id="about" className="site-footer">
-        <div className="container">
-          <div className="sf-top">
-            <div className="sf-brand">
-              <div className="logo">
-                <img className="logo-mark" src="/rootlogo.png" alt="EcoTech" style={{ width: 32, height: 32 }} />
-                <span className="logo-text gradient-text">EcoTech</span>
-              </div>
-              <p>{t('footer.tagline')}</p>
-            </div>
-            <div className="sf-cols">
-              <div className="sf-col">
-                <h4>{t('foot.infra')}</h4>
-                {(['foot.infra1', 'foot.infra2', 'foot.infra3', 'foot.infra4', 'foot.infra5'] as const).map((k) => (
-                  <a key={k} href="#" onClick={(e) => e.preventDefault()}>{t(k)}</a>
-                ))}
-              </div>
-              <div className="sf-col">
-                <h4>{t('foot.agent')}</h4>
-                {(['foot.agent1', 'foot.agent2', 'foot.agent3', 'foot.agent4'] as const).map((k) => (
-                  <a key={k} href="#" onClick={(e) => e.preventDefault()}>{t(k)}</a>
-                ))}
-              </div>
-              <div className="sf-col">
-                <h4>{t('foot.token')}</h4>
-                {['DeepSeek', 'Qwen', 'GLM', 'OpenAI', 'Anthropic'].map((m) => (
-                  <Link key={m} to="/ecoapi">{m}</Link>
-                ))}
-              </div>
-            </div>
-          </div>
-          <div className="sf-offices">
-            <h4 className="sf-office-title">{t('footer.offices')}</h4>
-            <div className="offices-grid">
-              {[
-                { cc: 'SG', name: t('footer.sg'), addr: '4 Fourth Avenue, #06-10, Singapore 268672' },
-                { cc: 'ID', name: t('footer.id'), addr: 'Noble House 25th Floor, Jl. Dr. Ide Anak Agung Gede Agung Kav. E 4.2, No. 2, Lingkar Mega Kuningan, South Jakarta 12950' },
-                { cc: 'CN', name: t('footer.cn'), addr: 'Unit 1252, Building 1 (Floors 5, 10, 11), No. 33 Courtyard, Guangshun North Street, Chaoyang District, Beijing' },
-              ].map((o) => (
-                <div className="office" key={o.cc}>
-                  <div className="office-head">
-                    <span className="office-cc">{o.cc}</span>
-                    <strong>{o.name}</strong>
-                  </div>
-                  <p>{o.addr}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className="sf-copyright">{t('footer.copyright')}</div>
-      </footer>
+      <SiteFooter />
 
       <ContactModal open={contactOpen} onClose={() => setContactOpen(false)} />
     </main>
