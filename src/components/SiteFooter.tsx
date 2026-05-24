@@ -9,7 +9,7 @@ export default function SiteFooter() {
         <div className="sf-top">
           <div className="sf-brand">
             <div className="logo">
-              <img src="/logowhite.png" alt="EcoTech" style={{ height: 40, width: 'auto', display: 'block' }} />
+              <img src="/logoblack.png" alt="EcoTech" style={{ height: 40, width: 'auto', display: 'block' }} />
             </div>
             <p>{t('footer.tagline')}</p>
           </div>

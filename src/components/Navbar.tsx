@@ -68,7 +68,7 @@ export default function Navbar() {
       >
         <button className="logo" onClick={handleLogo}>
           {isCorporate ? (
-            <img src={theme === 'dark' ? '/logowhite.png' : '/logoblack.png'} alt="EcoTech" style={{ height: 38, width: 'auto', display: 'block' }} />
+            <img src={theme === 'dark' ? '/logoblack.png' : '/logowhite.png'} alt="EcoTech" style={{ height: 38, width: 'auto', display: 'block' }} />
           ) : (
             <>
               <LogoMark />
