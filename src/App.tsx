@@ -1,8 +1,9 @@
 import { lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
-import Home from './pages/Home'
+import Corporate from './pages/Corporate'
 
+const Home = lazy(() => import('./pages/Home'))
 const Profile = lazy(() => import('./pages/Profile'))
 const Recharge = lazy(() => import('./pages/Recharge'))
 const Login = lazy(() => import('./pages/Login'))
@@ -20,7 +21,8 @@ export default function App() {
       <Navbar />
       <Suspense fallback={<PageLoader />}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Corporate />} />
+          <Route path="/ecoapi" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/recharge" element={<Recharge />} />
           <Route path="/login" element={<Login />} />
