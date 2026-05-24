@@ -214,7 +214,7 @@ export default function Corporate() {
                   </div>
                   <h3 className="corp-news-title">{t('corp.news.2.title')}</h3>
                   <p className="corp-news-desc">{t('corp.news.2.desc')}</p>
-                  <span className="corp-news-link">{t('corp.news.2.link')}</span>
+                  <Link to="/article/deepseek-huawei" className="corp-news-link corp-news-link--active">{t('corp.news.2.link')}</Link>
                 </div>
               </article>
             </Reveal>
@@ -232,7 +232,7 @@ export default function Corporate() {
                   </div>
                   <h3 className="corp-news-title">{t('corp.news.3.title')}</h3>
                   <p className="corp-news-desc">{t('corp.news.3.desc')}</p>
-                  <span className="corp-news-link">{t('corp.news.3.link')}</span>
+                  <Link to="/article/h200-china" className="corp-news-link corp-news-link--active">{t('corp.news.3.link')}</Link>
                 </div>
               </article>
             </Reveal>
