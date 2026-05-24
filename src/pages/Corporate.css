@@ -86,20 +86,20 @@
 .corp-section-sub {
   text-align: center;
   color: var(--ink-soft);
-  font-size: clamp(14px, 1.5vw, 17px);
-  margin-bottom: 52px;
+  font-size: clamp(16px, 1.6vw, 19px);
+  margin-bottom: 68px;
 }
 
 /* INDUSTRY NEWS */
 .corp-news-section {
-  padding: 110px 6vw;
+  padding: 130px 6vw;
   background: var(--bg);
 }
 
 .corp-news-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  gap: 32px;
 }
 
 .corp-news-card {
@@ -113,39 +113,39 @@
 .corp-news-card:hover { transform: translateY(-5px); }
 
 .corp-news-img {
-  height: 176px;
+  height: 200px;
   display: flex;
   align-items: flex-end;
-  padding: 18px;
+  padding: 22px;
   flex-shrink: 0;
 }
 
 .corp-news-img-label {
   color: rgba(255, 255, 255, 0.82);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.6px;
   text-shadow: 0 1px 4px rgba(0,0,0,0.5);
 }
 
 .corp-news-body {
-  padding: 20px 22px 24px;
+  padding: 28px 28px 32px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 14px;
   flex: 1;
 }
 
 .corp-news-meta {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .corp-news-tag {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
-  padding: 3px 10px;
+  padding: 4px 12px;
   border-radius: 99px;
   background: var(--grad-soft);
   color: var(--blue);
@@ -153,36 +153,37 @@
 }
 
 .corp-news-date {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--ink-soft);
 }
 
 .corp-news-title {
-  font-size: 14.5px;
+  font-size: 17px;
   font-weight: 700;
   line-height: 1.45;
   color: var(--ink);
 }
 
 .corp-news-desc {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--ink-soft);
-  line-height: 1.65;
+  line-height: 1.7;
   flex: 1;
 }
 
 .corp-news-link {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--blue);
   transition: color 0.2s;
   align-self: flex-start;
   cursor: default;
+  margin-top: 4px;
 }
 
 /* BIZ SECTIONS (AI INFRA / AGENT / TOKEN) */
 .biz-section {
-  padding: 90px 6vw;
+  padding: 130px 6vw;
   background: var(--bg);
 }
 
@@ -192,8 +193,8 @@
 
 .biz-split {
   display: flex;
-  align-items: flex-start;
-  gap: 56px;
+  align-items: center;
+  gap: 80px;
 }
 
 .biz-left {
@@ -202,41 +203,41 @@
 
 .biz-badge {
   display: inline-block;
-  padding: 7px 18px;
+  padding: 9px 22px;
   background: rgba(24, 95, 165, 0.08);
   border-radius: 999px;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 700;
   letter-spacing: 1.2px;
   color: var(--blue);
-  margin-bottom: 24px;
+  margin-bottom: 32px;
 }
 
 .biz-title {
-  font-size: clamp(22px, 2.4vw, 32px);
+  font-size: clamp(26px, 2.8vw, 38px);
   font-weight: 800;
   color: var(--ink);
   line-height: 1.25;
-  margin-bottom: 20px;
+  margin-bottom: 28px;
 }
 
 .biz-desc {
-  font-size: 14.5px;
+  font-size: 17px;
   color: var(--ink-soft);
-  line-height: 1.75;
+  line-height: 1.85;
 }
 
 .biz-right {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px;
 }
 
 .biz-card {
   background: var(--card);
-  border-radius: 14px;
-  padding: 26px 30px;
+  border-radius: 16px;
+  padding: 34px 38px;
   position: relative;
   overflow: hidden;
   border: 1px solid var(--border);
@@ -255,22 +256,22 @@
 }
 
 .biz-card-title {
-  font-size: 16.5px;
+  font-size: 20px;
   font-weight: 700;
   color: var(--ink);
-  margin-bottom: 10px;
+  margin-bottom: 16px;
 }
 
 .biz-card-desc {
-  font-size: 13.5px;
+  font-size: 16px;
   color: var(--ink-soft);
-  line-height: 1.7;
+  line-height: 1.8;
 }
 
 .biz-card-link {
   display: inline-block;
-  margin-top: 14px;
-  font-size: 14px;
+  margin-top: 20px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--blue);
   cursor: pointer;
