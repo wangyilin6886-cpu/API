@@ -74,9 +74,15 @@ export default function Navbar() {
         <div className={`nav-links ${menuOpen ? 'open' : ''}`}>
           {isCorporate ? (
             <>
-              <button onClick={() => scrollToSection('ai-infra')}>{t('corp.nav.infra')}</button>
-              <Link to="/ecoapi" onClick={() => setMenuOpen(false)}>{t('corp.nav.token')}</Link>
-              <button onClick={() => scrollToSection('ai-agent')}>{t('corp.nav.agent')}</button>
+              <button onClick={() => scrollToSection('ai-infra')} className="nav-chevron-item">
+                {t('corp.nav.infra')}<ChevronDown />
+              </button>
+              <button onClick={() => scrollToSection('ai-agent')} className="nav-chevron-item">
+                {t('corp.nav.agent')}<ChevronDown />
+              </button>
+              <Link to="/ecoapi" onClick={() => setMenuOpen(false)} className="nav-chevron-item">
+                {t('corp.nav.token')}<ChevronDown />
+              </Link>
               <button onClick={() => scrollToSection('about')}>{t('corp.nav.about')}</button>
             </>
           ) : (
@@ -139,6 +145,14 @@ export default function Navbar() {
 
       <ContactModal open={contactOpen} onClose={() => setContactOpen(false)} />
     </>
+  )
+}
+
+function ChevronDown() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ marginLeft: 3, marginTop: 1, flexShrink: 0 }}>
+      <path d="M6 9l6 6 6-6" />
+    </svg>
   )
 }
 

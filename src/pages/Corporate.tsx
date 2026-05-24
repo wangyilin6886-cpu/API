@@ -20,50 +20,43 @@ function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
   )
 }
 
-const infraIcons = [
-  <svg key={0} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="22" height="22">
-    <rect x="2" y="4" width="20" height="7" rx="2"/><rect x="2" y="13" width="20" height="7" rx="2"/>
-    <path d="M6 7.5h.01M6 16.5h.01M10 7.5h4M10 16.5h4"/>
-  </svg>,
-  <svg key={1} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="22" height="22">
-    <rect x="3" y="3" width="18" height="5" rx="1.5"/><rect x="3" y="10" width="18" height="5" rx="1.5"/>
-    <rect x="3" y="17" width="18" height="4" rx="1.5"/><path d="M7 5.5h.01M7 12.5h.01"/>
-  </svg>,
-  <svg key={2} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="22" height="22">
-    <circle cx="12" cy="12" r="3"/>
-    <path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/>
-  </svg>,
-  <svg key={3} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="22" height="22">
-    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-  </svg>,
-  <svg key={4} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="22" height="22">
-    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-    <polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>
-  </svg>,
-]
-
-const agentIcons = [
-  <svg key={0} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="22" height="22">
-    <path d="M21 11.5a8.4 8.4 0 0 1-9 8.4L3 21l1.1-3.6A8.4 8.4 0 1 1 21 11.5z"/>
-  </svg>,
-  <svg key={1} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="22" height="22">
-    <circle cx="12" cy="12" r="3"/>
-    <path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/>
-  </svg>,
-  <svg key={2} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="22" height="22">
-    <rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>
-  </svg>,
-  <svg key={3} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="22" height="22">
-    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-    <circle cx="9" cy="7" r="4"/>
-    <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
-  </svg>,
-]
-
 const newsCards = [
   { grad: 'linear-gradient(135deg, #0f2540 0%, #185fa5 55%, #5dcaa5 100%)', label: 'DeepSeek × Huawei' },
   { grad: 'linear-gradient(135deg, #0d0d1a 0%, #1a1a3e 45%, #0f3060 100%)', label: 'NVIDIA H200' },
   { grad: 'linear-gradient(135deg, #185fa5 0%, #5dcaa5 65%, #0f2540 100%)', label: 'EcoTech' },
+]
+
+const bizSections = [
+  {
+    id: 'ai-infra',
+    badgeKey: 'biz.infra.badge',
+    titleKey: 'biz.infra.title',
+    descKey: 'biz.infra.desc',
+    cards: [
+      { titleKey: 'biz.infra.c1.title', descKey: 'biz.infra.c1.desc', linkKey: 'biz.infra.c1.link' as string | undefined },
+      { titleKey: 'biz.infra.c2.title', descKey: 'biz.infra.c2.desc', linkKey: undefined },
+    ],
+  },
+  {
+    id: 'ai-agent',
+    badgeKey: 'biz.agent.badge',
+    titleKey: 'biz.agent.title',
+    descKey: 'biz.agent.desc',
+    cards: [
+      { titleKey: 'biz.agent.c1.title', descKey: 'biz.agent.c1.desc', linkKey: undefined },
+      { titleKey: 'biz.agent.c2.title', descKey: 'biz.agent.c2.desc', linkKey: undefined },
+    ],
+  },
+  {
+    id: 'ai-token',
+    badgeKey: 'biz.token.badge',
+    titleKey: 'biz.token.title',
+    descKey: 'biz.token.desc',
+    cards: [
+      { titleKey: 'biz.token.c1.title', descKey: 'biz.token.c1.desc', linkKey: undefined },
+      { titleKey: 'biz.token.c2.title', descKey: 'biz.token.c2.desc', linkKey: undefined },
+    ],
+  },
 ]
 
 export default function Corporate() {
@@ -95,10 +88,8 @@ export default function Corporate() {
           >
             {t('corp.hero.eyebrow')}
           </motion.span>
-
           <h1 className="corp-hero-title gradient-text">{t('corp.hero.title')}</h1>
           <p className="corp-hero-sub">{t('corp.hero.subtitle')}</p>
-
           <div className="corp-hero-btns">
             <motion.button
               className="btn-grad"
@@ -125,94 +116,12 @@ export default function Corporate() {
         </motion.div>
       </section>
 
-      {/* ===== AI INFRA ===== */}
-      <section id="ai-infra" className="corp-infra-section">
-        <div className="container corp-split">
-          <div className="corp-split-text">
-            <Reveal>
-              <span className="eyebrow">{t('corp.infra.eyebrow')}</span>
-            </Reveal>
-            <Reveal delay={0.08}>
-              <h2 className="section-title corp-split-title">{t('corp.infra.title')}</h2>
-            </Reveal>
-            <Reveal delay={0.14}>
-              <p className="corp-split-sub">{t('corp.infra.subtitle')}</p>
-            </Reveal>
-            <ul className="corp-product-list">
-              {([1, 2, 3, 4, 5] as const).map((i, idx) => (
-                <Reveal key={i} delay={0.2 + idx * 0.06}>
-                  <li className="corp-product-item">
-                    <span className="corp-product-icon">{infraIcons[i - 1]}</span>
-                    {t(`corp.infra.${i}`)}
-                  </li>
-                </Reveal>
-              ))}
-            </ul>
-          </div>
-
-          <Reveal delay={0.18}>
-            <div className="corp-infra-visual">
-              <div className="corp-card-grid">
-                {([1, 2, 3, 4, 5] as const).map((i) => (
-                  <div key={i} className={`corp-product-card glass corp-infra-c${i}`}>
-                    <span className="corp-card-icon-wrap">{infraIcons[i - 1]}</span>
-                    <span className="corp-card-label">{t(`corp.infra.${i}`)}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ===== AI AGENT ===== */}
-      <section id="ai-agent" className="corp-agent-section">
-        <div className="container corp-split corp-split-rev">
-          <Reveal delay={0.18}>
-            <div className="corp-agent-visual">
-              <div className="corp-agent-grid">
-                {([1, 2, 3, 4] as const).map((i) => (
-                  <div key={i} className={`corp-product-card glass corp-agent-c${i}`}>
-                    <span className="corp-card-icon-wrap">{agentIcons[i - 1]}</span>
-                    <span className="corp-card-label">{t(`corp.agent.${i}`)}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Reveal>
-
-          <div className="corp-split-text">
-            <Reveal>
-              <span className="eyebrow">{t('corp.agent.eyebrow')}</span>
-            </Reveal>
-            <Reveal delay={0.08}>
-              <h2 className="section-title corp-split-title">{t('corp.agent.title')}</h2>
-            </Reveal>
-            <Reveal delay={0.14}>
-              <p className="corp-split-sub">{t('corp.agent.subtitle')}</p>
-            </Reveal>
-            <ul className="corp-product-list">
-              {([1, 2, 3, 4] as const).map((i, idx) => (
-                <Reveal key={i} delay={0.2 + idx * 0.06}>
-                  <li className="corp-product-item">
-                    <span className="corp-product-icon">{agentIcons[i - 1]}</span>
-                    {t(`corp.agent.${i}`)}
-                  </li>
-                </Reveal>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
-
       {/* ===== INDUSTRY NEWS ===== */}
       <section className="corp-news-section">
         <div className="container">
           <Reveal>
-            <div style={{ textAlign: 'center', marginBottom: '14px' }}>
-              <span className="eyebrow">{t('corp.news.title')}</span>
-            </div>
-            <p className="section-subtitle" style={{ marginTop: 0 }}>{t('corp.news.subtitle')}</p>
+            <h2 className="corp-section-title">{t('corp.news.title')}</h2>
+            <p className="corp-section-sub">{t('corp.news.subtitle')}</p>
           </Reveal>
           <div className="corp-news-grid">
             {([1, 2, 3] as const).map((i) => (
@@ -236,6 +145,38 @@ export default function Corporate() {
           </div>
         </div>
       </section>
+
+      {/* ===== BIZ SECTIONS: AI INFRA / AGENT / TOKEN ===== */}
+      {bizSections.map((sec, si) => (
+        <section
+          key={sec.id}
+          id={sec.id}
+          className={`biz-section${si % 2 === 1 ? ' biz-section-alt' : ''}`}
+        >
+          <div className="container biz-split">
+            <div className="biz-left">
+              <Reveal>
+                <span className="biz-badge">{t(sec.badgeKey)}</span>
+                <h2 className="biz-title">{t(sec.titleKey)}</h2>
+                <p className="biz-desc">{t(sec.descKey)}</p>
+              </Reveal>
+            </div>
+            <div className="biz-right">
+              {sec.cards.map((card, ci) => (
+                <Reveal key={ci} delay={0.15 + ci * 0.1}>
+                  <div className="biz-card">
+                    <h3 className="biz-card-title">{t(card.titleKey)}</h3>
+                    <p className="biz-card-desc">{t(card.descKey)}</p>
+                    {card.linkKey && (
+                      <span className="biz-card-link">{t(card.linkKey)}</span>
+                    )}
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+      ))}
 
       {/* ===== FOOTER ===== */}
       <footer id="about" className="site-footer">
@@ -269,7 +210,6 @@ export default function Corporate() {
               </div>
             </div>
           </div>
-
           <div className="sf-offices">
             <h4 className="sf-office-title">{t('footer.offices')}</h4>
             <div className="offices-grid">
