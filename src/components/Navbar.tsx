@@ -67,7 +67,11 @@ export default function Navbar() {
         transition={{ duration: 0.6, ease: 'easeOut' }}
       >
         <button className="logo" onClick={handleLogo}>
-          <LogoMark />
+          {isCorporate ? (
+            <img className="logo-mark" src={theme === 'dark' ? '/logowhite.png' : '/logoblack.png'} alt="EcoTech" style={{ width: 32, height: 32 }} />
+          ) : (
+            <LogoMark />
+          )}
           <span className="logo-text gradient-text">{isCorporate ? 'EcoTech' : 'EcoAPI'}</span>
         </button>
 
