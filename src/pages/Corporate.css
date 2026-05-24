@@ -181,6 +181,46 @@
   margin-top: 4px;
 }
 
+/* WHY THIS MATTERS */
+.corp-why {
+  position: relative;
+  margin-top: 44px;
+  background: var(--grad-soft);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 38px 46px 38px 50px;
+  overflow: hidden;
+}
+
+.corp-why::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, #185fa5, #5dcaa5);
+}
+
+.corp-why-label {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  color: var(--blue);
+  margin-bottom: 18px;
+}
+
+.corp-why-body {
+  font-size: 18px;
+  color: var(--ink-soft);
+  line-height: 1.85;
+}
+
+@media (max-width: 600px) {
+  .corp-why { padding: 28px 26px 28px 30px; }
+  .corp-why-body { font-size: 16px; }
+}
+
 /* BIZ SECTIONS (AI INFRA / AGENT / TOKEN) */
 .biz-section {
   padding: 130px 6vw;

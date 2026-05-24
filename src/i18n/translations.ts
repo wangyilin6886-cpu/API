@@ -408,6 +408,8 @@ export const translations: Record<Lang, Dict> = {
     'biz.token.c1.desc': '了解 AI 扩展对物理和技术环境意味着什么。',
     'biz.token.c2.title': '集成设计',
     'biz.token.c2.desc': '从现状到 AI 就绪运营，规划更清晰的架构路径。',
+    'corp.why.label': '为何重要',
+    'corp.why.body': 'AI 基础设施格局正在快速演变——从主权芯片、模型适配，到实时性能排行，再到不断变化的出口政策。EcoTech 持续追踪这些信号，助力企业制定在我们服务的每一个市场都保持相关性、合规性与竞争力的部署策略。',
   },
   en: {
     'nav.home': 'Home',
@@ -808,6 +810,8 @@ export const translations: Record<Lang, Dict> = {
     'biz.token.c1.desc': 'Understand what AI expansion means for the physical and technical environment.',
     'biz.token.c2.title': 'Integrated Design',
     'biz.token.c2.desc': 'Shape a cleaner architecture path from current state to AI-capable operations.',
+    'corp.why.label': 'WHY THIS MATTERS',
+    'corp.why.body': 'The AI infrastructure landscape is shifting fast — from sovereign silicon and model adaptation, to live performance rankings, to evolving export policy. EcoTech tracks these signals so enterprises can build deployment strategies that stay relevant, compliant, and competitive across every market we serve.',
   },
   id: {
     'nav.home': 'Beranda',
@@ -1208,5 +1212,7 @@ export const translations: Record<Lang, Dict> = {
     'biz.token.c1.desc': 'Pahami apa arti ekspansi AI bagi lingkungan fisik dan teknis.',
     'biz.token.c2.title': 'Desain Terintegrasi',
     'biz.token.c2.desc': 'Bentuk jalur arsitektur yang lebih bersih dari kondisi saat ini ke operasi siap-AI.',
+    'corp.why.label': 'MENGAPA INI PENTING',
+    'corp.why.body': 'Lanskap infrastruktur AI bergeser dengan cepat — dari silikon berdaulat dan adaptasi model, hingga peringkat kinerja langsung, hingga kebijakan ekspor yang terus berkembang. EcoTech melacak sinyal-sinyal ini agar perusahaan dapat membangun strategi deployment yang tetap relevan, patuh, dan kompetitif di setiap pasar yang kami layani.',
   },
 }

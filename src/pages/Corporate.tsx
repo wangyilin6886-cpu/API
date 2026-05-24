@@ -143,6 +143,12 @@ export default function Corporate() {
               </Reveal>
             ))}
           </div>
+          <Reveal delay={0.1}>
+            <div className="corp-why">
+              <p className="corp-why-label">{t('corp.why.label')}</p>
+              <p className="corp-why-body">{t('corp.why.body')}</p>
+            </div>
+          </Reveal>
         </div>
       </section>
 
