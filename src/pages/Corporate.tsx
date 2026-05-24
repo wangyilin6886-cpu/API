@@ -131,17 +131,8 @@ export default function Corporate() {
             {/* Card 1: OpenRouter Leaderboard */}
             <Reveal delay={0.1}>
               <article className="corp-news-card glass">
-                <div className="corp-news-visual">
+                <div className="corp-news-visual" style={{ backgroundImage: 'url(/news1.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
                   <span className="corp-news-live-badge">{t('corp.news.1.badge')}</span>
-                  <div className="corp-leaderboard">
-                    {leaderboardRows.map((row) => (
-                      <div key={row.rank} className="corp-lb-row">
-                        <span className="corp-lb-rank">#{row.rank}</span>
-                        <span className="corp-lb-name">{row.name}</span>
-                        <span className="corp-lb-tokens">{row.tokens}</span>
-                      </div>
-                    ))}
-                  </div>
                 </div>
                 <div className="corp-news-body">
                   <div className="corp-news-meta">
@@ -160,19 +151,8 @@ export default function Corporate() {
             {/* Card 2: Reuters China – DeepSeek × Huawei */}
             <Reveal delay={0.2}>
               <article className="corp-news-card glass">
-                <div className="corp-news-visual">
+                <div className="corp-news-visual" style={{ backgroundImage: 'url(/news2.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
                   <span className="corp-news-live-badge">{t('corp.news.2.badge')}</span>
-                  <div className="corp-logos-display">
-                    <div className="corp-logo-block corp-logo-block--deepseek">
-                      <span className="corp-logo-letter">D</span>
-                      <span className="corp-logo-name">DeepSeek</span>
-                    </div>
-                    <span className="corp-logo-times">×</span>
-                    <div className="corp-logo-block corp-logo-block--huawei">
-                      <span className="corp-logo-letter">H</span>
-                      <span className="corp-logo-name">Huawei</span>
-                    </div>
-                  </div>
                 </div>
                 <div className="corp-news-body">
                   <div className="corp-news-meta">
@@ -189,18 +169,8 @@ export default function Corporate() {
             {/* Card 3: Reuters Policy – H200 */}
             <Reveal delay={0.3}>
               <article className="corp-news-card glass">
-                <div className="corp-news-visual">
+                <div className="corp-news-visual" style={{ backgroundImage: 'url(/news3.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
                   <span className="corp-news-live-badge">{t('corp.news.3.badge')}</span>
-                  <div className="corp-chip-display">
-                    <div className="corp-chip-rect">
-                      <span className="corp-chip-label">H200</span>
-                      <div className="corp-chip-grid">
-                        {Array.from({ length: 16 }).map((_, i) => (
-                          <div key={i} className="corp-chip-cell" />
-                        ))}
-                      </div>
-                    </div>
-                  </div>
                 </div>
                 <div className="corp-news-body">
                   <div className="corp-news-meta">
