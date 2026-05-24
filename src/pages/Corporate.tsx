@@ -20,10 +20,12 @@ function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
   )
 }
 
-const newsCards = [
-  { grad: 'linear-gradient(135deg, #0f2540 0%, #185fa5 55%, #5dcaa5 100%)', label: 'DeepSeek × Huawei' },
-  { grad: 'linear-gradient(135deg, #0d0d1a 0%, #1a1a3e 45%, #0f3060 100%)', label: 'NVIDIA H200' },
-  { grad: 'linear-gradient(135deg, #185fa5 0%, #5dcaa5 65%, #0f2540 100%)', label: 'EcoTech' },
+const leaderboardRows = [
+  { rank: 1, name: 'Hy3 preview', tokens: '2.4T' },
+  { rank: 2, name: 'Claude Opus 4.7', tokens: '1.5T' },
+  { rank: 3, name: 'Claude Sonnet 4.6', tokens: '1.5T' },
+  { rank: 4, name: 'DeepSeek V4 Flash', tokens: '1.4T' },
+  { rank: 5, name: 'Kimi K2.6', tokens: '1.2T' },
 ]
 
 const bizSections = [
@@ -120,28 +122,97 @@ export default function Corporate() {
       <section className="corp-news-section">
         <div className="container">
           <Reveal>
-            <h2 className="corp-section-title">{t('corp.news.title')}</h2>
+            <div className="corp-section-header">
+              <h2 className="corp-section-title">{t('corp.news.title')}</h2>
+            </div>
             <p className="corp-section-sub">{t('corp.news.subtitle')}</p>
           </Reveal>
           <div className="corp-news-grid">
-            {([1, 2, 3] as const).map((i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <article className="corp-news-card glass">
-                  <div className="corp-news-img" style={{ background: newsCards[i - 1].grad }}>
-                    <span className="corp-news-img-label">{newsCards[i - 1].label}</span>
+            {/* Card 1: OpenRouter Leaderboard */}
+            <Reveal delay={0.1}>
+              <article className="corp-news-card glass">
+                <div className="corp-news-visual">
+                  <span className="corp-news-live-badge">{t('corp.news.1.badge')}</span>
+                  <div className="corp-leaderboard">
+                    {leaderboardRows.map((row) => (
+                      <div key={row.rank} className="corp-lb-row">
+                        <span className="corp-lb-rank">#{row.rank}</span>
+                        <span className="corp-lb-name">{row.name}</span>
+                        <span className="corp-lb-tokens">{row.tokens}</span>
+                      </div>
+                    ))}
                   </div>
-                  <div className="corp-news-body">
-                    <div className="corp-news-meta">
-                      <span className="corp-news-tag">{t(`corp.news.${i}.tag`)}</span>
-                      <span className="corp-news-date">{t(`corp.news.${i}.date`)}</span>
+                </div>
+                <div className="corp-news-body">
+                  <div className="corp-news-meta">
+                    <span className="corp-news-tag">{t('corp.news.1.tag')}</span>
+                    <span className="corp-news-date">{t('corp.news.1.date')}</span>
+                  </div>
+                  <h3 className="corp-news-title">{t('corp.news.1.title')}</h3>
+                  <p className="corp-news-desc">{t('corp.news.1.desc')}</p>
+                  <a className="corp-news-link corp-news-link--active" href="https://openrouter.ai/rankings" target="_blank" rel="noopener noreferrer">
+                    {t('corp.news.1.link')}
+                  </a>
+                </div>
+              </article>
+            </Reveal>
+
+            {/* Card 2: Reuters China – DeepSeek × Huawei */}
+            <Reveal delay={0.2}>
+              <article className="corp-news-card glass">
+                <div className="corp-news-visual">
+                  <span className="corp-news-live-badge">{t('corp.news.2.badge')}</span>
+                  <div className="corp-logos-display">
+                    <div className="corp-logo-block corp-logo-block--deepseek">
+                      <span className="corp-logo-letter">D</span>
+                      <span className="corp-logo-name">DeepSeek</span>
                     </div>
-                    <h3 className="corp-news-title">{t(`corp.news.${i}.title`)}</h3>
-                    <p className="corp-news-desc">{t(`corp.news.${i}.desc`)}</p>
-                    <span className="corp-news-link">{t('corp.news.readMore')}</span>
+                    <span className="corp-logo-times">×</span>
+                    <div className="corp-logo-block corp-logo-block--huawei">
+                      <span className="corp-logo-letter">H</span>
+                      <span className="corp-logo-name">Huawei</span>
+                    </div>
                   </div>
-                </article>
-              </Reveal>
-            ))}
+                </div>
+                <div className="corp-news-body">
+                  <div className="corp-news-meta">
+                    <span className="corp-news-tag">{t('corp.news.2.tag')}</span>
+                    <span className="corp-news-date">{t('corp.news.2.date')}</span>
+                  </div>
+                  <h3 className="corp-news-title">{t('corp.news.2.title')}</h3>
+                  <p className="corp-news-desc">{t('corp.news.2.desc')}</p>
+                  <span className="corp-news-link">{t('corp.news.2.link')}</span>
+                </div>
+              </article>
+            </Reveal>
+
+            {/* Card 3: Reuters Policy – H200 */}
+            <Reveal delay={0.3}>
+              <article className="corp-news-card glass">
+                <div className="corp-news-visual">
+                  <span className="corp-news-live-badge">{t('corp.news.3.badge')}</span>
+                  <div className="corp-chip-display">
+                    <div className="corp-chip-rect">
+                      <span className="corp-chip-label">H200</span>
+                      <div className="corp-chip-grid">
+                        {Array.from({ length: 16 }).map((_, i) => (
+                          <div key={i} className="corp-chip-cell" />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="corp-news-body">
+                  <div className="corp-news-meta">
+                    <span className="corp-news-tag">{t('corp.news.3.tag')}</span>
+                    <span className="corp-news-date">{t('corp.news.3.date')}</span>
+                  </div>
+                  <h3 className="corp-news-title">{t('corp.news.3.title')}</h3>
+                  <p className="corp-news-desc">{t('corp.news.3.desc')}</p>
+                  <span className="corp-news-link">{t('corp.news.3.link')}</span>
+                </div>
+              </article>
+            </Reveal>
           </div>
           <Reveal delay={0.1}>
             <div className="corp-why">

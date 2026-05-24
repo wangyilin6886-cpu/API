@@ -81,6 +81,25 @@
   color: var(--ink);
   letter-spacing: -1px;
   margin-bottom: 14px;
+  display: inline-block;
+  position: relative;
+  padding-bottom: 16px;
+}
+
+.corp-section-title::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  width: 64px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--grad);
+}
+
+.corp-section-header {
+  text-align: center;
 }
 
 .corp-section-sub {
@@ -112,20 +131,164 @@
 
 .corp-news-card:hover { transform: translateY(-5px); }
 
-.corp-news-img {
-  height: 200px;
+/* NEWS CARD VISUAL AREA */
+.corp-news-visual {
+  height: 210px;
+  background: #0b1628;
+  position: relative;
   display: flex;
-  align-items: flex-end;
-  padding: 22px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.corp-news-live-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.75);
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 6px;
+  padding: 4px 10px;
+}
+
+/* Leaderboard */
+.corp-leaderboard {
+  width: calc(100% - 32px);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.corp-lb-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 7px;
+  padding: 7px 12px;
+}
+
+.corp-lb-rank {
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.35);
+  width: 24px;
   flex-shrink: 0;
 }
 
-.corp-news-img-label {
-  color: rgba(255, 255, 255, 0.82);
-  font-size: 14px;
+.corp-lb-name {
+  font-size: 12.5px;
+  color: rgba(255,255,255,0.82);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.corp-lb-tokens {
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.6px;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+  color: #5dcaa5;
+  flex-shrink: 0;
+}
+
+/* DeepSeek × Huawei logos */
+.corp-logos-display {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.corp-logo-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.corp-logo-letter {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 900;
+  color: #fff;
+}
+
+.corp-logo-block--deepseek .corp-logo-letter {
+  background: linear-gradient(135deg, #0f2540, #185fa5);
+}
+
+.corp-logo-block--huawei .corp-logo-letter {
+  background: linear-gradient(135deg, #c00, #e83030);
+}
+
+.corp-logo-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.5px;
+}
+
+.corp-logo-times {
+  font-size: 28px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.3);
+  margin-top: -12px;
+}
+
+/* H200 chip */
+.corp-chip-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.corp-chip-rect {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  background: linear-gradient(135deg, #1e2a3a, #2a3a4e);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 30px rgba(24,95,165,0.25);
+}
+
+.corp-chip-label {
+  font-size: 22px;
+  font-weight: 900;
+  color: rgba(255,255,255,0.85);
+  letter-spacing: 1px;
+  position: relative;
+  z-index: 1;
+}
+
+.corp-chip-grid {
+  position: absolute;
+  inset: 8px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  opacity: 0.12;
+}
+
+.corp-chip-cell {
+  background: rgba(255,255,255,0.6);
+  border-radius: 2px;
 }
 
 .corp-news-body {
@@ -180,6 +343,14 @@
   cursor: default;
   margin-top: 4px;
 }
+
+.corp-news-link--active {
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.corp-news-link--active:hover { color: var(--teal); }
 
 /* WHY THIS MATTERS */
 .corp-why {
