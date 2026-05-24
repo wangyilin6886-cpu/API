@@ -1,5 +1,9 @@
+import { useTheme } from '../theme/ThemeContext'
+
 interface Props { className?: string }
 
 export default function LogoMark({ className }: Props) {
-  return <img className={`logo-mark ${className || ''}`} src="/logo.png" alt="EcoAPI" />
+  const { theme } = useTheme()
+  const src = theme === 'dark' ? '/rootlogo.png' : '/logo.png'
+  return <img className={`logo-mark ${className || ''}`} src={src} alt="EcoAPI" />
 }

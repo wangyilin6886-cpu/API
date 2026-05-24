@@ -237,7 +237,7 @@ export const translations: Record<Lang, Dict> = {
     'footer.sg': '新加坡',
     'footer.id': '印度尼西亚',
     'footer.cn': '中国',
-    'footer.copyright': '© 2026 Global EcoAPI Systems PTE. LTD. 保留所有权利。',
+    'footer.copyright': '© 2026 Global EcoTech Systems PTE. LTD. 保留所有权利。',
 
     'profile.title': '个人中心',
     'profile.balance': '账户余额',
@@ -573,7 +573,7 @@ export const translations: Record<Lang, Dict> = {
     'footer.sg': 'Singapore',
     'footer.id': 'Indonesia',
     'footer.cn': 'China',
-    'footer.copyright': '© 2026 Global EcoAPI Systems PTE. LTD. All rights reserved.',
+    'footer.copyright': '© 2026 Global EcoTech Systems PTE. LTD. All rights reserved.',
 
     'profile.title': 'Dashboard',
     'profile.balance': 'Balance',
@@ -909,7 +909,7 @@ export const translations: Record<Lang, Dict> = {
     'footer.sg': 'Singapura',
     'footer.id': 'Indonesia',
     'footer.cn': 'Tiongkok',
-    'footer.copyright': '© 2026 Global EcoAPI Systems PTE. LTD. Hak cipta dilindungi.',
+    'footer.copyright': '© 2026 Global EcoTech Systems PTE. LTD. Hak cipta dilindungi.',
 
     'profile.title': 'Dasbor',
     'profile.balance': 'Saldo',
