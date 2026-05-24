@@ -109,6 +109,143 @@
   margin-bottom: 68px;
 }
 
+/* ECO QUOTE + STATS */
+.corp-eco-section {
+  padding: 120px 6vw 96px;
+  background: var(--bg);
+}
+
+.corp-eco-quote {
+  position: relative;
+  max-width: 940px;
+  margin: 0 auto;
+  padding-left: 36px;
+  font-size: clamp(20px, 2.2vw, 28px);
+  line-height: 1.6;
+  color: var(--ink);
+  font-weight: 400;
+}
+
+.corp-eco-quote::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 4px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #185fa5, #5dcaa5);
+}
+
+.corp-eco-quote strong { font-weight: 800; color: var(--ink); }
+
+.corp-eco-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  max-width: 940px;
+  margin: 60px auto 0;
+}
+
+.corp-eco-stat {
+  padding: 6px 28px;
+  border-left: 1px solid var(--border);
+  transition: transform 0.35s cubic-bezier(.22,1,.36,1);
+}
+.corp-eco-stat:first-child { border-left: none; padding-left: 36px; }
+.corp-eco-stat:hover { transform: translateY(-10px); }
+
+.corp-eco-stat-num {
+  font-size: 42px;
+  font-weight: 800;
+  color: var(--blue);
+  line-height: 1;
+  margin-bottom: 16px;
+}
+.corp-eco-stat-num sup { font-size: 0.55em; font-weight: 800; }
+
+.corp-eco-stat-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  margin-bottom: 5px;
+}
+.corp-eco-stat-sub { font-size: 14px; color: var(--ink-soft); opacity: 0.65; }
+
+/* WHAT WE DO: THREE PILLARS */
+.corp-pillars-section {
+  padding: 96px 6vw 130px;
+  background: var(--bg-alt);
+}
+
+.corp-pillars-badge {
+  display: inline-block;
+  padding: 10px 24px;
+  border-radius: 999px;
+  background: rgba(91, 91, 214, 0.1);
+  color: #5b5bd6;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-bottom: 30px;
+}
+
+.corp-pillars-title {
+  font-size: clamp(30px, 4vw, 48px);
+  font-weight: 900;
+  color: var(--ink);
+  letter-spacing: -1px;
+  margin-bottom: 56px;
+}
+
+.corp-pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.corp-pillar-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 34px 32px 38px;
+  transition: transform 0.35s cubic-bezier(.22,1,.36,1), box-shadow 0.35s;
+}
+
+.corp-pillar-card:hover { transform: translateY(-10px); box-shadow: 0 34px 70px -24px rgba(24,95,165,0.42); }
+
+.corp-pillar-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 13px;
+  background: rgba(91, 91, 214, 0.1);
+  color: #5b5bd6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 26px;
+}
+
+.corp-pillar-title {
+  font-size: 21px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 16px;
+}
+
+.corp-pillar-desc {
+  font-size: 15.5px;
+  color: var(--ink-soft);
+  line-height: 1.75;
+}
+
+@media (max-width: 900px) {
+  .corp-eco-stats { grid-template-columns: 1fr; gap: 0; }
+  .corp-eco-stat { border-left: none; border-top: 1px solid var(--border); padding: 24px 0; }
+  .corp-eco-stat:first-child { border-top: none; padding-left: 0; }
+  .corp-pillars-grid { grid-template-columns: 1fr; }
+}
+
 /* INDUSTRY NEWS */
 .corp-news-section {
   padding: 130px 6vw;
@@ -126,10 +263,10 @@
   border-radius: 20px;
   display: flex;
   flex-direction: column;
-  transition: transform 0.25s ease;
+  transition: transform 0.35s cubic-bezier(.22,1,.36,1), box-shadow 0.35s;
 }
 
-.corp-news-card:hover { transform: translateY(-5px); }
+.corp-news-card:hover { transform: translateY(-10px); box-shadow: 0 34px 70px -24px rgba(24,95,165,0.42); }
 
 /* NEWS CARD VISUAL AREA */
 .corp-news-visual {
@@ -454,7 +591,10 @@
   border: 1px solid var(--border);
   box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
   backdrop-filter: blur(8px);
+  transition: transform 0.35s cubic-bezier(.22,1,.36,1), box-shadow 0.35s;
 }
+
+.biz-card:hover { transform: translateY(-10px); box-shadow: 0 34px 70px -24px rgba(24,95,165,0.42); }
 
 .biz-card::before {
   content: '';

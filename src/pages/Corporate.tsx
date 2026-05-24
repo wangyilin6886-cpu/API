@@ -118,6 +118,59 @@ export default function Corporate() {
         </motion.div>
       </section>
 
+      {/* ===== ECO QUOTE + STATS ===== */}
+      <section className="corp-eco-section">
+        <div className="container">
+          <Reveal>
+            <blockquote className="corp-eco-quote">
+              {t('corp.eco.q1')}
+              <strong>{t('corp.eco.qBold')}</strong>
+              {t('corp.eco.q2')}
+            </blockquote>
+          </Reveal>
+          <div className="corp-eco-stats">
+            {[
+              { num: <>3</>, key: 'corp.eco.stat1' },
+              { num: <>AI<sup>3</sup></>, key: 'corp.eco.stat2' },
+              { num: <>&infin;</>, key: 'corp.eco.stat3' },
+            ].map((s, i) => (
+              <Reveal key={s.key} delay={0.1 + i * 0.1}>
+                <div className="corp-eco-stat">
+                  <div className="corp-eco-stat-num">{s.num}</div>
+                  <div className="corp-eco-stat-label">{t(`${s.key}.label`)}</div>
+                  <div className="corp-eco-stat-sub">{t(`${s.key}.sub`)}</div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== WHAT WE DO: THREE PILLARS ===== */}
+      <section className="corp-pillars-section">
+        <div className="container">
+          <Reveal>
+            <span className="corp-pillars-badge">{t('corp.pillars.badge')}</span>
+            <h2 className="corp-pillars-title">{t('corp.pillars.title')}</h2>
+          </Reveal>
+          <div className="corp-pillars-grid">
+            {[
+              { icon: <PillarGlobe />, key: 'corp.pillar1' },
+              { icon: <PillarChart />, key: 'corp.pillar2' },
+              { icon: <PillarBox />, key: 'corp.pillar3' },
+            ].map((p, i) => (
+              <Reveal key={p.key} delay={0.1 + i * 0.1}>
+                <div className="corp-pillar-card">
+                  <div className="corp-pillar-icon">{p.icon}</div>
+                  <h3 className="corp-pillar-title">{t(`${p.key}.title`)}</h3>
+                  <p className="corp-pillar-desc">{t(`${p.key}.desc`)}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ===== INDUSTRY NEWS ===== */}
       <section className="corp-news-section">
         <div className="container">
@@ -281,5 +334,29 @@ export default function Corporate() {
 
       <ContactModal open={contactOpen} onClose={() => setContactOpen(false)} />
     </main>
+  )
+}
+
+function PillarGlobe() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M3 12h18M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18" />
+    </svg>
+  )
+}
+function PillarChart() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+      <path d="M5 20V10M12 20V4M19 20v-6" />
+    </svg>
+  )
+}
+function PillarBox() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round">
+      <path d="M21 8l-9-5-9 5v8l9 5 9-5V8z" />
+      <path d="M3 8l9 5 9-5M12 13v8" />
+    </svg>
   )
 }

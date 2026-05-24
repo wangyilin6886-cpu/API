@@ -7,12 +7,12 @@ interface I18nCtx {
   t: (key: string) => string
 }
 
-const Ctx = createContext<I18nCtx>({ lang: 'zh', setLang: () => {}, t: (k) => k })
+const Ctx = createContext<I18nCtx>({ lang: 'en', setLang: () => {}, t: (k) => k })
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>(() => {
     const saved = localStorage.getItem('lang') as Lang | null
-    return saved && ['zh', 'en', 'id'].includes(saved) ? saved : 'zh'
+    return saved && ['zh', 'en', 'id'].includes(saved) ? saved : 'en'
   })
 
   const setLang = useCallback((l: Lang) => {
