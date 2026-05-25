@@ -56,7 +56,7 @@ export default function ApiDocs() {
       <div className="page-inner">
         <Reveal>
           <div className="page-head">
-            <button className="btn-ghost" style={{ padding: '8px 18px', fontSize: 14, marginBottom: 20 }} onClick={() => nav('/')}>← {t('api.back')}</button>
+            <button className="btn-ghost" style={{ padding: '8px 18px', fontSize: 14, marginBottom: 20 }} onClick={() => nav('/ecoapi')}>← {t('api.back')}</button>
             <h1 className="gradient-text">{t('api.title')}</h1>
             <p>{t('api.subtitle')}</p>
           </div>

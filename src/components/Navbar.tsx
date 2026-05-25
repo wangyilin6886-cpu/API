@@ -89,11 +89,11 @@ export default function Navbar() {
               <Link to="/ecoapi" onClick={() => setMenuOpen(false)} className="nav-chevron-item">
                 {t('corp.nav.token')}<ChevronDown />
               </Link>
-              <button onClick={() => scrollToSection('about')}>{t('corp.nav.about')}</button>
+              <button onClick={() => scrollToSection('overview')}>{t('corp.nav.about')}</button>
             </>
           ) : (
             <>
-              <button onClick={goGateway}>{t('nav.home')}</button>
+              <button onClick={() => { setMenuOpen(false); nav('/') }}>{t('nav.home')}</button>
               <Link to="/profile" onClick={() => setMenuOpen(false)}>{t('nav.profile')}</Link>
               <Link to="/recharge" onClick={() => setMenuOpen(false)}>{t('nav.recharge')}</Link>
             </>
