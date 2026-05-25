@@ -2,9 +2,18 @@
   "redirects": [
     {
       "source": "/",
-      "has": [{ "type": "host", "value": "ecoapi.ai" }],
+      "has": [{ "type": "host", "value": "ecoapi\\.ai" }],
+      "destination": "/ecoapi",
+      "permanent": false
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "www\\.ecoapi\\.ai" }],
       "destination": "/ecoapi",
       "permanent": false
     }
+  ],
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
