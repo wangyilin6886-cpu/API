@@ -454,7 +454,7 @@ export default function Home() {
         <div className="container">
           <div className="sf-top">
             <div className="sf-brand">
-              <div className="logo"><img className="logo-mark" src="/rootlogo.png" alt="EcoTech" /><span className="logo-text gradient-text">EcoTech</span></div>
+              <div className="logo"><img src="/logoblack.png" alt="EcoAPI" style={{ height: 36, width: 'auto', display: 'block' }} /></div>
               <p>{t('footer.tagline')}</p>
             </div>
             <div className="sf-cols">
