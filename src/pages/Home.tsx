@@ -466,9 +466,11 @@ export default function Home() {
               </div>
               <div className="sf-col">
                 <h4>{t('foot.agent')}</h4>
-                {['foot.agent1', 'foot.agent2', 'foot.agent3', 'foot.agent4'].map((k) => (
-                  <a key={k} href="#" onClick={(e) => e.preventDefault()}>{t(k)}</a>
-                ))}
+                {['foot.agent1', 'foot.agent2', 'foot.agent3', 'foot.agent4'].map((k) =>
+                  k === 'foot.agent2'
+                    ? <a key={k} href="https://www.castrel.ai/" target="_blank" rel="noopener noreferrer">{t(k)}</a>
+                    : <a key={k} href="#" onClick={(e) => e.preventDefault()}>{t(k)}</a>
+                )}
               </div>
               <div className="sf-col">
                 <h4>{t('foot.token')}</h4>

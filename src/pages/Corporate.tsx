@@ -120,7 +120,7 @@ export default function Corporate() {
       </section>
 
       {/* ===== ECO QUOTE + STATS ===== */}
-      <section className="corp-eco-section">
+      <section id="overview" className="corp-eco-section">
         <div className="container">
           <Reveal>
             <blockquote className="corp-eco-quote">
