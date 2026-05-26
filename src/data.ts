@@ -57,6 +57,10 @@ export const partners: { nameKey: string; logo: string }[] = [
   { nameKey: 'partner.aws', logo: '/partners/aws.png' },
   { nameKey: 'partner.openai', logo: '/partners/openai.png' },
   { nameKey: 'partner.anthropic', logo: '/partners/anthropic.png' },
+  { nameKey: 'partner.cloudwise', logo: '/partners/cloudwise.png' },
+  { nameKey: 'partner.transcend', logo: '/partners/ai-transcend.png' },
+  { nameKey: 'partner.speakly', logo: '/partners/speakly-ai.png' },
+  { nameKey: 'partner.rudder', logo: '/partners/ai-rudder.png' },
 ]
 
 export const consumeRank = [
