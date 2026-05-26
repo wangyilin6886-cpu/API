@@ -288,7 +288,7 @@ export default function Corporate() {
           </Reveal>
           <Reveal delay={0.15}>
             <div className="corp-partner-frame">
-              <img src="/strategicpartner.jpg" alt={t('corp.partner.title')} loading="lazy" />
+              <img src="/strategicpartner.png" alt={t('corp.partner.title')} loading="lazy" />
             </div>
           </Reveal>
         </div>
