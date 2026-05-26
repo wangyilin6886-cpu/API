@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from 'react'
+import { lazy, Suspense, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useI18n } from '../i18n/I18nContext'
@@ -65,6 +65,10 @@ const bizSections = [
 export default function Corporate() {
   const { t } = useI18n()
   const [contactOpen, setContactOpen] = useState(false)
+
+  useEffect(() => {
+    document.title = 'EcoTech · Scalable and Practical AI Ecosystems.'
+  }, [])
 
   return (
     <main className="corp-main">
