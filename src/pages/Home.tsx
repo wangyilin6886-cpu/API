@@ -15,6 +15,12 @@ const Sphere3D = lazy(() => import('../components/Sphere3D'))
 export default function Home() {
   const { t } = useI18n()
   const nav = useNavigate()
+
+  useEffect(() => {
+    document.title = 'ECOAPI - One Key Access Every Top LLM'
+    return () => { document.title = 'EcoTech · Scalable and Practical AI Ecosystems.' }
+  }, [])
+
   const [yearly, setYearly] = useState(false)
   const [cat, setCat] = useState<string>('all')
   const [contactOpen, setContactOpen] = useState(false)
