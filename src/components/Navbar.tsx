@@ -19,7 +19,7 @@ export default function Navbar() {
   const nav = useNavigate()
   const langRef = useRef<HTMLDivElement>(null)
 
-  const isCorporate = loc.pathname === '/'
+  const isCorporate = loc.pathname === '/' || loc.pathname === '/ai-infra'
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30)
