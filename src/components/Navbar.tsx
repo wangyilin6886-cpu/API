@@ -19,7 +19,7 @@ export default function Navbar() {
   const nav = useNavigate()
   const langRef = useRef<HTMLDivElement>(null)
 
-  const isCorporate = loc.pathname === '/'
+  const isCorporate = loc.pathname === '/' || loc.pathname === '/ai-infra'
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30)
@@ -86,9 +86,9 @@ export default function Navbar() {
               <button onClick={() => scrollToSection('ai-agent')} className="nav-chevron-item">
                 {t('corp.nav.agent')}<ChevronDown />
               </button>
-              <Link to="/ecoapi" onClick={() => setMenuOpen(false)} className="nav-chevron-item">
+              <a href="https://www.ecoapi.ai/ecoapi" onClick={() => setMenuOpen(false)} className="nav-chevron-item">
                 {t('corp.nav.token')}<ChevronDown />
-              </Link>
+              </a>
               <button onClick={() => scrollToSection('overview')}>{t('corp.nav.about')}</button>
             </>
           ) : (

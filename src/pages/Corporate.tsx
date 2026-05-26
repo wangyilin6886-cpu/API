@@ -279,6 +279,21 @@ export default function Corporate() {
         </section>
       ))}
 
+      {/* ===== STRATEGIC PARTNER ===== */}
+      <section className="corp-partner-section">
+        <div className="container">
+          <Reveal>
+            <span className="corp-pillars-badge">{t('corp.partner.badge')}</span>
+            <h2 className="corp-pillars-title">{t('corp.partner.title')}</h2>
+          </Reveal>
+          <Reveal delay={0.15}>
+            <div className="corp-partner-frame">
+              <img src="/strategicpartner.png" alt={t('corp.partner.title')} loading="lazy" />
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
       <SiteFooter />
 
       <ContactModal open={contactOpen} onClose={() => setContactOpen(false)} />

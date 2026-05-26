@@ -475,7 +475,7 @@ export default function Home() {
               <div className="sf-col">
                 <h4>{t('foot.token')}</h4>
                 {['DeepSeek', 'Qwen', 'GLM', 'OpenAI', 'Anthropic'].map((m) => (
-                  <a key={m} onClick={() => nav('/api')}>{m}</a>
+                  <a key={m} href="https://www.ecoapi.ai/ecoapi">{m}</a>
                 ))}
               </div>
             </div>

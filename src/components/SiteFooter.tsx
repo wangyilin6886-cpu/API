@@ -1,8 +1,20 @@
-import { Link } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useI18n } from '../i18n/I18nContext'
 
 export default function SiteFooter() {
   const { t } = useI18n()
+  const nav = useNavigate()
+  const loc = useLocation()
+
+  const goSection = (id: string) => {
+    if (loc.pathname !== '/') {
+      nav('/')
+      setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }), 120)
+    } else {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
   return (
     <footer id="about" className="site-footer">
       <div className="container">
@@ -15,13 +27,13 @@ export default function SiteFooter() {
           </div>
           <div className="sf-cols">
             <div className="sf-col">
-              <h4>{t('foot.infra')}</h4>
+              <h4 className="sf-col-link" onClick={() => goSection('ai-infra')}>{t('foot.infra')}</h4>
               {(['foot.infra1', 'foot.infra2', 'foot.infra3', 'foot.infra4', 'foot.infra5'] as const).map((k) => (
                 <a key={k} href="#" onClick={(e) => e.preventDefault()}>{t(k)}</a>
               ))}
             </div>
             <div className="sf-col">
-              <h4>{t('foot.agent')}</h4>
+              <h4 className="sf-col-link" onClick={() => goSection('ai-agent')}>{t('foot.agent')}</h4>
               {(['foot.agent1', 'foot.agent2', 'foot.agent3', 'foot.agent4'] as const).map((k) =>
                 k === 'foot.agent2'
                   ? <a key={k} href="https://www.castrel.ai/" target="_blank" rel="noopener noreferrer">{t(k)}</a>
@@ -29,9 +41,9 @@ export default function SiteFooter() {
               )}
             </div>
             <div className="sf-col">
-              <h4>{t('foot.token')}</h4>
+              <h4 className="sf-col-link"><a href="https://www.ecoapi.ai/ecoapi">{t('foot.token')}</a></h4>
               {['DeepSeek', 'Qwen', 'GLM', 'OpenAI', 'Anthropic'].map((m) => (
-                <Link key={m} to="/ecoapi">{m}</Link>
+                <a key={m} href="https://www.ecoapi.ai/ecoapi">{m}</a>
               ))}
             </div>
           </div>
