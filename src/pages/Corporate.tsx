@@ -62,6 +62,16 @@ const bizSections = [
   },
 ]
 
+const corpPartners = [
+  { name: 'Cloudwise', logo: '/strategicpartner/cloudwise.png' },
+  { name: 'AI Transcend', logo: '/strategicpartner/ai-transcend.png' },
+  { name: 'Speakly AI', logo: '/strategicpartner/speakly-ai.png' },
+  { name: 'AI Rudder', logo: '/strategicpartner/ai-rudder.png' },
+  { name: '华鲲振宇', logo: '/strategicpartner/huakun.png' },
+  { name: 'αFusion', logo: '/strategicpartner/alpha-fusion.png' },
+  { name: '星网信通', logo: '/strategicpartner/netinfo.png' },
+]
+
 export default function Corporate() {
   const { t } = useI18n()
   const [contactOpen, setContactOpen] = useState(false)
@@ -285,16 +295,46 @@ export default function Corporate() {
 
       {/* ===== STRATEGIC PARTNER ===== */}
       <section className="corp-partner-section">
-        <div className="container">
-          <Reveal>
-            <span className="corp-pillars-badge">{t('corp.partner.badge')}</span>
-            <h2 className="corp-pillars-title">{t('corp.partner.title')}</h2>
-          </Reveal>
-          <Reveal delay={0.15}>
-            <div className="corp-partner-frame">
-              <img src="/strategicpartner.png" alt={t('corp.partner.title')} loading="lazy" />
-            </div>
-          </Reveal>
+        <div className="blob" style={{ width: 460, height: 460, background: '#185fa5', bottom: -80, left: -80 }} />
+        <div className="blob" style={{ width: 420, height: 420, background: '#5dcaa5', top: -40, right: -80 }} />
+        <Reveal>
+          <span className="corp-pillars-badge">{t('corp.partner.badge')}</span>
+          <h2 className="corp-pillars-title">{t('corp.partner.title')}</h2>
+        </Reveal>
+        <div className="partners-orbit">
+          <div className="orbit-ring r1" />
+          <div className="orbit-ring r2" />
+          <div className="orbit-ring r3" />
+          <motion.div
+            className="orbit-center"
+            initial={{ opacity: 0, scale: 0.6 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <span className="orbit-count gradient-text">7</span>
+            <span className="orbit-eco">{t('corp.partner.badge')}</span>
+          </motion.div>
+          {corpPartners.map((p, i) => {
+            const radius = 43
+            const angle = (i / corpPartners.length) * Math.PI * 2 - Math.PI / 2
+            const x = 50 + radius * Math.cos(angle)
+            const y = 50 + radius * Math.sin(angle) * 0.92
+            return (
+              <div
+                key={p.name}
+                className="orbit-slot"
+                style={{ left: `${x}%`, top: `${y}%`, ['--d' as string]: `${i * 0.16}s` }}
+              >
+                <div className="orbit-float" style={{ ['--d' as string]: `${i * 0.3}s` }}>
+                  <div className="orbit-chip glass">
+                    <CorpPartnerLogo name={p.name} logo={p.logo} alt={i} />
+                    <span className="orbit-name">{p.name}</span>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
         </div>
       </section>
 
@@ -320,6 +360,16 @@ function PillarChart() {
     </svg>
   )
 }
+function CorpPartnerLogo({ name, logo, alt }: { name: string; logo: string; alt: number }) {
+  const [err, setErr] = useState(false)
+  if (logo && !err) {
+    return <img className="orbit-logo-img" src={logo} alt={name} loading="lazy" onError={() => setErr(true)} />
+  }
+  return (
+    <span className="orbit-logo" style={{ background: alt % 2 ? 'var(--grad)' : 'linear-gradient(120deg,#185fa5,#5dcaa5)' }}>{name[0]}</span>
+  )
+}
+
 function PillarBox() {
   return (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round">
