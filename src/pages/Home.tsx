@@ -21,6 +21,11 @@ export default function Home() {
     return () => { document.title = 'EcoTech · Scalable and Practical AI Ecosystems.' }
   }, [])
 
+  const goCorpSection = (id: string) => {
+    nav('/')
+    setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }), 120)
+  }
+
   const [yearly, setYearly] = useState(false)
   const [cat, setCat] = useState<string>('all')
   const [contactOpen, setContactOpen] = useState(false)
@@ -465,13 +470,13 @@ export default function Home() {
             </div>
             <div className="sf-cols">
               <div className="sf-col">
-                <h4>{t('foot.infra')}</h4>
+                <h4 className="sf-col-link" onClick={() => goCorpSection('ai-infra')}>{t('foot.infra')}</h4>
                 {['foot.infra1', 'foot.infra2', 'foot.infra3', 'foot.infra4', 'foot.infra5'].map((k) => (
                   <a key={k} href="#" onClick={(e) => e.preventDefault()}>{t(k)}</a>
                 ))}
               </div>
               <div className="sf-col">
-                <h4>{t('foot.agent')}</h4>
+                <h4 className="sf-col-link" onClick={() => goCorpSection('ai-agent')}>{t('foot.agent')}</h4>
                 {['foot.agent1', 'foot.agent2', 'foot.agent3', 'foot.agent4'].map((k) =>
                   k === 'foot.agent2'
                     ? <a key={k} href="https://www.castrel.ai/" target="_blank" rel="noopener noreferrer">{t(k)}</a>
@@ -479,7 +484,7 @@ export default function Home() {
                 )}
               </div>
               <div className="sf-col">
-                <h4>{t('foot.token')}</h4>
+                <h4 className="sf-col-link"><a href="https://www.ecoapi.ai/ecoapi">{t('foot.token')}</a></h4>
                 {['DeepSeek', 'Qwen', 'GLM', 'OpenAI', 'Anthropic'].map((m) => (
                   <a key={m} href="https://www.ecoapi.ai/ecoapi">{m}</a>
                 ))}
