@@ -24,8 +24,36 @@
   position: absolute;
   inset: 0;
   background: radial-gradient(ellipse 80% 80% at 50% 50%, transparent 25%, var(--bg) 75%);
-  z-index: 1;
+  z-index: 0;
   pointer-events: none;
+}
+
+.corp-hero::before {
+  content: '';
+  position: absolute;
+  top: 18%;
+  left: -200px;
+  width: 560px;
+  height: 560px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(24, 95, 165, 0.28), transparent 68%);
+  filter: blur(90px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.corp-hero::after {
+  content: '';
+  position: absolute;
+  bottom: 12%;
+  right: -200px;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(93, 202, 165, 0.30), transparent 68%);
+  filter: blur(95px);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .corp-hero-content {
