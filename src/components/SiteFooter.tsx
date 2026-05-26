@@ -31,7 +31,7 @@ export default function SiteFooter() {
             <div className="sf-col">
               <h4>{t('foot.token')}</h4>
               {['DeepSeek', 'Qwen', 'GLM', 'OpenAI', 'Anthropic'].map((m) => (
-                <Link key={m} to="/ecoapi">{m}</Link>
+                <a key={m} href="https://www.ecoapi.ai/ecoapi">{m}</a>
               ))}
             </div>
           </div>

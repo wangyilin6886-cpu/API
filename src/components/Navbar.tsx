@@ -86,9 +86,9 @@ export default function Navbar() {
               <button onClick={() => scrollToSection('ai-agent')} className="nav-chevron-item">
                 {t('corp.nav.agent')}<ChevronDown />
               </button>
-              <Link to="/ecoapi" onClick={() => setMenuOpen(false)} className="nav-chevron-item">
+              <a href="https://www.ecoapi.ai/ecoapi" onClick={() => setMenuOpen(false)} className="nav-chevron-item">
                 {t('corp.nav.token')}<ChevronDown />
-              </Link>
+              </a>
               <button onClick={() => scrollToSection('overview')}>{t('corp.nav.about')}</button>
             </>
           ) : (
