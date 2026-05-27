@@ -16,10 +16,7 @@ export default function Home() {
   const { t } = useI18n()
   const nav = useNavigate()
 
-  useEffect(() => {
-    document.title = 'ECOAPI - One Key Access Every Top LLM'
-    return () => { document.title = 'EcoTech · Scalable and Practical AI Ecosystems.' }
-  }, [])
+  useEffect(() => { document.title = 'ECOAPI - One Key Access Every Top LLM' }, [])
 
   const goCorpSection = (id: string) => {
     nav('/')

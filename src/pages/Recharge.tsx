@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useI18n } from '../i18n/I18nContext'
 import { useToast } from '../components/Toast'
 import Reveal from '../components/Reveal'
@@ -18,6 +18,7 @@ export default function Recharge() {
   const toast = useToast()
   const [sel, setSel] = useState(2)
   const [custom, setCustom] = useState('')
+  useEffect(() => { document.title = 'ECOAPI - One Key Access Every Top LLM' }, [])
   const [method, setMethod] = useState('alipay')
 
   const base = custom ? Number(custom) || 0 : amounts[sel].v

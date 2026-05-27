@@ -15,6 +15,8 @@ export default function Models() {
   const nav = useNavigate()
   const [q, setQ] = useState('')
   const [sort, setSort] = useState('score')
+
+  useEffect(() => { document.title = 'ECOAPI - One Key Access Every Top LLM' }, [])
   const [cat, setCat] = useState('all')
   const [vendors, setVendors] = useState<string[]>([])
   const [tags, setTags] = useState<string[]>([])
