@@ -6,7 +6,7 @@ import './pages.css'
 
 interface Msg { role: 'ai' | 'user'; text: string }
 
-const API_KEY = import.meta.env.VITE_DEEPSEEK_API_KEY as string | undefined
+const CHAT_ENABLED = import.meta.env.VITE_CHAT_ENABLED === 'true'
 
 export default function Chat() {
   const { t } = useI18n()
@@ -23,13 +23,13 @@ export default function Chat() {
   }, [msgs, loading])
 
   const reply = async (history: Msg[]) => {
-    if (!API_KEY) {
+    if (!CHAT_ENABLED) {
       const last = history[history.length - 1].text
       return t('chat.demo') + '「' + last + '」'
     }
-    const res = await fetch('/deepseek/chat/completions', {
+    const res = await fetch('/api/chat', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: model.includes('Reasoner') ? 'deepseek-reasoner' : 'deepseek-chat',
         messages: [
@@ -64,7 +64,7 @@ export default function Chat() {
     <div className="chat-page">
       <div className="chat-bar">
         <h2 className="gradient-text">{t('chat.title')}</h2>
-        {API_KEY ? <span className="chat-live">● {t('chat.live')}</span> : <span className="chat-demo-tag">{t('chat.demoTag')}</span>}
+        {CHAT_ENABLED ? <span className="chat-live">● {t('chat.live')}</span> : <span className="chat-demo-tag">{t('chat.demoTag')}</span>}
         <select className="chat-model-select" value={model} onChange={(e) => setModel(e.target.value)}>
           {models.map((m) => <option key={m.name} value={m.name}>{m.name}</option>)}
         </select>

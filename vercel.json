@@ -14,7 +14,6 @@
     }
   ],
   "rewrites": [
-    { "source": "/deepseek/:path*", "destination": "https://api.deepseek.com/:path*" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
