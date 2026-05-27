@@ -6,7 +6,7 @@ import './pages.css'
 
 interface Msg { role: 'ai' | 'user'; text: string }
 
-const CHAT_ENABLED = import.meta.env.VITE_CHAT_ENABLED === 'true'
+const CHAT_ENABLED = true
 
 export default function Chat() {
   const { t } = useI18n()
