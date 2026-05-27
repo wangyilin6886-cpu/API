@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useI18n } from '../i18n/I18nContext'
@@ -11,6 +11,7 @@ export default function Login() {
   const nav = useNavigate()
   const toast = useToast()
   const [reg, setReg] = useState(false)
+  useEffect(() => { document.title = 'ECOAPI - One Key Access Every Top LLM' }, [])
   const [email, setEmail] = useState('')
   const [pwd, setPwd] = useState('')
   const [errs, setErrs] = useState<{ email?: string; pwd?: string }>({})

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useI18n } from '../i18n/I18nContext'
@@ -32,6 +32,7 @@ export default function ApiDocs() {
   const nav = useNavigate()
   const [tab, setTab] = useState<'keys' | 'docs'>('keys')
   const [keys, setKeys] = useState<KeyItem[]>(initialKeys)
+  useEffect(() => { document.title = 'ECOAPI - One Key Access Every Top LLM' }, [])
   const [newName, setNewName] = useState('')
   const [copied, setCopied] = useState<number | string | null>(null)
 
