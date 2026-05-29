@@ -32,14 +32,13 @@ export default function Chat() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: model.includes('Reasoner') ? 'deepseek-reasoner' : 'deepseek-chat',
-        messages: [
-          { role: 'system', content: 'You are EcoAPI assistant, a helpful AI. Answer in the language the user uses.' },
-          ...history.map((m) => ({ role: m.role === 'ai' ? 'assistant' : 'user', content: m.text })),
-        ],
+        messages: history.map((m) => ({ role: m.role === 'ai' ? 'assistant' : 'user', content: m.text })),
       }),
     })
-    if (!res.ok) throw new Error(`HTTP ${res.status}`)
-    const data = await res.json()
+    const data = await res.json().catch(() => ({}))
+    if (!res.ok || data.error) {
+      throw new Error(data.error?.message || data.error || `HTTP ${res.status}`)
+    }
     return data.choices?.[0]?.message?.content ?? '(empty)'
   }
 
@@ -54,7 +53,7 @@ export default function Chat() {
       const answer = await reply(next)
       setMsgs((m) => [...m, { role: 'ai', text: answer }])
     } catch (e) {
-      setMsgs((m) => [...m, { role: 'ai', text: t('chat.error') }])
+      setMsgs((m) => [...m, { role: 'ai', text: `${t('chat.error')} (${e instanceof Error ? e.message : String(e)})` }])
     } finally {
       setLoading(false)
     }
