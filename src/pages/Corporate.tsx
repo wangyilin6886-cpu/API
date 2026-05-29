@@ -312,7 +312,7 @@ export default function Corporate() {
             viewport={{ once: true }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
-            <span className="corp-orbit-brand gradient-text">ECOTECH</span>
+            <span className="corp-orbit-brand">ECOTECH</span>
           </motion.div>
           {corpPartners.map((p, i) => {
             const radius = 43

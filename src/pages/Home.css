@@ -230,8 +230,8 @@
 }
 .orbit-name { font-size: 14px; font-weight: 700; color: var(--ink); }
 .orbit-logo-img {
-  width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
-  background: #fff; padding: 6px; object-fit: contain;
+  width: 66px; height: 66px; border-radius: 14px; flex-shrink: 0;
+  background: #fff; padding: 8px; object-fit: contain;
   box-shadow: 0 6px 16px -8px rgba(0,0,0,0.18); border: 1px solid var(--border);
 }
 
