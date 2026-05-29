@@ -63,13 +63,13 @@ const bizSections = [
 ]
 
 const corpPartners = [
-  { name: 'Cloudwise', logo: '/strategicpartner/cloudwise.png' },
-  { name: 'AI Transcend', logo: '/strategicpartner/ai-transcend.png' },
-  { name: 'Speakly AI', logo: '/strategicpartner/speakly-ai.png' },
-  { name: 'AI Rudder', logo: '/strategicpartner/ai-rudder.png' },
-  { name: '华鲲振宇', logo: '/strategicpartner/huakun.png' },
-  { name: 'αFusion', logo: '/strategicpartner/alpha-fusion.png' },
-  { name: '星网信通', logo: '/strategicpartner/netinfo.png' },
+  { nameKey: 'cp.cloudwise', logo: '/strategicpartner/cloudwise.png' },
+  { nameKey: 'cp.transcend', logo: '/strategicpartner/ai-transcend.png' },
+  { nameKey: 'cp.speakly', logo: '/strategicpartner/speakly-ai.png' },
+  { nameKey: 'cp.rudder', logo: '/strategicpartner/ai-rudder.png' },
+  { nameKey: 'cp.huakun', logo: '/strategicpartner/huakun.png' },
+  { nameKey: 'cp.fusion', logo: '/strategicpartner/alpha-fusion.png' },
+  { nameKey: 'cp.netinfo', logo: '/strategicpartner/netinfo.png' },
 ]
 
 export default function Corporate() {
@@ -312,8 +312,7 @@ export default function Corporate() {
             viewport={{ once: true }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
-            <span className="orbit-count gradient-text">7</span>
-            <span className="orbit-eco">{t('corp.partner.badge')}</span>
+            <span className="corp-orbit-brand gradient-text">ECOTECH</span>
           </motion.div>
           {corpPartners.map((p, i) => {
             const radius = 43
@@ -322,14 +321,14 @@ export default function Corporate() {
             const y = 50 + radius * Math.sin(angle) * 0.92
             return (
               <div
-                key={p.name}
+                key={p.nameKey}
                 className="orbit-slot"
                 style={{ left: `${x}%`, top: `${y}%`, ['--d' as string]: `${i * 0.16}s` }}
               >
                 <div className="orbit-float" style={{ ['--d' as string]: `${i * 0.3}s` }}>
                   <div className="orbit-chip glass">
-                    <CorpPartnerLogo name={p.name} logo={p.logo} alt={i} />
-                    <span className="orbit-name">{p.name}</span>
+                    <CorpPartnerLogo name={t(p.nameKey)} logo={p.logo} alt={i} />
+                    <span className="orbit-name">{t(p.nameKey)}</span>
                   </div>
                 </div>
               </div>
