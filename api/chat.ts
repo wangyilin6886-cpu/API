@@ -65,7 +65,7 @@ We serve Singapore (SG), Indonesia (ID), and China (CN).
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return res.status(405).end()
 
-  const apiKey = process.env.DEEPSEEK_API_KEY || 'sk-a4f2653730104d8385b525de8ef80aba'
+  const apiKey = process.env.DEEPSEEK_API_KEY || 'sk-c338052c4b9140c4942f00118bf91d03'
 
   try {
     const body = (req.body ?? {}) as { model?: string; messages?: { role: string; content: string }[] }
