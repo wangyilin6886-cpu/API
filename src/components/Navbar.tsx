@@ -80,7 +80,7 @@ export default function Navbar() {
         <div className={`nav-links ${menuOpen ? 'open' : ''}`}>
           {isCorporate ? (
             <>
-              <button onClick={() => scrollToSection('ai-infra')} className="nav-chevron-item">
+              <button onClick={() => { setMenuOpen(false); nav('/ai-infra') }} className="nav-chevron-item">
                 {t('corp.nav.infra')}<ChevronDown />
               </button>
               <button onClick={() => scrollToSection('ai-agent')} className="nav-chevron-item">
