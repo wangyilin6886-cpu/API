@@ -116,7 +116,7 @@ export default function Corporate() {
             >
               {t('corp.hero.cta1')}
             </motion.button>
-            <Link to="/ai-infra" className="btn-ghost">
+            <Link to="/ecoapi" className="btn-ghost">
               {t('corp.hero.cta2')}
             </Link>
           </div>
