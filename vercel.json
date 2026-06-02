@@ -14,6 +14,12 @@
     }
   ],
   "rewrites": [
+    { "source": "/ecoapi", "destination": "/ecoapi.html" },
+    { "source": "/profile", "destination": "/ecoapi.html" },
+    { "source": "/recharge", "destination": "/ecoapi.html" },
+    { "source": "/login", "destination": "/ecoapi.html" },
+    { "source": "/chat", "destination": "/ecoapi.html" },
+    { "source": "/models", "destination": "/ecoapi.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
