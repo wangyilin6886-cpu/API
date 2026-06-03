@@ -13,6 +13,7 @@ const Models = lazy(() => import('./pages/Models'))
 const ArticleDeepSeek = lazy(() => import('./pages/ArticleDeepSeek'))
 const ArticleH200 = lazy(() => import('./pages/ArticleH200'))
 const AIInfra = lazy(() => import('./pages/AIInfra'))
+const LegalPage = lazy(() => import('./pages/LegalPage'))
 
 function PageLoader() {
   return <div className="route-loader"><span className="route-spinner" /></div>
@@ -38,6 +39,8 @@ export default function App() {
           <Route path="/article/deepseek-huawei" element={<ArticleDeepSeek />} />
           <Route path="/article/h200-china" element={<ArticleH200 />} />
           <Route path="/ai-infra" element={<AIInfra />} />
+          <Route path="/terms" element={<LegalPage type="terms" />} />
+          <Route path="/privacy" element={<LegalPage type="privacy" />} />
         </Routes>
       </Suspense>
     </>
