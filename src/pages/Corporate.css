@@ -821,7 +821,8 @@
   display: flex; align-items: center; gap: 14px;
   padding: 14px 20px 14px 14px; border-radius: 22px;
   transition: transform 0.28s ease, box-shadow 0.28s ease;
-  cursor: default; white-space: nowrap;
+  cursor: pointer; white-space: nowrap;
+  text-decoration: none; color: inherit;
 }
 .corp-partner-section .orbit-chip:hover { transform: scale(1.10); box-shadow: 0 20px 44px -16px rgba(24,95,165,0.5); }
 .corp-partner-section .orbit-logo {

@@ -63,13 +63,13 @@ const bizSections = [
 ]
 
 const corpPartners = [
-  { nameKey: 'cp.cloudwise', logo: '/strategicpartner/cloudwise.png' },
-  { nameKey: 'cp.transcend', logo: '/strategicpartner/ai-transcend.png' },
-  { nameKey: 'cp.speakly', logo: '/strategicpartner/speakly-ai.png' },
-  { nameKey: 'cp.rudder', logo: '/strategicpartner/ai-rudder.png' },
-  { nameKey: 'cp.huakun', logo: '/strategicpartner/huakun.png' },
-  { nameKey: 'cp.fusion', logo: '/strategicpartner/alpha-fusion.png' },
-  { nameKey: 'cp.netinfo', logo: '/strategicpartner/netinfo.png' },
+  { nameKey: 'cp.cloudwise', logo: '/strategicpartner/cloudwise.png', url: 'https://www.cloudwise.com/' },
+  { nameKey: 'cp.transcend', logo: '/strategicpartner/ai-transcend.png', url: 'https://ai-transcend.com/' },
+  { nameKey: 'cp.speakly', logo: '/strategicpartner/speakly-ai.png', url: 'https://www.speaklyai.com/' },
+  { nameKey: 'cp.rudder', logo: '/strategicpartner/ai-rudder.png', url: 'https://airudder.com/' },
+  { nameKey: 'cp.huakun', logo: '/strategicpartner/huakun.png', url: 'https://www.schkzy.com/' },
+  { nameKey: 'cp.fusion', logo: '/strategicpartner/alpha-fusion.png', url: 'https://afusion.ai/en/' },
+  { nameKey: 'cp.netinfo', logo: '/strategicpartner/netinfo.png', url: 'https://www.netinfosz.com/' },
 ]
 
 export default function Corporate() {
@@ -326,10 +326,10 @@ export default function Corporate() {
                 style={{ left: `${x}%`, top: `${y}%`, ['--d' as string]: `${i * 0.16}s` }}
               >
                 <div className="orbit-float" style={{ ['--d' as string]: `${i * 0.3}s` }}>
-                  <div className="orbit-chip glass">
+                  <a className="orbit-chip glass" href={p.url} target="_blank" rel="noopener noreferrer">
                     <CorpPartnerLogo name={t(p.nameKey)} logo={p.logo} alt={i} />
                     <span className="orbit-name">{t(p.nameKey)}</span>
-                  </div>
+                  </a>
                 </div>
               </div>
             )
