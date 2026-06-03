@@ -21,7 +21,7 @@ function PageLoader() {
 
 export default function App() {
   const loc = useLocation()
-  const hideNav = loc.pathname.startsWith('/article/')
+  const hideNav = loc.pathname.startsWith('/article/') || ['/terms', '/privacy', '/ecoapi/terms', '/ecoapi/privacy'].includes(loc.pathname)
 
   return (
     <>
@@ -41,6 +41,8 @@ export default function App() {
           <Route path="/ai-infra" element={<AIInfra />} />
           <Route path="/terms" element={<LegalPage type="terms" />} />
           <Route path="/privacy" element={<LegalPage type="privacy" />} />
+          <Route path="/ecoapi/terms" element={<LegalPage type="terms" />} />
+          <Route path="/ecoapi/privacy" element={<LegalPage type="privacy" />} />
         </Routes>
       </Suspense>
     </>
