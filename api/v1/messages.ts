@@ -12,12 +12,24 @@ export default async function handler(req: Request): Promise<Response> {
     return err(405, 'invalid_request_error', 'Method not allowed')
   }
 
+  // DIAGNOSTIC: dump every header name we actually receive, so we can see
+  // whether Vercel/Claude Code is delivering the auth header at all.
+  const received: string[] = []
+  req.headers.forEach((_v, k) => received.push(k))
+  console.log('[ecoapi-proxy] received headers:', received.join(', '))
+
   // Forward the user's auth exactly as received. The user's key IS B's key in
   // this passthrough version, so we must not convert between x-api-key and
   // Authorization: Bearer — B only accepts the same form the user sent direct.
   const xApiKey = req.headers.get('x-api-key')
   const auth = req.headers.get('authorization')
-  if (!xApiKey && !auth) return err(401, 'authentication_error', 'Missing API key')
+  if (!xApiKey && !auth) {
+    return err(
+      401,
+      'authentication_error',
+      `Missing API key. Headers received by proxy: [${received.join(', ')}]`,
+    )
+  }
 
   const body = await req.text()
 
