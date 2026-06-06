@@ -12,15 +12,19 @@ export default async function handler(req: Request): Promise<Response> {
     return err(405, 'invalid_request_error', 'Method not allowed')
   }
 
-  const bKey = process.env.B_API_KEY
-  if (!bKey) return err(500, 'api_error', 'Gateway not configured (B_API_KEY missing)')
+  // The key the user typed into Claude Code (x-api-key, or Authorization: Bearer).
+  // In this passthrough version we forward it straight to B as the B key.
+  const userKey =
+    req.headers.get('x-api-key') ??
+    req.headers.get('authorization')?.replace(/^Bearer\s+/i, '')
+  if (!userKey) return err(401, 'authentication_error', 'Missing API key')
 
   const body = await req.text()
 
-  // Forward only Anthropic-protocol headers; replace key with B's key
+  // Forward only Anthropic-protocol headers; pass the user's key through to B
   const fwd: Record<string, string> = {
     'content-type': 'application/json',
-    'x-api-key': bKey,
+    'x-api-key': userKey,
   }
   for (const h of ['anthropic-version', 'anthropic-beta']) {
     const v = req.headers.get(h)
