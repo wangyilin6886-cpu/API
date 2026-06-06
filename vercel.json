@@ -14,6 +14,7 @@
     }
   ],
   "rewrites": [
+    { "source": "/v1/:path*", "destination": "/api/v1/:path*" },
     { "source": "/ecoapi", "destination": "/ecoapi.html" },
     { "source": "/profile", "destination": "/ecoapi.html" },
     { "source": "/recharge", "destination": "/ecoapi.html" },
