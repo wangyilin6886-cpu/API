@@ -89,6 +89,23 @@ export async function revokeKey(id: string): Promise<void> {
   }
 }
 
+// ---------- Usage stats ----------
+
+export interface UsageStats {
+  days: number
+  totalInput: number
+  totalOutput: number
+  totalTokens: number
+  daily: { day: string; tokens: number }[]
+  byModel: { model: string; tokens: number }[]
+}
+
+export async function fetchUsage(days = 7): Promise<UsageStats> {
+  const res = await fetch(`/api/usage?days=${days}`, { headers: authHeaders() })
+  if (!res.ok) throw new Error('获取用量失败')
+  return res.json()
+}
+
 export async function fetchMe(): Promise<AuthUser | null> {
   const token = getToken()
   if (!token) return null
