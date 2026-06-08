@@ -13,7 +13,12 @@ export default async function handler(req: Request): Promise<Response> {
   if (!claims) return json({ error: 'token 无效或已过期' }, 401)
 
   const rows = await db
-    .select({ id: users.id, email: users.email, createdAt: users.createdAt })
+    .select({
+      id: users.id,
+      email: users.email,
+      balanceCents: users.balanceCents,
+      createdAt: users.createdAt,
+    })
     .from(users)
     .where(eq(users.id, claims.userId))
     .limit(1)
