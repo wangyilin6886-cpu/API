@@ -1,5 +1,11 @@
-// Verify a Polar webhook using the Standard Webhooks (svix) scheme.
+// Verify a Polar webhook signature.
 // Returns the parsed event on success, or null if the signature is invalid.
+//
+// Polar follows the Standard Webhooks header layout (webhook-id / -timestamp /
+// -signature) but derives the HMAC key differently from svix: its SDK feeds the
+// *raw UTF-8 bytes of the full secret string* (incl. the "polar_whs_" prefix) as
+// the key. To be robust we accept either that scheme or the classic svix one
+// (strip prefix, base64-decode the rest).
 
 function base64ToBytes(b64: string): Uint8Array {
   const bin = atob(b64)
@@ -15,6 +21,18 @@ function bytesToBase64(bytes: ArrayBuffer): string {
   return btoa(bin)
 }
 
+async function hmacBase64(keyBytes: Uint8Array, content: string): Promise<string> {
+  const key = await crypto.subtle.importKey(
+    'raw',
+    keyBytes,
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign'],
+  )
+  const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(content))
+  return bytesToBase64(sig)
+}
+
 export async function verifyPolarWebhook(
   payload: string,
   headers: Headers,
@@ -26,31 +44,33 @@ export async function verifyPolarWebhook(
   if (!id || !timestamp || !sigHeader) return null
 
   try {
-    // Polar secrets are prefixed ("polar_whs_" or the svix "whsec_"); the rest is base64.
-    let rawSecret = secret
-    if (rawSecret.startsWith('polar_whs_')) rawSecret = rawSecret.slice('polar_whs_'.length)
-    else if (rawSecret.startsWith('whsec_')) rawSecret = rawSecret.slice('whsec_'.length)
-    const keyBytes = base64ToBytes(rawSecret)
-
-    const key = await crypto.subtle.importKey(
-      'raw',
-      keyBytes,
-      { name: 'HMAC', hash: 'SHA-256' },
-      false,
-      ['sign'],
-    )
     const signedContent = `${id}.${timestamp}.${payload}`
-    const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(signedContent))
-    const expected = bytesToBase64(sig)
 
-    // Header is space-separated "v1,<sig>" entries; any match passes.
-    const ok = sigHeader.split(' ').some((part) => {
-      const [, value] = part.split(',')
-      return value === expected
-    })
-    if (!ok) return null
+    // Candidate HMAC keys, in order of likelihood for Polar.
+    const candidates: Uint8Array[] = []
+    // 1) Polar SDK: raw UTF-8 bytes of the full secret string (with prefix).
+    candidates.push(new TextEncoder().encode(secret))
+    // 2) svix scheme: strip known prefix, base64-decode the remainder.
+    let stripped = secret
+    if (stripped.startsWith('polar_whs_')) stripped = stripped.slice('polar_whs_'.length)
+    else if (stripped.startsWith('whsec_')) stripped = stripped.slice('whsec_'.length)
+    try {
+      candidates.push(base64ToBytes(stripped))
+    } catch {
+      // ignore non-base64 secret for this scheme
+    }
+    // 3) raw UTF-8 bytes of the secret with the prefix stripped.
+    candidates.push(new TextEncoder().encode(stripped))
 
-    return JSON.parse(payload)
+    const provided = sigHeader.split(' ').map((part) => part.split(',')[1])
+
+    for (const keyBytes of candidates) {
+      const expected = await hmacBase64(keyBytes, signedContent)
+      if (provided.some((v) => v === expected)) {
+        return JSON.parse(payload)
+      }
+    }
+    return null
   } catch {
     return null
   }
