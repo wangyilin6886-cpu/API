@@ -5,15 +5,8 @@ import { useI18n } from '../i18n/I18nContext'
 import { useTheme } from '../theme/ThemeContext'
 import { useToast } from '../components/Toast'
 import Reveal from '../components/Reveal'
-import { isLoggedIn, listKeys, createKey, revokeKey, fetchUsage, type ApiKey, type UsageStats } from '../lib/auth'
+import { isLoggedIn, listKeys, createKey, revokeKey, fetchUsage, fetchMe, fetchTransactions, type ApiKey, type UsageStats, type Transaction } from '../lib/auth'
 import './pages.css'
-
-const records = [
-  { d: '2026-05-18', name: 'GPT-4o', type: 'call', amt: '-¥12.40' },
-  { d: '2026-05-17', name: 'pricing.std.name', type: 'topup', amt: '+¥99.00' },
-  { d: '2026-05-15', name: 'Claude Opus', type: 'call', amt: '-¥28.60' },
-  { d: '2026-05-12', name: 'DeepSeek-V3', type: 'call', amt: '-¥3.20' },
-]
 
 const W = 320, H = 120, PAD = 12
 const R = 54, C = 2 * Math.PI * R
@@ -43,18 +36,26 @@ export default function Profile() {
   const [creating, setCreating] = useState(false)
   const [newKey, setNewKey] = useState<string | null>(null)
 
-  // ---- Real usage ----
+  // ---- Real usage / balance / billing ----
   const [usageData, setUsageData] = useState<UsageStats | null>(null)
+  const [balanceCents, setBalanceCents] = useState<number | null>(null)
+  const [txns, setTxns] = useState<Transaction[]>([])
 
   useEffect(() => {
     if (!isLoggedIn()) { nav('/login'); return }
   }, [nav])
 
   useEffect(() => {
-    fetchUsage(7)
-      .then(setUsageData)
-      .catch(() => setUsageData(null))
+    fetchUsage(7).then(setUsageData).catch(() => setUsageData(null))
+    fetchMe().then((u) => setBalanceCents(u?.balanceCents ?? null)).catch(() => {})
   }, [])
+
+  useEffect(() => {
+    if (tab !== 'Billing') return
+    fetchTransactions().then(setTxns).catch(() => setTxns([]))
+  }, [tab])
+
+  const balanceUsd = balanceCents != null ? (balanceCents / 100).toFixed(2) : '—'
 
   // Build the area-chart geometry from real daily data.
   const chart = useMemo(() => {
@@ -138,7 +139,7 @@ export default function Profile() {
 
         <Reveal>
           <div className="stat-grid">
-            <div className="stat-card glass"><div className="label">{t('profile.balance')}</div><div className="value gradient-text">¥0.00</div><div className="sub">{t('profile.comingSoon')}</div></div>
+            <div className="stat-card glass"><div className="label">{t('profile.balance')}</div><div className="value gradient-text">${balanceUsd}</div><div className="sub">USD</div></div>
             <div className="stat-card glass"><div className="label">{t('profile.used')}</div><div className="value">{fmtTokens(usageData?.totalTokens ?? 0)}</div><div className="sub">Tokens · {usageData?.days ?? 7}d</div></div>
             <div className="stat-card glass"><div className="label">{t('profile.inout')}</div><div className="value gradient-text">{fmtTokens(usageData?.totalInput ?? 0)} / {fmtTokens(usageData?.totalOutput ?? 0)}</div><div className="sub">In / Out</div></div>
           </div>
@@ -251,15 +252,19 @@ export default function Profile() {
             {tab === 'Billing' && (
               <div className="panel glass">
                 <div className="panel-head"><h3>{t('profile.records')}</h3></div>
-                {records.map((r) => (
-                  <div className="record-row" key={r.d + r.name}>
-                    <div>
-                      <div style={{ fontWeight: 600 }}>{(r.name.startsWith('pricing.') ? t(r.name) : r.name) + ' · ' + t(`profile.${r.type}`)}</div>
-                      <div style={{ fontSize: 12.5, color: 'var(--ink-soft)', marginTop: 3 }}>{r.d}</div>
+                {txns.length === 0 ? (
+                  <div style={{ padding: 20, color: 'var(--ink-soft)' }}>{t('profile.noTxns')}</div>
+                ) : (
+                  txns.map((r) => (
+                    <div className="record-row" key={r.id}>
+                      <div>
+                        <div style={{ fontWeight: 600 }}>{t(`profile.${r.type}`)}</div>
+                        <div style={{ fontSize: 12.5, color: 'var(--ink-soft)', marginTop: 3 }}>{new Date(r.createdAt).toLocaleString()}</div>
+                      </div>
+                      <span className="amt" style={{ color: 'var(--teal)' }}>+ ${(r.amountCents / 100).toFixed(2)}</span>
                     </div>
-                    <span className="amt" style={{ color: r.amt.startsWith('+') ? 'var(--teal)' : 'var(--blue)' }}>{r.amt}</span>
-                  </div>
-                ))}
+                  ))
+                )}
                 <button className="btn-grad" style={{ width: '100%', justifyContent: 'center', marginTop: 20 }} onClick={() => nav('/recharge')}>{t('profile.recharge')} →</button>
               </div>
             )}

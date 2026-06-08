@@ -1,6 +1,7 @@
-import { and, eq, isNull } from 'drizzle-orm'
-import { db, apiKeys, usageLogs } from '../../db/index.js'
+import { and, eq, isNull, sql } from 'drizzle-orm'
+import { db, apiKeys, users, usageLogs } from '../../db/index.js'
 import { hashApiKey } from '../../lib/auth.js'
+import { computeCostCents } from '../../lib/pricing.js'
 
 export const config = { runtime: 'edge' }
 
@@ -26,14 +27,20 @@ export default async function handler(req: Request): Promise<Response> {
   // Validate the key against our DB and make sure it isn't revoked.
   const hash = await hashApiKey(userKey)
   const rows = await db
-    .select({ id: apiKeys.id })
+    .select({ id: apiKeys.id, userId: apiKeys.userId, balanceCents: users.balanceCents })
     .from(apiKeys)
+    .innerJoin(users, eq(apiKeys.userId, users.id))
     .where(and(eq(apiKeys.keyHash, hash), isNull(apiKeys.revokedAt)))
     .limit(1)
   if (rows.length === 0) {
     return err(401, 'authentication_error', 'Invalid or revoked API key')
   }
-  const keyId = rows[0].id
+  const { id: keyId, userId, balanceCents } = rows[0]
+
+  // Reject when the account is out of credit.
+  if (balanceCents <= 0) {
+    return err(402, 'billing_error', 'Insufficient balance. Please top up at ecoapi.ai.')
+  }
 
   // Swap in B's real upstream key (stored only in the environment).
   const bKey = process.env.B_API_KEY
@@ -70,7 +77,7 @@ export default async function handler(req: Request): Promise<Response> {
   // Pass the response through a meter that records token usage when the stream
   // finishes. The DB write happens in flush(), which runs while the function is
   // still alive serving the stream — no waitUntil needed.
-  const metered = upstream.body.pipeThrough(usageMeter(keyId, model, ct))
+  const metered = upstream.body.pipeThrough(usageMeter(keyId, userId, model, ct))
   return new Response(metered, { status: upstream.status, headers: out })
 }
 
@@ -84,7 +91,7 @@ function parseModel(body: string): string {
 
 // TransformStream that forwards every chunk untouched while extracting
 // input/output token counts from the Anthropic response (SSE or plain JSON).
-function usageMeter(keyId: string, model: string, ct: string | null): TransformStream {
+function usageMeter(keyId: string, userId: string, model: string, ct: string | null): TransformStream {
   const isSSE = (ct || '').includes('text/event-stream')
   const decoder = new TextDecoder()
   let inputTokens = 0
@@ -138,8 +145,15 @@ function usageMeter(keyId: string, model: string, ct: string | null): TransformS
         }
       }
       if (inputTokens > 0 || outputTokens > 0) {
+        const costCents = computeCostCents(model, inputTokens, outputTokens)
         try {
-          await db.insert(usageLogs).values({ keyId, model, inputTokens, outputTokens })
+          await db.insert(usageLogs).values({ keyId, model, inputTokens, outputTokens, costCents })
+          if (costCents > 0) {
+            await db
+              .update(users)
+              .set({ balanceCents: sql`${users.balanceCents} - ${costCents}` })
+              .where(eq(users.id, userId))
+          }
         } catch {
           // never fail the user's request because logging failed
         }

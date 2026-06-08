@@ -5,6 +5,7 @@ const TOKEN_KEY = 'ecoapi_token'
 export interface AuthUser {
   id: string
   email: string
+  balanceCents?: number
 }
 
 export function getToken(): string | null {
@@ -104,6 +105,44 @@ export async function fetchUsage(days = 7): Promise<UsageStats> {
   const res = await fetch(`/api/usage?days=${days}`, { headers: authHeaders() })
   if (!res.ok) throw new Error('获取用量失败')
   return res.json()
+}
+
+// ---------- Billing ----------
+
+export interface Pack {
+  id: string
+  label: string
+  usd: number
+}
+
+export interface Transaction {
+  id: string
+  type: string
+  amountCents: number
+  createdAt: string
+}
+
+export async function fetchPacks(): Promise<Pack[]> {
+  const res = await fetch('/api/checkout')
+  if (!res.ok) throw new Error('获取套餐失败')
+  return (await res.json()).packs
+}
+
+export async function startCheckout(pack: string): Promise<string> {
+  const res = await fetch('/api/checkout', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', ...authHeaders() },
+    body: JSON.stringify({ pack }),
+  })
+  const data = await res.json().catch(() => ({}))
+  if (!res.ok) throw new Error(data.error || '创建支付失败')
+  return data.url
+}
+
+export async function fetchTransactions(): Promise<Transaction[]> {
+  const res = await fetch('/api/transactions', { headers: authHeaders() })
+  if (!res.ok) throw new Error('获取账单失败')
+  return (await res.json()).transactions
 }
 
 export async function fetchMe(): Promise<AuthUser | null> {
