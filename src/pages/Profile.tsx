@@ -5,6 +5,7 @@ import { useI18n } from '../i18n/I18nContext'
 import { useTheme } from '../theme/ThemeContext'
 import { useToast } from '../components/Toast'
 import Reveal from '../components/Reveal'
+import { isLoggedIn, listKeys, createKey, revokeKey, type ApiKey } from '../lib/auth'
 import './pages.css'
 
 const usage = [
@@ -16,10 +17,6 @@ const dist = [
   { name: 'Claude Opus', v: 27, c: '#d97757' },
   { name: 'DeepSeek-V3', v: 20, c: '#5b6cff' },
   { name: 'Others', v: 15, c: '#185fa5' },
-]
-const keys = [
-  { name: 'Production', val: 'sk-eco-prod-9f3a2b7c8d1e4f6a0b5c2d9e' },
-  { name: 'Development', val: 'sk-eco-dev-2c4e6a8b0d1f3e5a7c9b1d3f' },
 ]
 const records = [
   { d: '2026-05-18', name: 'GPT-4o', type: 'call', amt: '-¥12.40' },
@@ -55,11 +52,53 @@ export default function Profile() {
   const toast = useToast()
   useEffect(() => { document.title = 'ECOAPI - One Key Access Every Top LLM' }, [])
   const [tab, setTab] = useState<Tab>('Usage')
-  const [copied, setCopied] = useState<number | null>(null)
+  const [copied, setCopied] = useState<string | null>(null)
 
-  const copy = (val: string, i: number) => {
+  // ---- Real API keys ----
+  const [keys, setKeys] = useState<ApiKey[]>([])
+  const [keysLoading, setKeysLoading] = useState(false)
+  const [creating, setCreating] = useState(false)
+  const [newKey, setNewKey] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!isLoggedIn()) { nav('/login'); return }
+  }, [nav])
+
+  useEffect(() => {
+    if (tab !== 'Keys') return
+    setKeysLoading(true)
+    listKeys()
+      .then(setKeys)
+      .catch((e) => toast(e instanceof Error ? e.message : '加载失败', 'error'))
+      .finally(() => setKeysLoading(false))
+  }, [tab, toast])
+
+  const handleCreate = async () => {
+    setCreating(true)
+    try {
+      const res = await createKey('Default')
+      setNewKey(res.key)
+      setKeys(await listKeys())
+    } catch (e) {
+      toast(e instanceof Error ? e.message : '创建失败', 'error')
+    } finally {
+      setCreating(false)
+    }
+  }
+
+  const handleRevoke = async (id: string) => {
+    try {
+      await revokeKey(id)
+      setKeys((ks) => ks.filter((k) => k.id !== id))
+      toast(t('profile.revoked'), 'success')
+    } catch (e) {
+      toast(e instanceof Error ? e.message : '撤销失败', 'error')
+    }
+  }
+
+  const copy = (val: string, id: string) => {
     navigator.clipboard?.writeText(val)
-    setCopied(i)
+    setCopied(id)
     setTimeout(() => setCopied(null), 1500)
   }
 
@@ -137,14 +176,37 @@ export default function Profile() {
 
             {tab === 'Keys' && (
               <div className="panel glass">
-                <div className="panel-head"><h3>{t('profile.keys')}</h3><button className="btn-ghost" style={{ padding: '8px 18px', fontSize: 14 }}>+ {t('profile.create')}</button></div>
-                {keys.map((k, i) => (
-                  <div className="key-row" key={k.name}>
-                    <span className="key-name">{k.name}</span>
-                    <span className="key-val">{k.val}</span>
-                    <button className="key-copy" onClick={() => copy(k.val, i)}>{copied === i ? t('profile.copied') : t('profile.copy')}</button>
+                <div className="panel-head">
+                  <h3>{t('profile.keys')}</h3>
+                  <button className="btn-ghost" style={{ padding: '8px 18px', fontSize: 14 }} onClick={handleCreate} disabled={creating}>
+                    + {creating ? '...' : t('profile.create')}
+                  </button>
+                </div>
+
+                {newKey && (
+                  <div className="key-reveal">
+                    <div className="key-reveal-warn">{t('profile.keyOnce')}</div>
+                    <div className="key-reveal-row">
+                      <code>{newKey}</code>
+                      <button className="key-copy" onClick={() => copy(newKey, 'new')}>{copied === 'new' ? t('profile.copied') : t('profile.copy')}</button>
+                    </div>
+                    <button className="key-reveal-done" onClick={() => setNewKey(null)}>{t('profile.keyDone')}</button>
                   </div>
-                ))}
+                )}
+
+                {keysLoading ? (
+                  <div style={{ padding: 20, color: 'var(--ink-soft)' }}>{t('profile.loading')}</div>
+                ) : keys.length === 0 ? (
+                  <div style={{ padding: 20, color: 'var(--ink-soft)' }}>{t('profile.noKeys')}</div>
+                ) : (
+                  keys.map((k) => (
+                    <div className="key-row" key={k.id}>
+                      <span className="key-name">{k.name}</span>
+                      <span className="key-val">{k.keyHint}</span>
+                      <button className="key-copy" style={{ color: 'var(--blue)' }} onClick={() => handleRevoke(k.id)}>{t('profile.revoke')}</button>
+                    </div>
+                  ))
+                )}
               </div>
             )}
 

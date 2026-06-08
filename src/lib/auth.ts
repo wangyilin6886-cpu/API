@@ -46,6 +46,49 @@ export async function login(email: string, password: string) {
   return data
 }
 
+// ---------- API key management ----------
+
+export interface ApiKey {
+  id: string
+  keyHint: string
+  name: string
+  createdAt: string
+}
+
+function authHeaders(): Record<string, string> {
+  const token = getToken()
+  return token ? { authorization: `Bearer ${token}` } : {}
+}
+
+export async function listKeys(): Promise<ApiKey[]> {
+  const res = await fetch('/api/keys', { headers: authHeaders() })
+  if (!res.ok) throw new Error('获取 key 列表失败')
+  const data = await res.json()
+  return data.keys
+}
+
+export async function createKey(name: string): Promise<{ id: string; name: string; key: string }> {
+  const res = await fetch('/api/keys', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', ...authHeaders() },
+    body: JSON.stringify({ name }),
+  })
+  const data = await res.json().catch(() => ({}))
+  if (!res.ok) throw new Error(data.error || '创建 key 失败')
+  return data
+}
+
+export async function revokeKey(id: string): Promise<void> {
+  const res = await fetch(`/api/keys?id=${encodeURIComponent(id)}`, {
+    method: 'DELETE',
+    headers: authHeaders(),
+  })
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}))
+    throw new Error(data.error || '撤销 key 失败')
+  }
+}
+
 export async function fetchMe(): Promise<AuthUser | null> {
   const token = getToken()
   if (!token) return null

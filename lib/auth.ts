@@ -55,6 +55,24 @@ export async function verifyPassword(password: string, stored: string): Promise<
   return diff === 0
 }
 
+// ---------- API key generation (ek-xxx) ----------
+
+export function generateApiKey(): string {
+  const bytes = crypto.getRandomValues(new Uint8Array(24))
+  return `ek-${toHex(bytes)}`
+}
+
+export async function hashApiKey(key: string): Promise<string> {
+  // ek-xxx keys are high-entropy random, so a fast SHA-256 is enough and lets
+  // us look up by deterministic hash. (Passwords use slow PBKDF2; keys don't.)
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(key))
+  return toHex(digest)
+}
+
+export function keyHint(key: string): string {
+  return `${key.slice(0, 7)}...${key.slice(-4)}`
+}
+
 // ---------- JWT (jose, HS256) ----------
 
 function secret(): Uint8Array {
@@ -91,4 +109,12 @@ export function json(data: unknown, status = 200, extraHeaders: Record<string, s
 
 export function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+}
+
+// Extract + verify the Bearer JWT from a request. Returns claims or null.
+export async function requireAuth(req: Request): Promise<{ userId: string; email: string } | null> {
+  const auth = req.headers.get('authorization')
+  const token = auth?.startsWith('Bearer ') ? auth.slice(7) : null
+  if (!token) return null
+  return verifyToken(token)
 }
