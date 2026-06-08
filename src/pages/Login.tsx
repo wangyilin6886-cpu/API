@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { useI18n } from '../i18n/I18nContext'
 import { useToast } from '../components/Toast'
 import LogoMark from '../components/LogoMark'
+import { login, register } from '../lib/auth'
 import './pages.css'
 
 export default function Login() {
@@ -15,16 +16,30 @@ export default function Login() {
   const [email, setEmail] = useState('')
   const [pwd, setPwd] = useState('')
   const [errs, setErrs] = useState<{ email?: string; pwd?: string }>({})
+  const [busy, setBusy] = useState(false)
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault()
     const next: { email?: string; pwd?: string } = {}
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) next.email = t('login.errEmail')
-    if (pwd.length < 6) next.pwd = t('login.errPwd')
+    if (pwd.length < (reg ? 8 : 6)) next.pwd = t('login.errPwd')
     setErrs(next)
     if (Object.keys(next).length) return
-    toast(t('login.success'), 'success')
-    setTimeout(() => nav('/profile'), 700)
+
+    setBusy(true)
+    try {
+      if (reg) {
+        await register(email, pwd)
+      } else {
+        await login(email, pwd)
+      }
+      toast(t('login.success'), 'success')
+      setTimeout(() => nav('/profile'), 500)
+    } catch (err) {
+      toast(err instanceof Error ? err.message : '请求失败', 'error')
+    } finally {
+      setBusy(false)
+    }
   }
 
   return (
@@ -54,7 +69,7 @@ export default function Login() {
             <input className={errs.pwd ? 'invalid' : ''} type="password" placeholder="••••••••" value={pwd} onChange={(e) => setPwd(e.target.value)} />
             {errs.pwd && <span className="field-err">{errs.pwd}</span>}
           </div>
-          <button className="btn-grad" type="submit">{reg ? t('login.register') : t('login.submit')} →</button>
+          <button className="btn-grad" type="submit" disabled={busy}>{busy ? '...' : (reg ? t('login.register') : t('login.submit'))} →</button>
         </form>
 
         <div className="auth-divider">{t('login.or')}</div>
