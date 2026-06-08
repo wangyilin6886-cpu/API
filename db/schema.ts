@@ -12,10 +12,11 @@ export const apiKeys = pgTable('api_keys', {
   userId: text('user_id')
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
-  // Key shown to users, format: ek-xxxxxxxxxxxxxxxxxxxxx
-  ourKey: text('our_key').notNull().unique(),
-  // B's actual upstream key — store encrypted in production
-  bKey: text('b_key').notNull(),
+  // SHA-256 hash of the full ek-xxx key. The plaintext is shown to the user
+  // only once at creation and never stored.
+  keyHash: text('key_hash').notNull().unique(),
+  // Display hint, e.g. "ek-a1b2...f9e0" — safe to show in the dashboard.
+  keyHint: text('key_hint').notNull(),
   name: text('name').notNull().default('Default'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   revokedAt: timestamp('revoked_at'),
