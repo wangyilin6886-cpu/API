@@ -263,6 +263,9 @@ export const translations: Record<Lang, Dict> = {
     'profile.dist': '模型用量占比',
     'profile.estimate': '本月预计账单',
     'profile.estimateNote': '按当前用量趋势预估',
+    'profile.inout': '输入 / 输出',
+    'profile.comingSoon': '即将上线',
+    'profile.noUsage': '暂无用量数据，先去用 key 发起几次请求吧。',
 
     'recharge.title': '账户充值',
     'recharge.subtitle': '选择套餐或自定义金额',
@@ -703,6 +706,9 @@ export const translations: Record<Lang, Dict> = {
     'profile.dist': 'Model Usage Split',
     'profile.estimate': 'Est. Monthly Bill',
     'profile.estimateNote': 'Projected from current usage',
+    'profile.inout': 'Input / Output',
+    'profile.comingSoon': 'Coming soon',
+    'profile.noUsage': 'No usage yet — make a few requests with your key.',
 
     'recharge.title': 'Top Up',
     'recharge.subtitle': 'Pick a plan or enter a custom amount',
@@ -1143,6 +1149,9 @@ export const translations: Record<Lang, Dict> = {
     'profile.dist': 'Distribusi Pemakaian Model',
     'profile.estimate': 'Estimasi Tagihan Bulan Ini',
     'profile.estimateNote': 'Diproyeksikan dari pemakaian saat ini',
+    'profile.inout': 'Input / Output',
+    'profile.comingSoon': 'Segera hadir',
+    'profile.noUsage': 'Belum ada pemakaian — buat beberapa permintaan dengan kunci Anda.',
 
     'recharge.title': 'Isi Saldo',
     'recharge.subtitle': 'Pilih paket atau masukkan jumlah khusus',
