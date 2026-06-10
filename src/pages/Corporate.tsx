@@ -6,7 +6,6 @@ import ContactModal from '../components/ContactModal'
 import SiteFooter from '../components/SiteFooter'
 import './Corporate.css'
 
-const Sphere3D = lazy(() => import('../components/Sphere3D'))
 
 function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   return (
@@ -76,9 +75,7 @@ export default function Corporate() {
       {/* ===== HERO ===== */}
       <section className="corp-hero">
         <div className="corp-sphere-bg" aria-hidden="true">
-          <Suspense fallback={<div className="sphere-fallback" />}>
-            <Sphere3D />
-          </Suspense>
+          <div className="hero-mesh" />
         </div>
         <div className="corp-hero-overlay" />
 

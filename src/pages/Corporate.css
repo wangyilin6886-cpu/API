@@ -851,3 +851,19 @@
   .corp-partner-section .orbit-slot { position: static; transform: none; }
   .corp-partner-section .orbit-float { animation: none; }
 }
+
+/* hero gradient mesh (replaces 3D sphere) */
+.hero-mesh {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(820px, 92vw);
+  height: min(820px, 92vw);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 34% 30%, rgba(99, 179, 237, 0.45), transparent 55%),
+    radial-gradient(circle at 72% 36%, rgba(24, 95, 165, 0.40), transparent 58%),
+    radial-gradient(circle at 56% 74%, rgba(59, 154, 225, 0.42), transparent 60%);
+  filter: blur(54px);
+}

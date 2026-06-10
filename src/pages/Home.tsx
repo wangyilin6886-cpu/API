@@ -10,7 +10,6 @@ import ContactModal from '../components/ContactModal'
 import { models, modelCats, consumeRank, abilityRank, rankTotals, rootWall, scenarios, compareRows, comparePlans } from '../data'
 import './Home.css'
 
-const Sphere3D = lazy(() => import('../components/Sphere3D'))
 
 export default function Home() {
   const { t } = useI18n()
@@ -92,10 +91,7 @@ export default function Home() {
             </motion.div>
           </div>
           <motion.div className="hero-sphere" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.3 }}>
-            <Suspense fallback={<div className="sphere-fallback" />}>
-              <Sphere3D />
-            </Suspense>
-            <div className="sphere-glow" />
+            <div className="hero-mesh-orb" />
           </motion.div>
         </div>
       </section>

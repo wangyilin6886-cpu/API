@@ -544,3 +544,21 @@
   .sf-cols { grid-template-columns: 1fr 1fr; }
   .site-footer .offices-grid { grid-template-columns: 1fr; gap: 26px; }
 }
+
+/* hero gradient orb (replaces 3D sphere) */
+.hero-mesh-orb {
+  position: absolute;
+  inset: 6%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 26%, #9bd4f8, transparent 46%),
+    radial-gradient(circle at 73% 32%, #1f6fc0, transparent 56%),
+    radial-gradient(circle at 58% 78%, #3b9ae1, transparent 58%),
+    radial-gradient(circle at 50% 52%, #2f7fd1, #15518f 80%);
+  box-shadow: inset -22px -26px 70px rgba(8, 30, 60, 0.5), inset 22px 24px 60px rgba(190, 224, 250, 0.42);
+  animation: meshFloat 9s ease-in-out infinite;
+}
+@keyframes meshFloat {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-14px) scale(1.02); }
+}
