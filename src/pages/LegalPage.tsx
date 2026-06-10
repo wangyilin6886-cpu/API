@@ -3,7 +3,7 @@ import { ArticleProgress, ArticleNav, ArticleFooter } from './ArticleShell'
 import './Article.css'
 
 const SUPPORT_EMAIL = 'wangyilin6886@gmail.com'
-const BRAND = 'EcoAPI by EcoTech'
+const BRAND = 'SuperAPI by SuperXIndo'
 
 function Terms() {
   return (
@@ -122,7 +122,7 @@ export default function LegalPage({ type }: Props) {
     : 'Last updated: June 2026'
 
   useEffect(() => {
-    document.title = `${title} · EcoAPI by EcoTech`
+    document.title = `${title} · SuperAPI by SuperXIndo`
   }, [title])
 
   return (

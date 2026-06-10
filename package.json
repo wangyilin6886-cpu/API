@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && node scripts/gen-ecoapi-shell.mjs",
+    "build": "tsc -b && vite build && node scripts/gen-superapi-shell.mjs",
     "preview": "vite preview",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio"

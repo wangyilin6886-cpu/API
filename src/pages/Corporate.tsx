@@ -62,22 +62,13 @@ const bizSections = [
   },
 ]
 
-const corpPartners = [
-  { nameKey: 'cp.cloudwise', logo: '/strategicpartner/cloudwise.png', url: 'https://www.cloudwise.ai/' },
-  { nameKey: 'cp.transcend', logo: '/strategicpartner/ai-transcend.png', url: 'https://ai-transcend.com/' },
-  { nameKey: 'cp.speakly', logo: '/strategicpartner/speakly-ai.png', url: 'https://www.speaklyai.com/' },
-  { nameKey: 'cp.rudder', logo: '/strategicpartner/ai-rudder.png', url: 'https://airudder.com/' },
-  { nameKey: 'cp.huakun', logo: '/strategicpartner/huakun.png', url: 'https://www.schkzy.com/' },
-  { nameKey: 'cp.fusion', logo: '/strategicpartner/alpha-fusion.png', url: 'https://www.xfusion.com/en' },
-  { nameKey: 'cp.netinfo', logo: '/strategicpartner/netinfo.png', url: 'https://www.netinfosz.com/' },
-]
 
 export default function Corporate() {
   const { t } = useI18n()
   const [contactOpen, setContactOpen] = useState(false)
 
   useEffect(() => {
-    document.title = 'EcoTech · Scalable and Practical AI Ecosystems.'
+    document.title = 'SuperXIndo · Scalable and Practical AI Ecosystems.'
   }, [])
 
   return (
@@ -116,7 +107,7 @@ export default function Corporate() {
             >
               {t('corp.hero.cta1')}
             </motion.button>
-            <Link to="/ecoapi" className="btn-ghost">
+            <Link to="/superapi" className="btn-ghost">
               {t('corp.hero.cta2')}
             </Link>
           </div>
@@ -292,50 +283,6 @@ export default function Corporate() {
           </div>
         </section>
       ))}
-
-      {/* ===== STRATEGIC PARTNER ===== */}
-      <section className="corp-partner-section">
-        <div className="blob" style={{ width: 460, height: 460, background: '#185fa5', bottom: -80, left: -80 }} />
-        <div className="blob" style={{ width: 420, height: 420, background: '#5dcaa5', top: -40, right: -80 }} />
-        <Reveal>
-          <span className="corp-pillars-badge">{t('corp.partner.badge')}</span>
-          <h2 className="corp-pillars-title">{t('corp.partner.title')}</h2>
-        </Reveal>
-        <div className="partners-orbit">
-          <div className="orbit-ring r1" />
-          <div className="orbit-ring r2" />
-          <div className="orbit-ring r3" />
-          <motion.div
-            className="orbit-center"
-            initial={{ opacity: 0, scale: 0.6 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <span className="corp-orbit-brand">ECOTECH</span>
-          </motion.div>
-          {corpPartners.map((p, i) => {
-            const radius = 43
-            const angle = (i / corpPartners.length) * Math.PI * 2 - Math.PI / 2
-            const x = 50 + radius * Math.cos(angle)
-            const y = 50 + radius * Math.sin(angle) * 0.92
-            return (
-              <div
-                key={p.nameKey}
-                className="orbit-slot"
-                style={{ left: `${x}%`, top: `${y}%`, ['--d' as string]: `${i * 0.16}s` }}
-              >
-                <div className="orbit-float" style={{ ['--d' as string]: `${i * 0.3}s` }}>
-                  <a className="orbit-chip glass" href={p.url} target="_blank" rel="noopener noreferrer">
-                    <CorpPartnerLogo name={t(p.nameKey)} logo={p.logo} alt={i} />
-                    <span className="orbit-name">{t(p.nameKey)}</span>
-                  </a>
-                </div>
-              </div>
-            )
-          })}
-        </div>
-      </section>
 
       <SiteFooter />
 

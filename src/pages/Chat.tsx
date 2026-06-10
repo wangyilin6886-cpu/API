@@ -15,7 +15,7 @@ export default function Chat() {
   const [msgs, setMsgs] = useState<Msg[]>([{ role: 'ai', text: t('chat.welcome') }])
   const [loading, setLoading] = useState(false)
 
-  useEffect(() => { document.title = 'ECOAPI - One Key Access Every Top LLM' }, [])
+  useEffect(() => { document.title = 'SUPERAPI - One Key Access Every Top LLM' }, [])
   const bodyRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {

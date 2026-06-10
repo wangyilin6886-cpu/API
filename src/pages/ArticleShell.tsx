@@ -28,7 +28,7 @@ export function ArticleNav() {
   return (
     <nav className="art-nav">
       <Link to="/" className="art-back">
-        <BackArrow /> EcoTech
+        <BackArrow /> SuperXIndo
       </Link>
       <span className="art-nav-brand">Industry Intelligence</span>
     </nav>
@@ -39,9 +39,9 @@ export function ArticleFooter() {
   return (
     <footer className="art-footer">
       <Link to="/" className="art-footer-back">
-        <BackArrow /> Back to EcoTech
+        <BackArrow /> Back to SuperXIndo
       </Link>
-      <p className="art-footer-copy">© 2026 Global EcoTech Systems · Industry Intelligence</p>
+      <p className="art-footer-copy">© 2026 Global SuperXIndo Systems · Industry Intelligence</p>
     </footer>
   )
 }

@@ -26,7 +26,7 @@ export default function Profile() {
   const nav = useNavigate()
   const { theme, toggle } = useTheme()
   const toast = useToast()
-  useEffect(() => { document.title = 'ECOAPI - One Key Access Every Top LLM' }, [])
+  useEffect(() => { document.title = 'SUPERAPI - One Key Access Every Top LLM' }, [])
   const [tab, setTab] = useState<Tab>('Usage')
   const [copied, setCopied] = useState<string | null>(null)
 
@@ -273,7 +273,7 @@ export default function Profile() {
               <div className="panel glass" style={{ maxWidth: 560 }}>
                 <div className="field">
                   <label>{t('profile.nickname')}</label>
-                  <input defaultValue="EcoAPI User" />
+                  <input defaultValue="SuperAPI User" />
                 </div>
                 <div className="field">
                   <label>{t('login.email')}</label>

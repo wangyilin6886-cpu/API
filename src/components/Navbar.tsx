@@ -48,7 +48,7 @@ export default function Navbar() {
 
   const goGateway = () => {
     setMenuOpen(false)
-    if (loc.pathname !== '/ecoapi') nav('/ecoapi')
+    if (loc.pathname !== '/superapi') nav('/superapi')
     else window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -68,11 +68,11 @@ export default function Navbar() {
       >
         <button className="logo" onClick={handleLogo}>
           {isCorporate ? (
-            <img src={theme === 'dark' ? '/logoblack.png' : '/logowhite.png'} alt="EcoTech" style={{ height: 38, width: 'auto', display: 'block' }} />
+            <img src={theme === 'dark' ? '/superxblack.png' : '/superxwhite.png'} alt="SuperXIndo" style={{ height: 38, width: 'auto', display: 'block' }} />
           ) : (
             <>
               <LogoMark />
-              <span className="logo-text gradient-text">EcoAPI</span>
+              <span className="logo-text gradient-text">SuperAPI</span>
             </>
           )}
         </button>
@@ -86,7 +86,7 @@ export default function Navbar() {
               <button onClick={() => scrollToSection('ai-agent')} className="nav-chevron-item">
                 {t('corp.nav.agent')}<ChevronDown />
               </button>
-              <a href="https://www.ecoapi.ai/ecoapi" onClick={() => setMenuOpen(false)} className="nav-chevron-item">
+              <a href="https://www.superapi.ai/superapi" onClick={() => setMenuOpen(false)} className="nav-chevron-item">
                 {t('corp.nav.token')}<ChevronDown />
               </a>
               <button onClick={() => scrollToSection('overview')}>{t('corp.nav.about')}</button>

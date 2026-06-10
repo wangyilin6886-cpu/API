@@ -9,8 +9,8 @@ import './pages.css'
 interface KeyItem { id: number; name: string; key: string; created: string; used: string }
 
 const initialKeys: KeyItem[] = [
-  { id: 1, name: 'Production', key: 'sk-eco-prod-9f3a2b7c8d1e4f6a0b5c2d9e', created: '2026-04-12', used: '42.6M' },
-  { id: 2, name: 'Development', key: 'sk-eco-dev-2c4e6a8b0d1f3e5a7c9b1d3f', created: '2026-05-02', used: '3.1M' },
+  { id: 1, name: 'Production', key: 'sk-superapi-prod-9f3a2b7c8d1e4f6a0b5c2d9e', created: '2026-04-12', used: '42.6M' },
+  { id: 2, name: 'Development', key: 'sk-superapi-dev-2c4e6a8b0d1f3e5a7c9b1d3f', created: '2026-05-02', used: '3.1M' },
 ]
 
 const endpoints = [
@@ -32,7 +32,7 @@ export default function ApiDocs() {
   const nav = useNavigate()
   const [tab, setTab] = useState<'keys' | 'docs'>('keys')
   const [keys, setKeys] = useState<KeyItem[]>(initialKeys)
-  useEffect(() => { document.title = 'ECOAPI - One Key Access Every Top LLM' }, [])
+  useEffect(() => { document.title = 'SUPERAPI - One Key Access Every Top LLM' }, [])
   const [newName, setNewName] = useState('')
   const [copied, setCopied] = useState<number | string | null>(null)
 
@@ -45,7 +45,7 @@ export default function ApiDocs() {
   const createKey = () => {
     const name = newName.trim() || 'untitled'
     const rand = Math.random().toString(16).slice(2, 14) + Math.random().toString(16).slice(2, 14)
-    setKeys((k) => [{ id: Date.now(), name, key: 'sk-eco-' + rand, created: '2026-05-20', used: '0' }, ...k])
+    setKeys((k) => [{ id: Date.now(), name, key: 'sk-superapi-' + rand, created: '2026-05-20', used: '0' }, ...k])
     setNewName('')
   }
   const revoke = (id: number) => setKeys((k) => k.filter((x) => x.id !== id))
@@ -57,7 +57,7 @@ export default function ApiDocs() {
       <div className="page-inner">
         <Reveal>
           <div className="page-head">
-            <button className="btn-ghost" style={{ padding: '8px 18px', fontSize: 14, marginBottom: 20 }} onClick={() => nav('/ecoapi')}>← {t('api.back')}</button>
+            <button className="btn-ghost" style={{ padding: '8px 18px', fontSize: 14, marginBottom: 20 }} onClick={() => nav('/superapi')}>← {t('api.back')}</button>
             <h1 className="gradient-text">{t('api.title')}</h1>
             <p>{t('api.subtitle')}</p>
           </div>
@@ -74,8 +74,8 @@ export default function ApiDocs() {
               </button>
               <div className="api-side-card">
                 <span className="api-side-base">{t('api.base')}</span>
-                <code>https://api.ecoapi.ai/v1</code>
-                <button className="key-copy" style={{ marginTop: 10 }} onClick={() => copy('https://api.ecoapi.ai/v1', 'base')}>
+                <code>https://api.superapi.ai/v1</code>
+                <button className="key-copy" style={{ marginTop: 10 }} onClick={() => copy('https://api.superapi.ai/v1', 'base')}>
                   {copied === 'base' ? t('profile.copied') : t('profile.copy')}
                 </button>
               </div>
@@ -132,7 +132,7 @@ export default function ApiDocs() {
                     <h3 className="api-h3">{t('api.authTitle')}</h3>
                     <p className="api-desc">{t('api.authDesc')}</p>
                     <div className="code-block">
-                      <span className="tk-key">Authorization:</span> Bearer <span className="tk-str">sk-eco-xxxxxxxxxxxx</span>
+                      <span className="tk-key">Authorization:</span> Bearer <span className="tk-str">sk-superapi-xxxxxxxxxxxx</span>
                     </div>
 
                     <h3 className="api-h3">{t('api.endpointTitle')}</h3>
@@ -148,14 +148,14 @@ export default function ApiDocs() {
 
                     <h3 className="api-h3">{t('api.example')}</h3>
                     <div className="code-block">
-                      <span className="tk-key">curl</span> https://api.ecoapi.ai/v1/chat/completions \<br />
-                      &nbsp;&nbsp;-H <span className="tk-str">"Authorization: Bearer sk-eco-xxxx"</span> \<br />
+                      <span className="tk-key">curl</span> https://api.superapi.ai/v1/chat/completions \<br />
+                      &nbsp;&nbsp;-H <span className="tk-str">"Authorization: Bearer sk-superapi-xxxx"</span> \<br />
                       &nbsp;&nbsp;-H <span className="tk-str">"Content-Type: application/json"</span> \<br />
                       &nbsp;&nbsp;-d <span className="tk-str">{'\'{ "model": "claude-opus-4-7", "messages": [{"role":"user","content":"Hello!"}] }\''}</span>
                     </div>
                     <div className="code-block">
                       <span className="tk-key">from</span> openai <span className="tk-key">import</span> OpenAI<br /><br />
-                      client = <span className="tk-fn">OpenAI</span>(api_key=<span className="tk-str">"sk-eco-xxxx"</span>, base_url=<span className="tk-str">"https://api.ecoapi.ai/v1"</span>)<br />
+                      client = <span className="tk-fn">OpenAI</span>(api_key=<span className="tk-str">"sk-superapi-xxxx"</span>, base_url=<span className="tk-str">"https://api.superapi.ai/v1"</span>)<br />
                       resp = client.chat.completions.<span className="tk-fn">create</span>(<br />
                       &nbsp;&nbsp;model=<span className="tk-str">"gpt-4o"</span>, messages=[{'{'}<span className="tk-str">"role"</span>:<span className="tk-str">"user"</span>,<span className="tk-str">"content"</span>:<span className="tk-str">"Hello!"</span>{'}'}]<br />
                       )<br />

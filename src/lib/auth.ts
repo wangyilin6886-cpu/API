@@ -1,6 +1,6 @@
 // Frontend auth helpers — talk to /api/auth/* and persist the JWT in localStorage.
 
-const TOKEN_KEY = 'ecoapi_token'
+const TOKEN_KEY = 'superapi_token'
 
 export interface AuthUser {
   id: string

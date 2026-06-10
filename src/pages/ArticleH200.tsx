@@ -39,7 +39,7 @@ export default function ArticleH200() {
             targets a market breakthrough — but weeks on, not a single chip has shipped.
           </p>
           <div className="art-byline">
-            <strong>EcoTech Industry Desk</strong>
+            <strong>SuperXIndo Industry Desk</strong>
             <span className="art-byline-dot" />
             <span>8 min read</span>
           </div>
@@ -182,7 +182,7 @@ export default function ArticleH200() {
         </p>
 
         <div className="art-callout">
-          <div className="art-callout-label">EcoTech Analysis</div>
+          <div className="art-callout-label">SuperXIndo Analysis</div>
           <p>
             For enterprise buyers, the lesson is to plan around continued supply-chain
             bifurcation rather than betting on a single thaw. Approvals can be granted and
@@ -202,7 +202,7 @@ export default function ArticleH200() {
           accept.
         </p>
         <p>
-          EcoTech expects the stalemate to persist through at least mid-2026, with any
+          SuperXIndo expects the stalemate to persist through at least mid-2026, with any
           deliveries contingent on resolution of the revenue-sharing terms and the broader
           diplomatic climate. Enterprises evaluating AI infrastructure across the region
           should plan accordingly, treating the H200 channel as a possibility rather than a

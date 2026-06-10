@@ -7,7 +7,7 @@ import CountUp from '../components/CountUp'
 import Tilt from '../components/Tilt'
 import LogoMark from '../components/LogoMark'
 import ContactModal from '../components/ContactModal'
-import { models, modelCats, partners, consumeRank, abilityRank, rankTotals, rootWall, testimonials, scenarios, compareRows, comparePlans, compliance } from '../data'
+import { models, modelCats, consumeRank, abilityRank, rankTotals, rootWall, scenarios, compareRows, comparePlans } from '../data'
 import './Home.css'
 
 const Sphere3D = lazy(() => import('../components/Sphere3D'))
@@ -16,7 +16,7 @@ export default function Home() {
   const { t } = useI18n()
   const nav = useNavigate()
 
-  useEffect(() => { document.title = 'ECOAPI - One Key Access Every Top LLM' }, [])
+  useEffect(() => { document.title = 'SUPERAPI - One Key Access Every Top LLM' }, [])
 
   const goCorpSection = (id: string) => {
     nav('/')
@@ -142,7 +142,7 @@ export default function Home() {
           <div className="console glass">
             <div className="console-bar">
               <span className="dot r" /><span className="dot y" /><span className="dot g" />
-              <span className="console-url">app.ecoapi.ai/dashboard</span>
+              <span className="console-url">app.superapi.ai/dashboard</span>
             </div>
             <div className="console-body">
               <div className="console-side">
@@ -298,75 +298,6 @@ export default function Home() {
         </Reveal>
       </section>
 
-      {/* ===== 5. PARTNERS ===== */}
-      <section className="section partners" id="partners">
-        <div className="blob" style={{ width: 460, height: 460, background: '#185fa5', bottom: -80, left: -80 }} />
-        <div className="blob" style={{ width: 420, height: 420, background: '#5dcaa5', top: -40, right: -80 }} />
-        <Reveal><h2 className="section-title">{t('partners.title')}</h2></Reveal>
-        <Reveal delay={0.1}><p className="section-subtitle">{t('partners.subtitle')}</p></Reveal>
-        <div className="partners-orbit">
-          <div className="orbit-ring r1" />
-          <div className="orbit-ring r2" />
-          <div className="orbit-ring r3" />
-          <motion.div
-            className="orbit-center"
-            initial={{ opacity: 0, scale: 0.6 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <span className="orbit-count gradient-text">{t('partners.count')}</span>
-            <span className="orbit-eco">{t('partners.eco')}</span>
-          </motion.div>
-          {partners.map((p, i) => {
-            const radius = 43
-            const angle = (i / partners.length) * Math.PI * 2 - Math.PI / 2
-            const x = 50 + radius * Math.cos(angle)
-            const y = 50 + radius * Math.sin(angle) * 0.92
-            return (
-              <div
-                key={p.nameKey}
-                className="orbit-slot"
-                style={{ left: `${x}%`, top: `${y}%`, ['--d' as string]: `${i * 0.16}s` }}
-              >
-                <div className="orbit-float" style={{ ['--d' as string]: `${i * 0.3}s` }}>
-                  <div className="orbit-chip glass">
-                    <PartnerLogo name={t(p.nameKey)} logo={p.logo} alt={i} />
-                    <span className="orbit-name">{t(p.nameKey)}</span>
-                  </div>
-                </div>
-              </div>
-            )
-          })}
-        </div>
-
-        <div className="container testi-grid">
-          {testimonials.map((tm, i) => (
-            <Reveal key={tm.avatar} delay={i * 0.1} className="testi-wrap">
-              <div className="testi-card glass">
-                <span className="testi-mark">“</span>
-                <p className="testi-quote">{t(tm.q)}</p>
-                <div className="testi-foot">
-                  <span className="testi-avatar" style={{ background: tm.color }}>{tm.avatar}</span>
-                  <div>
-                    <span className="testi-author">{t(tm.a)}</span>
-                  </div>
-                </div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-
-        <Reveal delay={0.1} className="compliance-wrap">
-          <span className="compliance-title">{t('compliance.title')}</span>
-          <div className="compliance-row">
-            {compliance.map((c) => (
-              <span className="compliance-badge" key={c}><ShieldIcon /> {c}</span>
-            ))}
-          </div>
-        </Reveal>
-      </section>
-
       {/* ===== 6. LEADERBOARD ===== */}
       <section className="section rank" id="rank">
         <div className="blob" style={{ width: 440, height: 440, background: '#185fa5', top: -40, right: -100, opacity: 0.5 }} />
@@ -462,7 +393,7 @@ export default function Home() {
         <div className="container">
           <div className="sf-top">
             <div className="sf-brand">
-              <div className="logo"><img src="/logoblack.png" alt="EcoAPI" style={{ height: 36, width: 'auto', display: 'block' }} /></div>
+              <div className="logo"><img src="/superxblack.png" alt="SuperAPI" style={{ height: 36, width: 'auto', display: 'block' }} /></div>
               <p>{t('footer.tagline')}</p>
             </div>
             <div className="sf-cols">
@@ -481,9 +412,9 @@ export default function Home() {
                 )}
               </div>
               <div className="sf-col">
-                <h4 className="sf-col-link"><a href="https://www.ecoapi.ai/ecoapi">{t('foot.token')}</a></h4>
+                <h4 className="sf-col-link"><a href="https://www.superapi.ai/superapi">{t('foot.token')}</a></h4>
                 {['DeepSeek', 'Qwen', 'GLM', 'OpenAI', 'Anthropic'].map((m) => (
-                  <a key={m} href="https://www.ecoapi.ai/ecoapi">{m}</a>
+                  <a key={m} href="https://www.superapi.ai/superapi">{m}</a>
                 ))}
               </div>
             </div>
@@ -537,16 +468,6 @@ const scenIcons = [
   <svg key={4} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 5h12M9 3v2M5 5c0 6 3 9 7 11M11 11c-1 3-3 5-6 6M14 21l4-9 4 9M16 18h4" /></svg>,
   <svg key={5} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="9" y="2" width="6" height="12" rx="3" /><path d="M5 11a7 7 0 0 0 14 0M12 18v3" /></svg>,
 ]
-
-function PartnerLogo({ name, logo, alt }: { name: string; logo: string; alt: number }) {
-  const [err, setErr] = useState(false)
-  if (logo && !err) {
-    return <img className="orbit-logo-img" src={logo} alt={name} loading="lazy" onError={() => setErr(true)} />
-  }
-  return (
-    <span className="orbit-logo" style={{ background: alt % 2 ? 'var(--grad)' : 'linear-gradient(120deg,#185fa5,#5dcaa5)' }}>{name[0]}</span>
-  )
-}
 
 function ShieldIcon() {
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="15" height="15"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z" /><path d="M9 12l2 2 4-4" /></svg>

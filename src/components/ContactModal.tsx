@@ -7,7 +7,7 @@ export default function ContactModal({ open, onClose }: { open: boolean; onClose
 
   const methods = [
     { id: 'whatsapp', label: 'WhatsApp', value: '+62 823 7100 8529', color: '#25d366', href: 'https://wa.me/6282371008529', icon: <WhatsAppIcon /> },
-    { id: 'email', label: t('contact.email'), value: 'info@ecotech-systems.com', color: '#185fa5', href: 'mailto:info@ecotech-systems.com', icon: <MailIcon /> },
+    { id: 'email', label: t('contact.email'), value: 'info@superxindo-systems.com', color: '#185fa5', href: 'mailto:info@superxindo-systems.com', icon: <MailIcon /> },
   ]
 
   return (

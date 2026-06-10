@@ -39,7 +39,7 @@ export default async function handler(req: Request): Promise<Response> {
 
   // Reject when the account is out of credit.
   if (balanceCents <= 0) {
-    return err(402, 'billing_error', 'Insufficient balance. Please top up at ecoapi.ai.')
+    return err(402, 'billing_error', 'Insufficient balance. Please top up at superapi.ai.')
   }
 
   // Swap in B's real upstream key (stored only in the environment).

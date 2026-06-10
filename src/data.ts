@@ -40,29 +40,6 @@ export const compareRows: { key: string; vals: (boolean | string)[] }[] = [
 ]
 export const comparePlans = ['free', 'std', 'pro', 'ent']
 
-export const testimonials = [
-  { q: 'partners.q1', a: 'partners.a1', avatar: 'L', color: 'linear-gradient(135deg,#5dcaa5,#1aa179)' },
-  { q: 'partners.q2', a: 'partners.a2', avatar: 'A', color: 'linear-gradient(135deg,#185fa5,#5dcaa5)' },
-  { q: 'partners.q3', a: 'partners.a3', avatar: 'W', color: 'linear-gradient(135deg,#7c5cff,#185fa5)' },
-]
-
-export const compliance = ['SOC 2', 'ISO 27001', 'GDPR', 'TLS 1.3', '99.99% SLA']
-
-export const partners: { nameKey: string; logo: string }[] = [
-  { nameKey: 'partner.google', logo: '/partners/google-cloud.png' },
-  { nameKey: 'partner.aliyun', logo: '/partners/aliyun.png' },
-  { nameKey: 'partner.huawei', logo: '/partners/huawei.png' },
-  { nameKey: 'partner.tencent', logo: '/partners/tencent.png' },
-  { nameKey: 'partner.bytedance', logo: '/partners/bytedance.png' },
-  { nameKey: 'partner.aws', logo: '/partners/aws.png' },
-  { nameKey: 'partner.openai', logo: '/partners/openai.png' },
-  { nameKey: 'partner.anthropic', logo: '/partners/anthropic.png' },
-  { nameKey: 'partner.cloudwise', logo: '/partners/cloudwise.png' },
-  { nameKey: 'partner.transcend', logo: '/partners/ai-transcend.png' },
-  { nameKey: 'partner.speakly', logo: '/partners/speakly-ai.png' },
-  { nameKey: 'partner.rudder', logo: '/partners/ai-rudder.png' },
-]
-
 export const consumeRank = [
   { name: 'GPT-4o', vendor: 'OpenAI', value: 100, tokens: '8.4B', trend: '+12%', up: true },
   { name: 'DeepSeek-V3', vendor: 'DeepSeek', value: 86, tokens: '7.2B', trend: '+28%', up: true },

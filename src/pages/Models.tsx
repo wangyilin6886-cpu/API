@@ -16,7 +16,7 @@ export default function Models() {
   const [q, setQ] = useState('')
   const [sort, setSort] = useState('score')
 
-  useEffect(() => { document.title = 'ECOAPI - One Key Access Every Top LLM' }, [])
+  useEffect(() => { document.title = 'SUPERAPI - One Key Access Every Top LLM' }, [])
   const [cat, setCat] = useState('all')
   const [vendors, setVendors] = useState<string[]>([])
   const [tags, setTags] = useState<string[]>([])
@@ -239,8 +239,8 @@ export default function Models() {
               </div>
               <h4 className="drawer-h">{t('catalog.example')}</h4>
               <div className="code-block">
-                <span className="tk-key">curl</span> https://api.ecoapi.ai/v1/chat/completions \<br />
-                &nbsp;&nbsp;-H <span className="tk-str">"Authorization: Bearer sk-eco-xxxx"</span> \<br />
+                <span className="tk-key">curl</span> https://api.superapi.ai/v1/chat/completions \<br />
+                &nbsp;&nbsp;-H <span className="tk-str">"Authorization: Bearer sk-superapi-xxxx"</span> \<br />
                 &nbsp;&nbsp;-d <span className="tk-str">{`'{ "model": "${detail.name}", "messages": [...] }'`}</span>
               </div>
               <div className="drawer-foot">

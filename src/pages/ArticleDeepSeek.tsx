@@ -39,7 +39,7 @@ export default function ArticleDeepSeek() {
             the most significant milestone yet in China's self-reliant AI stack.
           </p>
           <div className="art-byline">
-            <strong>EcoTech Industry Desk</strong>
+            <strong>SuperXIndo Industry Desk</strong>
             <span className="art-byline-dot" />
             <span>7 min read</span>
           </div>
@@ -160,7 +160,7 @@ export default function ArticleDeepSeek() {
         </p>
 
         <div className="art-callout">
-          <div className="art-callout-label">EcoTech Analysis</div>
+          <div className="art-callout-label">SuperXIndo Analysis</div>
           <p>
             The speed of the cloud-provider response is the real story. Hardware
             announcements are common; coordinated purchasing commitments from all three of
@@ -191,7 +191,7 @@ export default function ArticleDeepSeek() {
         <h2>What This Means for Enterprise AI Strategy</h2>
         <div className="art-divider" />
         <p>
-          EcoTech tracks these developments because they directly shape infrastructure
+          SuperXIndo tracks these developments because they directly shape infrastructure
           decisions across Southeast Asia and the wider Asia-Pacific region. Enterprises in
           Indonesia, Singapore, and the broader ASEAN bloc that are evaluating AI
           deployments now face an increasingly bifurcated hardware landscape: a

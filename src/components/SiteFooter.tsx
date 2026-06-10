@@ -21,7 +21,7 @@ export default function SiteFooter() {
         <div className="sf-top">
           <div className="sf-brand">
             <div className="logo">
-              <img src="/logoblack.png" alt="EcoTech" style={{ height: 40, width: 'auto', display: 'block' }} />
+              <img src="/superxblack.png" alt="SuperXIndo" style={{ height: 40, width: 'auto', display: 'block' }} />
             </div>
             <p>{t('footer.tagline')}</p>
           </div>
@@ -41,9 +41,9 @@ export default function SiteFooter() {
               )}
             </div>
             <div className="sf-col">
-              <h4 className="sf-col-link"><a href="https://www.ecoapi.ai/ecoapi">{t('foot.token')}</a></h4>
+              <h4 className="sf-col-link"><a href="https://www.superapi.ai/superapi">{t('foot.token')}</a></h4>
               {['DeepSeek', 'Qwen', 'GLM', 'OpenAI', 'Anthropic'].map((m) => (
-                <a key={m} href="https://www.ecoapi.ai/ecoapi">{m}</a>
+                <a key={m} href="https://www.superapi.ai/superapi">{m}</a>
               ))}
             </div>
           </div>

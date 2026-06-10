@@ -21,7 +21,7 @@ function PageLoader() {
 
 export default function App() {
   const loc = useLocation()
-  const hideNav = loc.pathname.startsWith('/article/') || ['/terms', '/privacy', '/ecoapi/terms', '/ecoapi/privacy'].includes(loc.pathname)
+  const hideNav = loc.pathname.startsWith('/article/') || ['/terms', '/privacy', '/superapi/terms', '/superapi/privacy'].includes(loc.pathname)
 
   return (
     <>
@@ -29,7 +29,7 @@ export default function App() {
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="/" element={<Corporate />} />
-          <Route path="/ecoapi" element={<Home />} />
+          <Route path="/superapi" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/recharge" element={<Recharge />} />
           <Route path="/login" element={<Login />} />
@@ -41,8 +41,8 @@ export default function App() {
           <Route path="/ai-infra" element={<AIInfra />} />
           <Route path="/terms" element={<LegalPage type="terms" />} />
           <Route path="/privacy" element={<LegalPage type="privacy" />} />
-          <Route path="/ecoapi/terms" element={<LegalPage type="terms" />} />
-          <Route path="/ecoapi/privacy" element={<LegalPage type="privacy" />} />
+          <Route path="/superapi/terms" element={<LegalPage type="terms" />} />
+          <Route path="/superapi/privacy" element={<LegalPage type="privacy" />} />
         </Routes>
       </Suspense>
     </>

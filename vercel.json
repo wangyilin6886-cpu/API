@@ -2,25 +2,25 @@
   "redirects": [
     {
       "source": "/",
-      "has": [{ "type": "host", "value": "ecoapi\\.ai" }],
-      "destination": "/ecoapi",
+      "has": [{ "type": "host", "value": "superapi\\.ai" }],
+      "destination": "/superapi",
       "permanent": false
     },
     {
       "source": "/",
-      "has": [{ "type": "host", "value": "www\\.ecoapi\\.ai" }],
-      "destination": "/ecoapi",
+      "has": [{ "type": "host", "value": "www\\.superapi\\.ai" }],
+      "destination": "/superapi",
       "permanent": false
     }
   ],
   "rewrites": [
     { "source": "/v1/:path*", "destination": "/api/v1/:path*" },
-    { "source": "/ecoapi", "destination": "/ecoapi.html" },
-    { "source": "/profile", "destination": "/ecoapi.html" },
-    { "source": "/recharge", "destination": "/ecoapi.html" },
-    { "source": "/login", "destination": "/ecoapi.html" },
-    { "source": "/chat", "destination": "/ecoapi.html" },
-    { "source": "/models", "destination": "/ecoapi.html" },
+    { "source": "/superapi", "destination": "/superapi.html" },
+    { "source": "/profile", "destination": "/superapi.html" },
+    { "source": "/recharge", "destination": "/superapi.html" },
+    { "source": "/login", "destination": "/superapi.html" },
+    { "source": "/chat", "destination": "/superapi.html" },
+    { "source": "/models", "destination": "/superapi.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

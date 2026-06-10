@@ -12,7 +12,7 @@ export default function Login() {
   const nav = useNavigate()
   const toast = useToast()
   const [reg, setReg] = useState(false)
-  useEffect(() => { document.title = 'ECOAPI - One Key Access Every Top LLM' }, [])
+  useEffect(() => { document.title = 'SUPERAPI - One Key Access Every Top LLM' }, [])
   const [email, setEmail] = useState('')
   const [pwd, setPwd] = useState('')
   const [errs, setErrs] = useState<{ email?: string; pwd?: string }>({})
@@ -53,7 +53,7 @@ export default function Login() {
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       >
         <div className="logo" style={{ justifyContent: 'center', marginBottom: 18 }}>
-          <LogoMark /><span className="logo-text gradient-text">EcoAPI</span>
+          <LogoMark /><span className="logo-text gradient-text">SuperAPI</span>
         </div>
         <h1>{reg ? t('login.register') : t('login.title')}</h1>
         <p className="sub">{t('login.subtitle')}</p>

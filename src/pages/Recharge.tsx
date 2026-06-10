@@ -10,7 +10,7 @@ export default function Recharge() {
   const { t } = useI18n()
   const toast = useToast()
   const nav = useNavigate()
-  useEffect(() => { document.title = 'ECOAPI - One Key Access Every Top LLM' }, [])
+  useEffect(() => { document.title = 'SUPERAPI - One Key Access Every Top LLM' }, [])
 
   const [packs, setPacks] = useState<Pack[]>([])
   const [sel, setSel] = useState(0)
