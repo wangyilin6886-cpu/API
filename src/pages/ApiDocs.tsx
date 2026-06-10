@@ -74,8 +74,8 @@ export default function ApiDocs() {
               </button>
               <div className="api-side-card">
                 <span className="api-side-base">{t('api.base')}</span>
-                <code>https://api.superapi.ai/v1</code>
-                <button className="key-copy" style={{ marginTop: 10 }} onClick={() => copy('https://api.superapi.ai/v1', 'base')}>
+                <code>https://superx-id.com/v1</code>
+                <button className="key-copy" style={{ marginTop: 10 }} onClick={() => copy('https://superx-id.com/v1', 'base')}>
                   {copied === 'base' ? t('profile.copied') : t('profile.copy')}
                 </button>
               </div>
@@ -148,14 +148,14 @@ export default function ApiDocs() {
 
                     <h3 className="api-h3">{t('api.example')}</h3>
                     <div className="code-block">
-                      <span className="tk-key">curl</span> https://api.superapi.ai/v1/chat/completions \<br />
+                      <span className="tk-key">curl</span> https://superx-id.com/v1/chat/completions \<br />
                       &nbsp;&nbsp;-H <span className="tk-str">"Authorization: Bearer sk-superapi-xxxx"</span> \<br />
                       &nbsp;&nbsp;-H <span className="tk-str">"Content-Type: application/json"</span> \<br />
                       &nbsp;&nbsp;-d <span className="tk-str">{'\'{ "model": "claude-opus-4-7", "messages": [{"role":"user","content":"Hello!"}] }\''}</span>
                     </div>
                     <div className="code-block">
                       <span className="tk-key">from</span> openai <span className="tk-key">import</span> OpenAI<br /><br />
-                      client = <span className="tk-fn">OpenAI</span>(api_key=<span className="tk-str">"sk-superapi-xxxx"</span>, base_url=<span className="tk-str">"https://api.superapi.ai/v1"</span>)<br />
+                      client = <span className="tk-fn">OpenAI</span>(api_key=<span className="tk-str">"sk-superapi-xxxx"</span>, base_url=<span className="tk-str">"https://superx-id.com/v1"</span>)<br />
                       resp = client.chat.completions.<span className="tk-fn">create</span>(<br />
                       &nbsp;&nbsp;model=<span className="tk-str">"gpt-4o"</span>, messages=[{'{'}<span className="tk-str">"role"</span>:<span className="tk-str">"user"</span>,<span className="tk-str">"content"</span>:<span className="tk-str">"Hello!"</span>{'}'}]<br />
                       )<br />

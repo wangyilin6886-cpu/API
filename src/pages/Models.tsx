@@ -239,7 +239,7 @@ export default function Models() {
               </div>
               <h4 className="drawer-h">{t('catalog.example')}</h4>
               <div className="code-block">
-                <span className="tk-key">curl</span> https://api.superapi.ai/v1/chat/completions \<br />
+                <span className="tk-key">curl</span> https://superx-id.com/v1/chat/completions \<br />
                 &nbsp;&nbsp;-H <span className="tk-str">"Authorization: Bearer sk-superapi-xxxx"</span> \<br />
                 &nbsp;&nbsp;-d <span className="tk-str">{`'{ "model": "${detail.name}", "messages": [...] }'`}</span>
               </div>

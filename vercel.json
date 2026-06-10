@@ -1,18 +1,4 @@
 {
-  "redirects": [
-    {
-      "source": "/",
-      "has": [{ "type": "host", "value": "superapi\\.ai" }],
-      "destination": "/superapi",
-      "permanent": false
-    },
-    {
-      "source": "/",
-      "has": [{ "type": "host", "value": "www\\.superapi\\.ai" }],
-      "destination": "/superapi",
-      "permanent": false
-    }
-  ],
   "rewrites": [
     { "source": "/v1/:path*", "destination": "/api/v1/:path*" },
     { "source": "/superapi", "destination": "/superapi.html" },

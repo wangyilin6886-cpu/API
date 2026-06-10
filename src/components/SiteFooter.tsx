@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useI18n } from '../i18n/I18nContext'
 
 export default function SiteFooter() {
@@ -41,9 +41,9 @@ export default function SiteFooter() {
               )}
             </div>
             <div className="sf-col">
-              <h4 className="sf-col-link"><a href="https://www.superapi.ai/superapi">{t('foot.token')}</a></h4>
+              <h4 className="sf-col-link"><Link to="/superapi">{t('foot.token')}</Link></h4>
               {['DeepSeek', 'Qwen', 'GLM', 'OpenAI', 'Anthropic'].map((m) => (
-                <a key={m} href="https://www.superapi.ai/superapi">{m}</a>
+                <Link key={m} to="/superapi">{m}</Link>
               ))}
             </div>
           </div>

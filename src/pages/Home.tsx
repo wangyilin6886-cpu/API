@@ -1,5 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useI18n } from '../i18n/I18nContext'
 import Reveal from '../components/Reveal'
@@ -142,7 +142,7 @@ export default function Home() {
           <div className="console glass">
             <div className="console-bar">
               <span className="dot r" /><span className="dot y" /><span className="dot g" />
-              <span className="console-url">app.superapi.ai/dashboard</span>
+              <span className="console-url">superx-id.com/dashboard</span>
             </div>
             <div className="console-body">
               <div className="console-side">
@@ -412,9 +412,9 @@ export default function Home() {
                 )}
               </div>
               <div className="sf-col">
-                <h4 className="sf-col-link"><a href="https://www.superapi.ai/superapi">{t('foot.token')}</a></h4>
+                <h4 className="sf-col-link"><Link to="/superapi">{t('foot.token')}</Link></h4>
                 {['DeepSeek', 'Qwen', 'GLM', 'OpenAI', 'Anthropic'].map((m) => (
-                  <a key={m} href="https://www.superapi.ai/superapi">{m}</a>
+                  <Link key={m} to="/superapi">{m}</Link>
                 ))}
               </div>
             </div>

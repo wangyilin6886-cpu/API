@@ -86,9 +86,9 @@ export default function Navbar() {
               <button onClick={() => scrollToSection('ai-agent')} className="nav-chevron-item">
                 {t('corp.nav.agent')}<ChevronDown />
               </button>
-              <a href="https://www.superapi.ai/superapi" onClick={() => setMenuOpen(false)} className="nav-chevron-item">
+              <Link to="/superapi" onClick={() => setMenuOpen(false)} className="nav-chevron-item">
                 {t('corp.nav.token')}<ChevronDown />
-              </a>
+              </Link>
               <button onClick={() => scrollToSection('overview')}>{t('corp.nav.about')}</button>
             </>
           ) : (
