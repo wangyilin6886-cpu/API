@@ -6,6 +6,7 @@ import Reveal from '../components/Reveal'
 import CountUp from '../components/CountUp'
 import Tilt from '../components/Tilt'
 import LogoMark from '../components/LogoMark'
+import RoutingDiagram from '../components/RoutingDiagram'
 import ContactModal from '../components/ContactModal'
 import { models, modelCats, consumeRank, abilityRank, rankTotals, rootWall, scenarios, compareRows, comparePlans } from '../data'
 import './Home.css'
@@ -91,7 +92,7 @@ export default function Home() {
             </motion.div>
           </div>
           <motion.div className="hero-sphere" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1, delay: 0.3 }}>
-            <div className="hero-mesh-orb" />
+            <RoutingDiagram />
           </motion.div>
         </div>
       </section>
