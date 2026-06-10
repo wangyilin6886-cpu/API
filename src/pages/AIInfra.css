@@ -1,0 +1,267 @@
+/* ===== AI INFRA PAGE ===== */
+.infra-root { overflow-x: hidden; }
+
+/* ── SHARED BADGE ── */
+.infra-badge {
+  display: inline-block;
+  padding: 10px 22px;
+  border-radius: 999px;
+  background: rgba(91, 91, 214, 0.1);
+  color: #5b5bd6;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-bottom: 32px;
+}
+
+/* ── HERO ── */
+.infra-hero {
+  padding-top: 70px;
+  background: #eaecf6;
+  min-height: 52vh;
+  display: flex;
+  align-items: center;
+}
+.infra-hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 6vw 86px;
+}
+.infra-hero-title {
+  font-size: clamp(36px, 5.5vw, 72px);
+  font-weight: 900;
+  color: #0f1d2e;
+  line-height: 1.08;
+  letter-spacing: -2px;
+  margin-bottom: 28px;
+  max-width: 840px;
+}
+.infra-hero-sub {
+  font-size: clamp(16px, 1.6vw, 19px);
+  color: #5a6a7e;
+  line-height: 1.7;
+  max-width: 600px;
+}
+
+/* ── SECTION LAYOUT ── */
+.infra-section {
+  padding: 100px 6vw;
+}
+.infra-section--gray { background: #f4f6fc; }
+.infra-section--white { background: #fff; }
+
+.infra-section-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.infra-section-title {
+  font-size: clamp(28px, 3.8vw, 48px);
+  font-weight: 900;
+  color: #0f1d2e;
+  letter-spacing: -1px;
+  line-height: 1.18;
+  margin-bottom: 20px;
+  max-width: 760px;
+}
+
+.infra-section-sub {
+  font-size: clamp(15px, 1.4vw, 17px);
+  color: #5a6a7e;
+  line-height: 1.7;
+  max-width: 680px;
+  margin-bottom: 60px;
+}
+
+/* ── CHALLENGE GRID ── */
+.infra-challenge-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.infra-challenge-card {
+  background: #f3f5fb;
+  border: 1px solid #e4e8f5;
+  border-radius: 18px;
+  padding: 38px 36px 42px;
+  transition: transform 0.35s cubic-bezier(.22,1,.36,1), box-shadow 0.35s;
+}
+.infra-challenge-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 28px 60px -22px rgba(91,91,214,0.22);
+}
+.infra-challenge-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  background: rgba(91, 91, 214, 0.1);
+  color: #5b5bd6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 26px;
+}
+.infra-challenge-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f1d2e;
+  margin-bottom: 14px;
+}
+.infra-challenge-desc {
+  font-size: 15.5px;
+  color: #5a6a7e;
+  line-height: 1.75;
+}
+
+/* ── APPROACH LIST ── */
+.infra-approach-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.infra-approach-item {
+  background: #fff;
+  border: 1px solid #e4e8f5;
+  border-radius: 18px;
+  padding: 44px 48px;
+  display: flex;
+  gap: 48px;
+  align-items: flex-start;
+  transition: transform 0.35s cubic-bezier(.22,1,.36,1), box-shadow 0.35s;
+}
+.infra-approach-item:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 56px -20px rgba(24,95,165,0.2);
+}
+.infra-approach-num {
+  font-size: 64px;
+  font-weight: 900;
+  color: #185fa5;
+  line-height: 1;
+  flex-shrink: 0;
+  width: 80px;
+  letter-spacing: -2px;
+}
+.infra-approach-content { flex: 1; }
+.infra-approach-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f1d2e;
+  margin-bottom: 14px;
+}
+.infra-approach-desc {
+  font-size: 16px;
+  color: #5a6a7e;
+  line-height: 1.75;
+  margin-bottom: 26px;
+}
+.infra-approach-bullets {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 28px;
+}
+.infra-approach-bullet {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14.5px;
+  color: #3a4a5c;
+  font-weight: 500;
+}
+.infra-approach-bullet-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #185fa5, #5dcaa5);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.infra-approach-bullet-dot svg {
+  width: 10px;
+  height: 10px;
+  color: #fff;
+}
+
+/* ── SECTORS GRID ── */
+.infra-sectors-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+.infra-sector-card {
+  background: #fff;
+  border: 1px solid #e4e8f5;
+  border-radius: 16px;
+  padding: 30px 28px 34px;
+  transition: transform 0.35s cubic-bezier(.22,1,.36,1), box-shadow 0.35s;
+}
+.infra-sector-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 28px 56px -22px rgba(24,95,165,0.22);
+}
+.infra-sector-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: #0f1d2e;
+  margin-bottom: 10px;
+}
+.infra-sector-desc {
+  font-size: 14.5px;
+  color: #5a6a7e;
+  line-height: 1.7;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .infra-challenge-grid { grid-template-columns: 1fr; }
+  .infra-sectors-grid { grid-template-columns: 1fr 1fr; }
+  .infra-approach-item { flex-direction: column; gap: 16px; padding: 30px 28px; }
+  .infra-approach-bullets { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .infra-sectors-grid { grid-template-columns: 1fr; }
+}
+
+/* ===== AMBIENT BLOBS (gateway-style blue/teal glows) ===== */
+.infra-hero,
+.infra-section {
+  position: relative;
+  overflow: hidden;
+}
+.infra-hero-inner,
+.infra-section-inner {
+  position: relative;
+  z-index: 1;
+}
+.infra-hero::before,
+.infra-section::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -260px;
+  width: 560px;
+  height: 560px;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(24, 95, 165, 0.30), transparent 68%);
+  filter: blur(90px);
+  pointer-events: none;
+  z-index: 0;
+}
+.infra-hero::after,
+.infra-section::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -260px;
+  width: 600px;
+  height: 600px;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(93, 202, 165, 0.32), transparent 68%);
+  filter: blur(95px);
+  pointer-events: none;
+  z-index: 0;
+}
