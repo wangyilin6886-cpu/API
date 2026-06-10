@@ -50,7 +50,7 @@
   width: 600px;
   height: 600px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(93, 202, 165, 0.30), transparent 68%);
+  background: radial-gradient(circle, rgba(59, 154, 225, 0.30), transparent 68%);
   filter: blur(95px);
   pointer-events: none;
   z-index: 1;
@@ -162,7 +162,7 @@
   bottom: 4px;
   width: 4px;
   border-radius: 2px;
-  background: linear-gradient(180deg, #185fa5, #5dcaa5);
+  background: linear-gradient(180deg, #185fa5, #3b9ae1);
 }
 
 .corp-eco-quote strong { font-weight: 800; color: var(--ink); }
@@ -361,7 +361,7 @@
 .corp-lb-tokens {
   font-size: 12px;
   font-weight: 700;
-  color: #5dcaa5;
+  color: #3b9ae1;
   flex-shrink: 0;
 }
 
@@ -535,7 +535,7 @@
   top: 0;
   bottom: 0;
   width: 4px;
-  background: linear-gradient(180deg, #185fa5, #5dcaa5);
+  background: linear-gradient(180deg, #185fa5, #3b9ae1);
 }
 
 .corp-why-label {
@@ -742,7 +742,7 @@
   height: 600px;
   transform: translateY(-50%);
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(93, 202, 165, 0.32), transparent 68%);
+  background: radial-gradient(circle, rgba(59, 154, 225, 0.32), transparent 68%);
   filter: blur(95px);
   pointer-events: none;
   z-index: 0;
@@ -789,7 +789,7 @@
   border-radius: 50%;
 }
 .corp-partner-section .orbit-ring.r1 { width: 300px; height: 290px; }
-.corp-partner-section .orbit-ring.r2 { width: 560px; height: 540px; border-color: rgba(93,202,165,0.18); animation: corp-spinSlow 60s linear infinite; }
+.corp-partner-section .orbit-ring.r2 { width: 560px; height: 540px; border-color: rgba(59, 154, 225,0.18); animation: corp-spinSlow 60s linear infinite; }
 .corp-partner-section .orbit-ring.r3 { width: 820px; height: 600px; border-color: rgba(24,95,165,0.10); }
 
 .corp-partner-section .orbit-center {
@@ -804,7 +804,7 @@
 }
 .corp-partner-section .orbit-center::after {
   content: ''; position: absolute; inset: -14px; border-radius: 50%;
-  border: 1.5px solid rgba(93,202,165,0.5); animation: corp-breathe 4s ease-in-out infinite;
+  border: 1.5px solid rgba(59, 154, 225,0.5); animation: corp-breathe 4s ease-in-out infinite;
 }
 .corp-partner-section .orbit-count { font-size: 42px; font-weight: 850; line-height: 1; -webkit-text-fill-color: #fff; }
 .corp-partner-section .orbit-eco { font-size: 13px; font-weight: 600; margin-top: 7px; opacity: 0.95; padding: 0 20px; }

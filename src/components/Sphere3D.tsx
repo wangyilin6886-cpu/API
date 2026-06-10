@@ -17,7 +17,7 @@ function WireSphere() {
         <meshStandardMaterial
           color="#185fa5"
           wireframe
-          emissive="#5dcaa5"
+          emissive="#3b9ae1"
           emissiveIntensity={0.5}
           roughness={0.3}
         />
@@ -25,10 +25,10 @@ function WireSphere() {
       <mesh>
         <icosahedronGeometry args={[1.55, 2]} />
         <meshStandardMaterial
-          color="#5dcaa5"
+          color="#3b9ae1"
           transparent
           opacity={0.18}
-          emissive="#5dcaa5"
+          emissive="#3b9ae1"
           emissiveIntensity={0.6}
           roughness={0.1}
           metalness={0.4}
@@ -61,7 +61,7 @@ function Particles() {
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
-      <pointsMaterial size={0.045} color="#5dcaa5" transparent opacity={0.85} sizeAttenuation />
+      <pointsMaterial size={0.045} color="#3b9ae1" transparent opacity={0.85} sizeAttenuation />
     </points>
   )
 }
@@ -83,7 +83,7 @@ export default function Sphere3D() {
   return (
     <Canvas camera={{ position: [0, 0, 7], fov: 45 }} dpr={[1, 2]}>
       <ambientLight intensity={0.6} />
-      <pointLight position={[5, 5, 5]} intensity={1.4} color="#5dcaa5" />
+      <pointLight position={[5, 5, 5]} intensity={1.4} color="#3b9ae1" />
       <pointLight position={[-5, -3, 2]} intensity={1.1} color="#185fa5" />
       <WireSphere />
       <Particles />

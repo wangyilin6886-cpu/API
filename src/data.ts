@@ -20,7 +20,7 @@ export const rootWall = [
 ]
 
 export const scenarios = [
-  { id: 'chat', color: '#5dcaa5' },
+  { id: 'chat', color: '#3b9ae1' },
   { id: 'content', color: '#185fa5' },
   { id: 'code', color: '#7c5cff' },
   { id: 'data', color: '#10a37f' },

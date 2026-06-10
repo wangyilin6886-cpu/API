@@ -26,8 +26,9 @@
 
 .logo { display: flex; align-items: center; gap: 10px; }
 .logo-mark {
-  width: 32px;
-  height: 32px;
+  height: 24px;
+  width: auto;
+  max-width: 220px;
   display: block;
 }
 .logo-text { font-size: 21px; font-weight: 800; letter-spacing: -0.5px; }

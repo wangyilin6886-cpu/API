@@ -52,7 +52,7 @@ export default function ApiDocs() {
 
   return (
     <div className="page api-page">
-      <div className="blob" style={{ width: 400, height: 400, background: '#5dcaa5', top: -80, right: -60 }} />
+      <div className="blob" style={{ width: 400, height: 400, background: '#3b9ae1', top: -80, right: -60 }} />
       <div className="blob" style={{ width: 360, height: 360, background: '#185fa5', bottom: -80, left: -60 }} />
       <div className="page-inner">
         <Reveal>

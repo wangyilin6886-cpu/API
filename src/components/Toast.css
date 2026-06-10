@@ -35,7 +35,7 @@
   font-size: 14px;
   flex-shrink: 0;
 }
-.toast-success .toast-icon { background: linear-gradient(120deg, #5dcaa5, #1aa179); }
+.toast-success .toast-icon { background: linear-gradient(120deg, #3b9ae1, #1366b3); }
 .toast-error .toast-icon { background: linear-gradient(120deg, #f5887a, #d9534f); }
 .toast-info .toast-icon { background: var(--grad); }
 

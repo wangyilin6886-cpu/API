@@ -44,7 +44,7 @@ export default function Login() {
 
   return (
     <div className="auth">
-      <div className="blob" style={{ width: 420, height: 420, background: '#5dcaa5', top: -80, left: -60 }} />
+      <div className="blob" style={{ width: 420, height: 420, background: '#3b9ae1', top: -80, left: -60 }} />
       <div className="blob" style={{ width: 420, height: 420, background: '#185fa5', bottom: -80, right: -60 }} />
       <motion.div
         className="auth-card glass"

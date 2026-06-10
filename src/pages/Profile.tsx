@@ -10,7 +10,7 @@ import './pages.css'
 
 const W = 320, H = 120, PAD = 12
 const R = 54, C = 2 * Math.PI * R
-const MODEL_COLORS = ['#5dcaa5', '#d97757', '#5b6cff', '#185fa5', '#10a37f', '#9b59b6']
+const MODEL_COLORS = ['#3b9ae1', '#d97757', '#5b6cff', '#185fa5', '#10a37f', '#9b59b6']
 
 function fmtTokens(n: number): string {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(2)}M`
@@ -133,7 +133,7 @@ export default function Profile() {
 
   return (
     <div className="page">
-      <div className="blob" style={{ width: 400, height: 400, background: '#5dcaa5', top: -100, right: -80 }} />
+      <div className="blob" style={{ width: 400, height: 400, background: '#3b9ae1', top: -100, right: -80 }} />
       <div className="page-inner">
         <Reveal><div className="page-head"><h1 className="gradient-text">{t('profile.title')}</h1></div></Reveal>
 
@@ -166,11 +166,11 @@ export default function Profile() {
                       <svg className="area-chart" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none">
                         <defs>
                           <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0" stopColor="#5dcaa5" stopOpacity="0.45" />
+                            <stop offset="0" stopColor="#3b9ae1" stopOpacity="0.45" />
                             <stop offset="1" stopColor="#185fa5" stopOpacity="0.02" />
                           </linearGradient>
                           <linearGradient id="areaLine" x1="0" y1="0" x2="1" y2="0">
-                            <stop offset="0" stopColor="#5dcaa5" />
+                            <stop offset="0" stopColor="#3b9ae1" />
                             <stop offset="1" stopColor="#185fa5" />
                           </linearGradient>
                         </defs>

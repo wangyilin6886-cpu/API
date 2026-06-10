@@ -21,7 +21,7 @@ export default function SiteFooter() {
         <div className="sf-top">
           <div className="sf-brand">
             <div className="logo">
-              <img src="/superxblack.png" alt="SuperXIndo" style={{ height: 40, width: 'auto', display: 'block' }} />
+              <img src="/superxblack.png" alt="SuperXIndo" style={{ height: 30, width: 'auto', maxWidth: 'min(380px, 80vw)', display: 'block' }} />
             </div>
             <p>{t('footer.tagline')}</p>
           </div>

@@ -1,7 +1,7 @@
 .home { width: 100%; overflow: hidden; }
 
 /* ===== HERO ===== */
-.hero { background: radial-gradient(circle at 70% 30%, rgba(93,202,165,0.10), transparent 55%); }
+.hero { background: radial-gradient(circle at 70% 30%, rgba(59, 154, 225,0.10), transparent 55%); }
 .hero-grid {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
@@ -28,8 +28,8 @@
 .hero-trust-label { font-size: 12px; font-weight: 700; letter-spacing: 1px; color: var(--ink-soft); text-transform: uppercase; }
 .hero-trust-logo { font-size: 14px; font-weight: 700; color: var(--ink); opacity: 0.55; transition: opacity 0.25s, color 0.25s; }
 .hero-trust-logo:hover { opacity: 1; color: var(--blue); }
-.pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 0 0 rgba(93,202,165,0.6); animation: pulse 2s infinite; }
-@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(93,202,165,0.5); } 70% { box-shadow: 0 0 0 9px rgba(93,202,165,0); } 100% { box-shadow: 0 0 0 0 rgba(93,202,165,0); } }
+.pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 0 0 rgba(59, 154, 225,0.6); animation: pulse 2s infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(59, 154, 225,0.5); } 70% { box-shadow: 0 0 0 9px rgba(59, 154, 225,0); } 100% { box-shadow: 0 0 0 0 rgba(59, 154, 225,0); } }
 
 .hero-sphere { position: relative; height: 480px; }
 .hero-sphere canvas { width: 100% !important; height: 100% !important; }
@@ -37,7 +37,7 @@
   position: absolute;
   inset: 18% 18%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(93,202,165,0.35), transparent 70%);
+  background: radial-gradient(circle, rgba(59, 154, 225,0.35), transparent 70%);
   filter: blur(40px);
   z-index: -1;
   animation: breathe 4s ease-in-out infinite;
@@ -80,7 +80,7 @@
 }
 .why-glow {
   position: absolute; top: -40px; left: -40px; width: 160px; height: 160px;
-  background: radial-gradient(circle, rgba(93,202,165,0.22), transparent 70%);
+  background: radial-gradient(circle, rgba(59, 154, 225,0.22), transparent 70%);
   filter: blur(20px); opacity: 0; transition: opacity 0.4s; pointer-events: none;
 }
 .why-card:hover .why-glow { opacity: 1; }
@@ -187,7 +187,7 @@
   border-radius: 50%;
 }
 .orbit-ring.r1 { width: 300px; height: 290px; }
-.orbit-ring.r2 { width: 560px; height: 540px; border-color: rgba(93,202,165,0.18); animation: spinSlow 60s linear infinite; }
+.orbit-ring.r2 { width: 560px; height: 540px; border-color: rgba(59, 154, 225,0.18); animation: spinSlow 60s linear infinite; }
 .orbit-ring.r3 { width: 820px; height: 600px; border-color: rgba(24,95,165,0.10); }
 
 .orbit-center {
@@ -202,7 +202,7 @@
 }
 .orbit-center::after {
   content: ''; position: absolute; inset: -14px; border-radius: 50%;
-  border: 1.5px solid rgba(93,202,165,0.5); animation: breathe 4s ease-in-out infinite;
+  border: 1.5px solid rgba(59, 154, 225,0.5); animation: breathe 4s ease-in-out infinite;
 }
 .orbit-count { font-size: 42px; font-weight: 850; line-height: 1; -webkit-text-fill-color: #fff; }
 .orbit-eco { font-size: 13px; font-weight: 600; margin-top: 7px; opacity: 0.95; padding: 0 20px; }
@@ -282,11 +282,11 @@
 .rank-name { font-size: 16px; font-weight: 700; }
 .rank-vendor { font-size: 12px; color: var(--ink-soft); }
 .rank-bar { flex: 1; height: 12px; background: var(--bg-alt); border-radius: 999px; overflow: hidden; }
-.rank-fill { height: 100%; background: var(--grad); border-radius: 999px; box-shadow: 0 0 12px rgba(93,202,165,0.5); }
+.rank-fill { height: 100%; background: var(--grad); border-radius: 999px; box-shadow: 0 0 12px rgba(59, 154, 225,0.5); }
 .rank-num { width: 78px; flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
 .rank-val { font-size: 16px; font-weight: 800; color: var(--blue); }
 .rank-trend { font-size: 11.5px; font-weight: 700; }
-.rank-trend.up { color: #1aa179; }
+.rank-trend.up { color: #1366b3; }
 .rank-trend.down { color: #d96a6a; }
 
 /* ===== RANK — DARK THEME ===== */
@@ -303,7 +303,7 @@
 .rank.dark .rank-row { border-bottom-color: rgba(255,255,255,0.06); }
 .rank.dark .rank-pos { background: rgba(255,255,255,0.08); color: #cdd9e6; }
 .rank.dark .rank-bar { background: rgba(255,255,255,0.10); }
-.rank.dark .rank-val { color: #5dcaa5; }
+.rank.dark .rank-val { color: #3b9ae1; }
 
 /* ===== CHAMPION CARD ===== */
 .champion {
@@ -344,7 +344,7 @@
 }
 .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-bottom: 70px; position: relative; z-index: 2; }
 .steps-track { position: absolute; top: 52px; left: 16%; right: 16%; height: 3px; background: var(--border); border-radius: 3px; z-index: 0; overflow: hidden; }
-.steps-track-fill { height: 100%; background: var(--grad); border-radius: 3px; box-shadow: 0 0 12px rgba(93,202,165,0.6); }
+.steps-track-fill { height: 100%; background: var(--grad); border-radius: 3px; box-shadow: 0 0 12px rgba(59, 154, 225,0.6); }
 .step-wrap { position: relative; z-index: 1; }
 .step { padding: 32px 26px; height: 100%; transition: transform 0.35s, box-shadow 0.35s; position: relative; }
 .step:hover { transform: translateY(-6px); }
@@ -436,7 +436,7 @@
 /* ===== HERO LIVE TICKER ===== */
 .hero-live { display: flex; align-items: center; gap: 8px; margin-top: 16px; font-size: 13px; color: var(--ink-soft); flex-wrap: wrap; }
 .hero-live strong { color: var(--blue); font-weight: 800; }
-.live-dot { width: 8px; height: 8px; border-radius: 50%; background: #1aa179; box-shadow: 0 0 0 0 rgba(26,161,121,0.5); animation: pulse 2s infinite; }
+.live-dot { width: 8px; height: 8px; border-radius: 50%; background: #1366b3; box-shadow: 0 0 0 0 rgba(26,161,121,0.5); animation: pulse 2s infinite; }
 .live-sep { opacity: 0.4; margin: 0 4px; }
 
 /* ===== SCENARIOS + CONSOLE PREVIEW ===== */
@@ -503,7 +503,7 @@
 .footer-res a { font-size: 14px; color: var(--ink-soft); cursor: pointer; transition: color 0.2s; width: fit-content; }
 .footer-res a:hover { color: var(--blue); }
 .footer-status { display: inline-flex; align-items: center; gap: 7px; }
-.status-dot { width: 8px; height: 8px; border-radius: 50%; background: #1aa179; box-shadow: 0 0 0 0 rgba(26,161,121,0.5); animation: pulse 2s infinite; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: #1366b3; box-shadow: 0 0 0 0 rgba(26,161,121,0.5); animation: pulse 2s infinite; }
 
 @media (max-width: 980px) {
   .scen-grid, .testi-grid { grid-template-columns: 1fr; }

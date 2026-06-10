@@ -312,7 +312,7 @@ function CorpPartnerLogo({ name, logo, alt }: { name: string; logo: string; alt:
     return <img className="orbit-logo-img" src={logo} alt={name} loading="lazy" onError={() => setErr(true)} />
   }
   return (
-    <span className="orbit-logo" style={{ background: alt % 2 ? 'var(--grad)' : 'linear-gradient(120deg,#185fa5,#5dcaa5)' }}>{name[0]}</span>
+    <span className="orbit-logo" style={{ background: alt % 2 ? 'var(--grad)' : 'linear-gradient(120deg,#185fa5,#3b9ae1)' }}>{name[0]}</span>
   )
 }
 

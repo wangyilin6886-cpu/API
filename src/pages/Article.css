@@ -31,7 +31,7 @@
   text-decoration: none;
   transition: color 0.2s;
 }
-.art-back:hover { color: #5dcaa5; }
+.art-back:hover { color: #3b9ae1; }
 
 .art-nav-brand {
   font-size: 12px;
@@ -65,7 +65,7 @@
 }
 .art-hero-glow--china {
   background:
-    radial-gradient(ellipse 55% 55% at 82% 18%, rgba(93, 202, 165, 0.18), transparent 70%),
+    radial-gradient(ellipse 55% 55% at 82% 18%, rgba(59, 154, 225, 0.18), transparent 70%),
     radial-gradient(ellipse 45% 45% at 15% 85%, rgba(24, 95, 165, 0.28), transparent 70%);
 }
 .art-hero-glow--policy {
@@ -205,7 +205,7 @@
   width: 48px;
   height: 3px;
   border-radius: 2px;
-  background: linear-gradient(90deg, #185fa5, #5dcaa5);
+  background: linear-gradient(90deg, #185fa5, #3b9ae1);
   margin: 4px 0 0;
 }
 
@@ -253,7 +253,7 @@
   font-size: 12.5px;
   font-weight: 700;
   letter-spacing: 2px;
-  color: #5dcaa5;
+  color: #3b9ae1;
   margin-bottom: 28px;
   text-transform: uppercase;
 }
@@ -271,7 +271,7 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #5dcaa5;
+  background: #3b9ae1;
   flex-shrink: 0;
   margin-top: 7px;
 }
@@ -309,7 +309,7 @@
   margin: 44px 0;
   padding: 26px 30px;
   border: 1px solid var(--border, #e5eaf2);
-  border-left: 4px solid #5dcaa5;
+  border-left: 4px solid #3b9ae1;
   border-radius: 12px;
   background: #f7fbf9;
 }
@@ -340,7 +340,7 @@
   gap: 10px;
   font-size: 15px;
   font-weight: 600;
-  color: #5dcaa5;
+  color: #3b9ae1;
   text-decoration: none;
   margin-bottom: 22px;
   transition: opacity 0.2s;
@@ -358,7 +358,7 @@
   left: 0;
   height: 3px;
   z-index: 101;
-  background: linear-gradient(90deg, #185fa5, #5dcaa5);
+  background: linear-gradient(90deg, #185fa5, #3b9ae1);
   transition: width 0.1s linear;
 }
 

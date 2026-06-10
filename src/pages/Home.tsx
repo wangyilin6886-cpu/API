@@ -44,7 +44,7 @@ export default function Home() {
       {/* ===== 1. HERO ===== */}
       <section className="section hero" id="hero">
         <div className="blob" style={{ width: 460, height: 460, background: '#185fa5', top: -120, left: -100 }} />
-        <div className="blob" style={{ width: 420, height: 420, background: '#5dcaa5', bottom: -120, right: 60 }} />
+        <div className="blob" style={{ width: 420, height: 420, background: '#3b9ae1', bottom: -120, right: 60 }} />
         <div className="container hero-grid">
           <div className="hero-text">
             <motion.span className="eyebrow" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
@@ -102,7 +102,7 @@ export default function Home() {
 
       {/* ===== 2. WHY US ===== */}
       <section className="section why" id="why">
-        <div className="blob" style={{ width: 420, height: 420, background: '#5dcaa5', top: -60, left: -100 }} />
+        <div className="blob" style={{ width: 420, height: 420, background: '#3b9ae1', top: -60, left: -100 }} />
         <div className="blob" style={{ width: 380, height: 380, background: '#185fa5', bottom: -80, right: -60 }} />
         <Reveal><h2 className="section-title">{t('why.title')}</h2></Reveal>
         <Reveal delay={0.08}><p className="section-subtitle">{t('why.subtitle')}</p></Reveal>
@@ -158,7 +158,7 @@ export default function Home() {
                 <div className="console-chart">
                   <svg viewBox="0 0 400 120" preserveAspectRatio="none">
                     <defs>
-                      <linearGradient id="cf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#5dcaa5" stopOpacity="0.5" /><stop offset="1" stopColor="#185fa5" stopOpacity="0.04" /></linearGradient>
+                      <linearGradient id="cf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#3b9ae1" stopOpacity="0.5" /><stop offset="1" stopColor="#185fa5" stopOpacity="0.04" /></linearGradient>
                     </defs>
                     <path d="M0 90 L50 70 L100 80 L150 45 L200 58 L250 30 L300 48 L350 22 L400 38 L400 120 L0 120 Z" fill="url(#cf)" />
                     <path d="M0 90 L50 70 L100 80 L150 45 L200 58 L250 30 L300 48 L350 22 L400 38" fill="none" stroke="#185fa5" strokeWidth="2.5" />
@@ -186,7 +186,7 @@ export default function Home() {
 
       {/* ===== 3. PRICING ===== */}
       <section className="section pricing" id="pricing">
-        <div className="blob" style={{ width: 380, height: 380, background: '#5dcaa5', top: 40, right: -80 }} />
+        <div className="blob" style={{ width: 380, height: 380, background: '#3b9ae1', top: 40, right: -80 }} />
         <Reveal><h2 className="section-title">{t('pricing.title')}</h2></Reveal>
         <Reveal delay={0.1}><p className="section-subtitle">{t('pricing.subtitle')}</p></Reveal>
         <Reveal delay={0.14}>
@@ -301,7 +301,7 @@ export default function Home() {
       {/* ===== 6. LEADERBOARD ===== */}
       <section className="section rank" id="rank">
         <div className="blob" style={{ width: 440, height: 440, background: '#185fa5', top: -40, right: -100, opacity: 0.5 }} />
-        <div className="blob" style={{ width: 380, height: 380, background: '#5dcaa5', bottom: -80, left: -80, opacity: 0.35 }} />
+        <div className="blob" style={{ width: 380, height: 380, background: '#3b9ae1', bottom: -80, left: -80, opacity: 0.35 }} />
         <Reveal><h2 className="section-title">{t('rank.title')}</h2></Reveal>
         <Reveal delay={0.08}><p className="section-subtitle">{t('rank.subtitle')}</p></Reveal>
         <Reveal delay={0.14}><p className="rank-intro">{t('rank.intro')}</p></Reveal>
@@ -393,7 +393,7 @@ export default function Home() {
         <div className="container">
           <div className="sf-top">
             <div className="sf-brand">
-              <div className="logo"><img src="/superxblack.png" alt="SuperAPI" style={{ height: 36, width: 'auto', display: 'block' }} /></div>
+              <div className="logo"><img src="/superxblack.png" alt="SuperAPI" style={{ height: 30, width: 'auto', maxWidth: 'min(380px, 80vw)', display: 'block' }} /></div>
               <p>{t('footer.tagline')}</p>
             </div>
             <div className="sf-cols">

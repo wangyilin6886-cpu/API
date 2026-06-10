@@ -68,7 +68,7 @@ export default function Navbar() {
       >
         <button className="logo" onClick={handleLogo}>
           {isCorporate ? (
-            <img src={theme === 'dark' ? '/superxblack.png' : '/superxwhite.png'} alt="SuperXIndo" style={{ height: 38, width: 'auto', display: 'block' }} />
+            <img src={theme === 'dark' ? '/superxblack.png' : '/superxwhite.png'} alt="SuperXIndo" style={{ height: 26, width: 'auto', maxWidth: 'min(460px, 54vw)', display: 'block' }} />
           ) : (
             <>
               <LogoMark />
