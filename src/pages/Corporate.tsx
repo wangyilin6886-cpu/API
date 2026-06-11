@@ -85,14 +85,6 @@ export default function Corporate() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
         >
-          <motion.span
-            className="eyebrow"
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.12 }}
-          >
-            {t('corp.hero.eyebrow')}
-          </motion.span>
           <h1 className="corp-hero-title gradient-text">{t('corp.hero.title')}</h1>
           <p className="corp-hero-sub">{t('corp.hero.subtitle')}</p>
           <div className="corp-hero-btns">
