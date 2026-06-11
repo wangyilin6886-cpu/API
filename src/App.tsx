@@ -10,8 +10,8 @@ const Login = lazy(() => import('./pages/Login'))
 const Chat = lazy(() => import('./pages/Chat'))
 const ApiDocs = lazy(() => import('./pages/ApiDocs'))
 const Models = lazy(() => import('./pages/Models'))
-const ArticleDeepSeek = lazy(() => import('./pages/ArticleDeepSeek'))
-const ArticleH200 = lazy(() => import('./pages/ArticleH200'))
+const ArticleAnthropicIPO = lazy(() => import('./pages/ArticleAnthropicIPO'))
+const ArticleOpenAICodex = lazy(() => import('./pages/ArticleOpenAICodex'))
 const AIInfra = lazy(() => import('./pages/AIInfra'))
 const LegalPage = lazy(() => import('./pages/LegalPage'))
 
@@ -36,8 +36,8 @@ export default function App() {
           <Route path="/chat" element={<Chat />} />
           <Route path="/api" element={<ApiDocs />} />
           <Route path="/models" element={<Models />} />
-          <Route path="/article/deepseek-huawei" element={<ArticleDeepSeek />} />
-          <Route path="/article/h200-china" element={<ArticleH200 />} />
+          <Route path="/article/anthropic-ipo" element={<ArticleAnthropicIPO />} />
+          <Route path="/article/openai-codex" element={<ArticleOpenAICodex />} />
           <Route path="/ai-infra" element={<AIInfra />} />
           <Route path="/terms" element={<LegalPage type="terms" />} />
           <Route path="/privacy" element={<LegalPage type="privacy" />} />

@@ -204,10 +204,10 @@ export default function Corporate() {
               </article>
             </Reveal>
 
-            {/* Card 2: Reuters China – DeepSeek × Huawei */}
+            {/* Card 2: Anthropic IPO */}
             <Reveal delay={0.2}>
               <article className="corp-news-card glass">
-                <div className="corp-news-visual" style={{ backgroundImage: 'url(/news2.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                <div className="corp-news-visual" style={{ backgroundImage: 'url(/anthropic.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
                   <span className="corp-news-live-badge">{t('corp.news.2.badge')}</span>
                 </div>
                 <div className="corp-news-body">
@@ -217,15 +217,15 @@ export default function Corporate() {
                   </div>
                   <h3 className="corp-news-title">{t('corp.news.2.title')}</h3>
                   <p className="corp-news-desc">{t('corp.news.2.desc')}</p>
-                  <Link to="/article/deepseek-huawei" className="corp-news-link corp-news-link--active">{t('corp.news.2.link')}</Link>
+                  <Link to="/article/anthropic-ipo" className="corp-news-link corp-news-link--active">{t('corp.news.2.link')}</Link>
                 </div>
               </article>
             </Reveal>
 
-            {/* Card 3: Reuters Policy – H200 */}
+            {/* Card 3: OpenAI acquires Codex */}
             <Reveal delay={0.3}>
               <article className="corp-news-card glass">
-                <div className="corp-news-visual" style={{ backgroundImage: 'url(/news3.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                <div className="corp-news-visual" style={{ backgroundImage: 'url(/openai-codex.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
                   <span className="corp-news-live-badge">{t('corp.news.3.badge')}</span>
                 </div>
                 <div className="corp-news-body">
@@ -235,7 +235,7 @@ export default function Corporate() {
                   </div>
                   <h3 className="corp-news-title">{t('corp.news.3.title')}</h3>
                   <p className="corp-news-desc">{t('corp.news.3.desc')}</p>
-                  <Link to="/article/h200-china" className="corp-news-link corp-news-link--active">{t('corp.news.3.link')}</Link>
+                  <Link to="/article/openai-codex" className="corp-news-link corp-news-link--active">{t('corp.news.3.link')}</Link>
                 </div>
               </article>
             </Reveal>
