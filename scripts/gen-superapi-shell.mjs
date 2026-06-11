@@ -30,7 +30,7 @@ const swaps = [
   ],
   // keywords
   [
-    'content="SuperXIndo, AI infrastructure, AI agent, AI token, enterprise AI, AI ecosystem, Singapore, Indonesia"',
+    'content="SuperXIndo, AI infrastructure, AI agent, AI token, enterprise AI, Indonesia"',
     'content="LLM API, API gateway, OpenAI compatible, DeepSeek, Claude, GPT, AI API, token billing"',
   ],
   // og:site_name (exact closing quote keeps this from matching title/desc)

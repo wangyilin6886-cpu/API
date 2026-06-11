@@ -67,7 +67,7 @@ export default function Corporate() {
   const [contactOpen, setContactOpen] = useState(false)
 
   useEffect(() => {
-    document.title = 'SuperXIndo · Scalable and Practical AI Ecosystems.'
+    document.title = 'SuperXIndo · Scalable and Practical AI Solutions.'
   }, [])
 
   return (
