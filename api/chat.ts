@@ -47,11 +47,11 @@ We serve Indonesia (ID).
 
 # Contact
 - WhatsApp: +62 823 7100 8529
-- Email: info@superxindo-systems.com
+- Email: info@superx-id.com
 
 # Guidelines
 - If a user asks something not covered here or you are unsure, do not invent facts. Instead, suggest they
-  reach out via WhatsApp (+62 823 7100 8529) or email (info@superxindo-systems.com).
+  reach out via WhatsApp (+62 823 7100 8529) or email (info@superx-id.com).
 - For general (non-company) questions, answer helpfully as a capable AI assistant.
 `.trim()
 
