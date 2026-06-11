@@ -133,7 +133,7 @@ export default function Corporate() {
           </Reveal>
           <div className="corp-eco-stats">
             {[
-              { num: <>3</>, key: 'corp.eco.stat1' },
+              { num: <>1</>, key: 'corp.eco.stat1' },
               { num: <>AI<sup>3</sup></>, key: 'corp.eco.stat2' },
               { num: <>&infin;</>, key: 'corp.eco.stat3' },
             ].map((s, i) => (

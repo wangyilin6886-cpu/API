@@ -20,7 +20,7 @@ if (!existsSync(src)) {
 const swaps = [
   // shared by <title>, og:title, twitter:title
   [
-    'SuperXIndo · Scalable and Practical AI Ecosystems',
+    'SuperXIndo · Scalable and Practical AI Solutions',
     'SuperAPI · One Key, Access Every Top LLM',
   ],
   // shared by description, og:description, twitter:description

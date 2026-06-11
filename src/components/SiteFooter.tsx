@@ -48,24 +48,6 @@ export default function SiteFooter() {
             </div>
           </div>
         </div>
-        <div className="sf-offices">
-          <h4 className="sf-office-title">{t('footer.offices')}</h4>
-          <div className="offices-grid">
-            {[
-              { cc: 'SG', name: t('footer.sg'), addr: '4 Fourth Avenue, #06-10, Singapore 268672' },
-              { cc: 'ID', name: t('footer.id'), addr: 'Noble House 25th Floor, Jl. Dr. Ide Anak Agung Gede Agung Kav. E 4.2, No. 2, Lingkar Mega Kuningan, South Jakarta 12950' },
-              { cc: 'CN', name: t('footer.cn'), addr: 'Unit 1252, Building 1 (Floors 5, 10, 11), No. 33 Courtyard, Guangshun North Street, Chaoyang District, Beijing' },
-            ].map((o) => (
-              <div className="office" key={o.cc}>
-                <div className="office-head">
-                  <span className="office-cc">{o.cc}</span>
-                  <strong>{o.name}</strong>
-                </div>
-                <p>{o.addr}</p>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
       <div className="sf-copyright">{t('footer.copyright')}</div>
     </footer>
