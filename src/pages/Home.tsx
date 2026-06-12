@@ -418,7 +418,6 @@ export default function Home() {
           </div>
 
         </div>
-        <div className="sf-copyright">{t('footer.copyright')}</div>
       </footer>
 
       <ContactModal open={contactOpen} onClose={() => setContactOpen(false)} />

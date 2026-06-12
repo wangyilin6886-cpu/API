@@ -49,7 +49,6 @@ export default function SiteFooter() {
           </div>
         </div>
       </div>
-      <div className="sf-copyright">{t('footer.copyright')}</div>
     </footer>
   )
 }
