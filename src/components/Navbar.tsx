@@ -6,7 +6,7 @@ import { useTheme } from '../theme/ThemeContext'
 import LogoMark from './LogoMark'
 import ContactModal from './ContactModal'
 import { LANGS, Lang } from '../i18n/translations'
-import { getCurrentEmail } from '../lib/auth'
+import { getCurrentEmail, clearToken } from '../lib/auth'
 import './Navbar.css'
 
 export default function Navbar() {
@@ -16,9 +16,11 @@ export default function Navbar() {
   const [langOpen, setLangOpen] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [contactOpen, setContactOpen] = useState(false)
+  const [userOpen, setUserOpen] = useState(false)
   const loc = useLocation()
   const nav = useNavigate()
   const langRef = useRef<HTMLDivElement>(null)
+  const userRef = useRef<HTMLDivElement>(null)
   const [email, setEmail] = useState<string | null>(null)
 
   const isCorporate = loc.pathname === '/' || loc.pathname === '/ai-infra'
@@ -41,6 +43,23 @@ export default function Navbar() {
     document.addEventListener('mousedown', onClick)
     return () => document.removeEventListener('mousedown', onClick)
   }, [langOpen])
+
+  useEffect(() => {
+    if (!userOpen) return
+    const onClick = (e: MouseEvent) => {
+      if (userRef.current && !userRef.current.contains(e.target as Node)) setUserOpen(false)
+    }
+    document.addEventListener('mousedown', onClick)
+    return () => document.removeEventListener('mousedown', onClick)
+  }, [userOpen])
+
+  const handleLogout = () => {
+    clearToken()
+    setEmail(null)
+    setUserOpen(false)
+    setMenuOpen(false)
+    nav('/')
+  }
 
   const scrollToSection = (hash: string) => {
     setMenuOpen(false)
@@ -144,9 +163,28 @@ export default function Navbar() {
               {t('corp.getDemo')}
             </button>
           ) : email ? (
-            <Link to="/profile" className="nav-avatar" onClick={() => setMenuOpen(false)} title={email}>
-              {email.charAt(0).toUpperCase()}
-            </Link>
+            <div className="user-wrap" ref={userRef}>
+              <button className="nav-avatar" onClick={() => setUserOpen((o) => !o)} title={email}>
+                {email.charAt(0).toUpperCase()}
+              </button>
+              <AnimatePresence>
+                {userOpen && (
+                  <motion.div
+                    className="user-menu glass"
+                    initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                    transition={{ duration: 0.18 }}
+                  >
+                    <div className="user-menu-email">{email}</div>
+                    <Link to="/profile" onClick={() => { setUserOpen(false); setMenuOpen(false) }}>
+                      {t('nav.profile')}
+                    </Link>
+                    <button className="user-menu-logout" onClick={handleLogout}>{t('nav.logout')}</button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           ) : (
             <Link to="/login" className="login-btn" onClick={() => setMenuOpen(false)}>
               {t('nav.login')}
