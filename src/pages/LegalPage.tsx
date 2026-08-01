@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
-import { ArticleProgress, ArticleNav, ArticleFooter } from './ArticleShell'
+import { ArticleProgress, ArticleNav } from './ArticleShell'
+import SiteFooter from '../components/SiteFooter'
 import './Article.css'
 
-const SUPPORT_EMAIL = 'wangyilin6886@gmail.com'
+const SUPPORT_EMAIL = 'info@ecotech-systems.com'
 const BRAND = 'EcoAPI by EcoTech'
 
 function Terms() {
@@ -149,7 +150,7 @@ export default function LegalPage({ type }: Props) {
 
       {isTerms ? <Terms /> : <Privacy />}
 
-      <ArticleFooter />
+      <SiteFooter />
     </div>
   )
 }
