@@ -6,6 +6,7 @@ import { useTheme } from '../theme/ThemeContext'
 import LogoMark from './LogoMark'
 import ContactModal from './ContactModal'
 import { LANGS, Lang } from '../i18n/translations'
+import { getCurrentEmail } from '../lib/auth'
 import './Navbar.css'
 
 export default function Navbar() {
@@ -18,6 +19,7 @@ export default function Navbar() {
   const loc = useLocation()
   const nav = useNavigate()
   const langRef = useRef<HTMLDivElement>(null)
+  const [email, setEmail] = useState<string | null>(null)
 
   const isCorporate = loc.pathname === '/' || loc.pathname === '/ai-infra'
 
@@ -26,6 +28,10 @@ export default function Navbar() {
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  // Re-read on every navigation so logging in (redirect to /profile) or
+  // logging out immediately flips the navbar between "Login" and the avatar.
+  useEffect(() => { setEmail(getCurrentEmail()) }, [loc.pathname])
 
   useEffect(() => {
     if (!langOpen) return
@@ -137,6 +143,10 @@ export default function Navbar() {
             >
               {t('corp.getDemo')}
             </button>
+          ) : email ? (
+            <Link to="/profile" className="nav-avatar" onClick={() => setMenuOpen(false)} title={email}>
+              {email.charAt(0).toUpperCase()}
+            </Link>
           ) : (
             <Link to="/login" className="login-btn" onClick={() => setMenuOpen(false)}>
               {t('nav.login')}
