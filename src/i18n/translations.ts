@@ -14,6 +14,7 @@ export const translations: Record<Lang, Dict> = {
     'nav.profile': '个人中心',
     'nav.recharge': '充值',
     'nav.login': '登录',
+    'nav.logout': '退出登录',
     'nav.lang': '语言',
 
     'hero.tag': '新一代 LLM Token 聚合中转',
@@ -462,6 +463,7 @@ export const translations: Record<Lang, Dict> = {
     'nav.profile': 'Dashboard',
     'nav.recharge': 'Top Up',
     'nav.login': 'Login',
+    'nav.logout': 'Log out',
     'nav.lang': 'Language',
 
     'hero.tag': 'Next-gen LLM Token Gateway',
@@ -910,6 +912,7 @@ export const translations: Record<Lang, Dict> = {
     'nav.profile': 'Dasbor',
     'nav.recharge': 'Isi Saldo',
     'nav.login': 'Masuk',
+    'nav.logout': 'Keluar',
     'nav.lang': 'Bahasa',
 
     'hero.tag': 'Gateway Token LLM Generasi Baru',

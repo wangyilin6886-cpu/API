@@ -24,6 +24,21 @@ export function isLoggedIn(): boolean {
   return !!getToken()
 }
 
+// Reads the email claim straight out of the JWT payload, no network call.
+// This is for display only (e.g. the navbar avatar) — never trust it for
+// authorization, the server independently verifies the token's signature.
+export function getCurrentEmail(): string | null {
+  const token = getToken()
+  if (!token) return null
+  try {
+    const payload = token.split('.')[1]
+    const json = JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')))
+    return typeof json.email === 'string' ? json.email : null
+  } catch {
+    return null
+  }
+}
+
 async function post(path: string, body: unknown): Promise<{ token: string; user: AuthUser }> {
   const res = await fetch(path, {
     method: 'POST',
