@@ -3,15 +3,10 @@ import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useI18n } from '../i18n/I18nContext'
 import Reveal from '../components/Reveal'
+import { useToast } from '../components/Toast'
 import { models } from '../data'
+import { isLoggedIn, listKeys, createKey, revokeKey, type ApiKey } from '../lib/auth'
 import './pages.css'
-
-interface KeyItem { id: number; name: string; key: string; created: string; used: string }
-
-const initialKeys: KeyItem[] = [
-  { id: 1, name: 'Production', key: 'sk-eco-prod-9f3a2b7c8d1e4f6a0b5c2d9e', created: '2026-04-12', used: '42.6M' },
-  { id: 2, name: 'Development', key: 'sk-eco-dev-2c4e6a8b0d1f3e5a7c9b1d3f', created: '2026-05-02', used: '3.1M' },
-]
 
 const endpoints = [
   { m: 'POST', p: '/v1/chat/completions', d: 'Chat / 对话补全' },
@@ -30,25 +25,53 @@ const errors = [
 export default function ApiDocs() {
   const { t } = useI18n()
   const nav = useNavigate()
+  const toast = useToast()
   const [tab, setTab] = useState<'keys' | 'docs'>('keys')
-  const [keys, setKeys] = useState<KeyItem[]>(initialKeys)
+  const [keys, setKeys] = useState<ApiKey[]>([])
+  const [keysLoading, setKeysLoading] = useState(false)
+  const [creating, setCreating] = useState(false)
+  const [newKey, setNewKey] = useState<string | null>(null)
   useEffect(() => { document.title = 'ECOAPI - One Key Access Every Top LLM' }, [])
   const [newName, setNewName] = useState('')
-  const [copied, setCopied] = useState<number | string | null>(null)
+  const [copied, setCopied] = useState<string | null>(null)
 
-  const copy = (val: string, id: number | string) => {
+  const copy = (val: string, id: string) => {
     navigator.clipboard?.writeText(val)
     setCopied(id)
     setTimeout(() => setCopied(null), 1500)
   }
-  const mask = (k: string) => k.slice(0, 11) + '••••••••••••' + k.slice(-4)
-  const createKey = () => {
-    const name = newName.trim() || 'untitled'
-    const rand = Math.random().toString(16).slice(2, 14) + Math.random().toString(16).slice(2, 14)
-    setKeys((k) => [{ id: Date.now(), name, key: 'sk-eco-' + rand, created: '2026-05-20', used: '0' }, ...k])
-    setNewName('')
+
+  useEffect(() => {
+    if (tab !== 'keys' || !isLoggedIn()) return
+    setKeysLoading(true)
+    listKeys()
+      .then(setKeys)
+      .catch((e) => toast(e instanceof Error ? e.message : '加载失败', 'error'))
+      .finally(() => setKeysLoading(false))
+  }, [tab, toast])
+
+  const handleCreate = async () => {
+    setCreating(true)
+    try {
+      const res = await createKey(newName.trim() || 'Default')
+      setNewKey(res.key)
+      setKeys(await listKeys())
+      setNewName('')
+    } catch (e) {
+      toast(e instanceof Error ? e.message : '创建失败', 'error')
+    } finally {
+      setCreating(false)
+    }
   }
-  const revoke = (id: number) => setKeys((k) => k.filter((x) => x.id !== id))
+
+  const handleRevoke = async (id: string) => {
+    try {
+      await revokeKey(id)
+      setKeys((ks) => ks.filter((k) => k.id !== id))
+    } catch (e) {
+      toast(e instanceof Error ? e.message : '撤销失败', 'error')
+    }
+  }
 
   return (
     <div className="page api-page">
@@ -90,37 +113,61 @@ export default function ApiDocs() {
                   <div className="panel glass">
                     <h2 className="api-h2">{t('api.keyTitle')}</h2>
                     <p className="api-desc">{t('api.keyDesc')}</p>
-                    <div className="key-create">
-                      <input value={newName} onChange={(e) => setNewName(e.target.value)} placeholder={t('api.newKeyPlaceholder')} onKeyDown={(e) => e.key === 'Enter' && createKey()} />
-                      <button className="btn-grad" onClick={createKey}>+ {t('api.create')}</button>
-                    </div>
-                    <div className="key-warn"><WarnIcon /> {t('api.keyWarn')}</div>
 
-                    <div className="key-table">
-                      <div className="key-thead">
-                        <span>{t('api.colName')}</span>
-                        <span>{t('api.colKey')}</span>
-                        <span>{t('api.colCreated')}</span>
-                        <span>{t('api.colUsed')}</span>
-                        <span>{t('api.colStatus')}</span>
-                        <span></span>
+                    {!isLoggedIn() ? (
+                      <div className="key-warn" style={{ justifyContent: 'space-between' }}>
+                        <span><WarnIcon /> {t('api.loginRequired')}</span>
+                        <button className="btn-grad" onClick={() => nav('/login')}>{t('nav.login')}</button>
                       </div>
-                      <AnimatePresence>
-                        {keys.map((k) => (
-                          <motion.div className="key-trow" key={k.id} layout initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.25 }}>
-                            <span className="kt-name">{k.name}</span>
-                            <span className="kt-key">{mask(k.key)}</span>
-                            <span className="kt-dim">{k.created}</span>
-                            <span className="kt-dim">{k.used}</span>
-                            <span className="kt-status">● {t('api.active')}</span>
-                            <span className="kt-actions">
-                              <button onClick={() => copy(k.key, k.id)}>{copied === k.id ? t('profile.copied') : t('profile.copy')}</button>
-                              <button className="kt-revoke" onClick={() => revoke(k.id)}>{t('api.revoke')}</button>
-                            </span>
-                          </motion.div>
-                        ))}
-                      </AnimatePresence>
-                    </div>
+                    ) : (
+                      <>
+                        <div className="key-create">
+                          <input value={newName} onChange={(e) => setNewName(e.target.value)} placeholder={t('api.newKeyPlaceholder')} onKeyDown={(e) => e.key === 'Enter' && handleCreate()} />
+                          <button className="btn-grad" onClick={handleCreate} disabled={creating}>+ {creating ? '...' : t('api.create')}</button>
+                        </div>
+                        <div className="key-warn"><WarnIcon /> {t('api.keyWarn')}</div>
+
+                        {newKey && (
+                          <div className="key-reveal">
+                            <div className="key-reveal-warn">{t('profile.keyOnce')}</div>
+                            <div className="key-reveal-row">
+                              <code>{newKey}</code>
+                              <button className="key-copy" onClick={() => copy(newKey, 'new')}>{copied === 'new' ? t('profile.copied') : t('profile.copy')}</button>
+                            </div>
+                            <button className="key-reveal-done" onClick={() => setNewKey(null)}>{t('profile.keyDone')}</button>
+                          </div>
+                        )}
+
+                        <div className="key-table">
+                          <div className="key-thead">
+                            <span>{t('api.colName')}</span>
+                            <span>{t('api.colKey')}</span>
+                            <span>{t('api.colCreated')}</span>
+                            <span>{t('api.colStatus')}</span>
+                            <span></span>
+                          </div>
+                          {keysLoading ? (
+                            <div style={{ padding: 20, color: 'var(--ink-soft)' }}>{t('profile.loading')}</div>
+                          ) : keys.length === 0 ? (
+                            <div style={{ padding: 20, color: 'var(--ink-soft)' }}>{t('profile.noKeys')}</div>
+                          ) : (
+                            <AnimatePresence>
+                              {keys.map((k) => (
+                                <motion.div className="key-trow" key={k.id} layout initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.25 }}>
+                                  <span className="kt-name">{k.name}</span>
+                                  <span className="kt-key">{k.keyHint}</span>
+                                  <span className="kt-dim">{new Date(k.createdAt).toLocaleDateString()}</span>
+                                  <span className="kt-status">● {t('api.active')}</span>
+                                  <span className="kt-actions">
+                                    <button className="kt-revoke" onClick={() => handleRevoke(k.id)}>{t('api.revoke')}</button>
+                                  </span>
+                                </motion.div>
+                              ))}
+                            </AnimatePresence>
+                          )}
+                        </div>
+                      </>
+                    )}
                   </div>
                 </motion.div>
               ) : (
