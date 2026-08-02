@@ -12,12 +12,20 @@ import './pages.css'
 const BASE_URL = 'https://www.ecoapi.ai/api'
 
 const CLAUDE_MODELS = [
-  { name: 'Claude Opus 4 系列', color: '#d97757' },
+  { name: 'Claude Opus 4.6', color: '#d97757' },
+  { name: 'Claude Opus 4.7', color: '#d97757' },
+  { name: 'Claude Opus 4.8', color: '#d97757' },
   { name: 'Claude Opus 5', color: '#d97757' },
   { name: 'Claude Fable 5', color: '#c96442' },
 ]
 
-const GPT_MODELS = [{ name: 'GPT-5 系列', color: '#10a37f' }]
+const GPT_MODELS = [
+  { name: 'GPT-5.4', color: '#10a37f' },
+  { name: 'GPT-5.5', color: '#10a37f' },
+  { name: 'GPT-5.6 Luna', color: '#10a37f' },
+  { name: 'GPT-5.6 Sol', color: '#10a37f' },
+  { name: 'GPT-5.6 Terra', color: '#10a37f' },
+]
 
 const errors = [
   { c: '401', d: 'Unauthorized — 密钥无效或已撤销' },

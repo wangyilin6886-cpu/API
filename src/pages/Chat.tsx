@@ -1,16 +1,30 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useI18n } from '../i18n/I18nContext'
-import { models } from '../data'
 import './pages.css'
 
 interface Msg { role: 'ai' | 'user'; text: string }
 
 const CHAT_ENABLED = true
 
+// Models offered in the picker. NOTE: /api/chat is still the DeepSeek-backed
+// company assistant, so this choice is not yet routed to the selected model.
+const CHAT_MODELS = [
+  { id: 'claude-opus-4-6', name: 'Claude Opus 4.6' },
+  { id: 'claude-opus-4-7', name: 'Claude Opus 4.7' },
+  { id: 'claude-opus-4-8', name: 'Claude Opus 4.8' },
+  { id: 'claude-opus-5', name: 'Claude Opus 5' },
+  { id: 'claude-fable-5', name: 'Claude Fable 5' },
+  { id: 'gpt-5.4', name: 'GPT-5.4' },
+  { id: 'gpt-5.5', name: 'GPT-5.5' },
+  { id: 'gpt-5.6-luna', name: 'GPT-5.6 Luna' },
+  { id: 'gpt-5.6-sol', name: 'GPT-5.6 Sol' },
+  { id: 'gpt-5.6-terra', name: 'GPT-5.6 Terra' },
+]
+
 export default function Chat() {
   const { t } = useI18n()
-  const [model, setModel] = useState(models[3].name)
+  const [model, setModel] = useState('claude-opus-5')
   const [input, setInput] = useState('')
   const [msgs, setMsgs] = useState<Msg[]>([{ role: 'ai', text: t('chat.welcome') }])
   const [loading, setLoading] = useState(false)
@@ -31,7 +45,9 @@ export default function Chat() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: model.includes('Reasoner') ? 'deepseek-reasoner' : 'deepseek-chat',
+        // The assistant behind /api/chat is DeepSeek-backed; the picker above
+        // does not (yet) switch the model that actually answers.
+        model: 'deepseek-chat',
         messages: history.map((m) => ({ role: m.role === 'ai' ? 'assistant' : 'user', content: m.text })),
       }),
     })
@@ -65,7 +81,7 @@ export default function Chat() {
         <h2 className="gradient-text">{t('chat.title')}</h2>
         {CHAT_ENABLED ? <span className="chat-live">● {t('chat.live')}</span> : <span className="chat-demo-tag">{t('chat.demoTag')}</span>}
         <select className="chat-model-select" value={model} onChange={(e) => setModel(e.target.value)}>
-          {models.map((m) => <option key={m.name} value={m.name}>{m.name}</option>)}
+          {CHAT_MODELS.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}
         </select>
       </div>
 
