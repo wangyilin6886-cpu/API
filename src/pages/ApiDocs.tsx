@@ -4,22 +4,26 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useI18n } from '../i18n/I18nContext'
 import Reveal from '../components/Reveal'
 import { useToast } from '../components/Toast'
-import { models } from '../data'
 import { isLoggedIn, listKeys, createKey, revokeKey, type ApiKey } from '../lib/auth'
 import './pages.css'
 
-const endpoints = [
-  { m: 'POST', p: '/v1/chat/completions', d: 'Chat / 对话补全' },
-  { m: 'POST', p: '/v1/embeddings', d: 'Embeddings / 向量化' },
-  { m: 'POST', p: '/v1/images/generations', d: 'Image / 文生图' },
-  { m: 'GET', p: '/v1/models', d: 'List / 模型列表' },
+// The www is required: the bare domain 307-redirects, and clients drop
+// credentials across a cross-host redirect.
+const BASE_URL = 'https://www.ecoapi.ai/api'
+
+const CLAUDE_MODELS = [
+  { name: 'Claude Opus 4 系列', color: '#d97757' },
+  { name: 'Claude Opus 5', color: '#d97757' },
+  { name: 'Claude Fable 5', color: '#c96442' },
 ]
 
+const GPT_MODELS = [{ name: 'GPT-5 系列', color: '#10a37f' }]
+
 const errors = [
-  { c: '401', d: 'Unauthorized — 密钥无效或缺失' },
-  { c: '429', d: 'Too Many Requests — 触发速率限制' },
-  { c: '402', d: 'Payment Required — 余额不足' },
-  { c: '500', d: 'Server Error — 上游异常，请重试' },
+  { c: '401', d: 'Unauthorized — 密钥无效或已撤销' },
+  { c: '402', d: 'Payment Required — 余额不足，请充值' },
+  { c: '500', d: 'Server Error — 服务端异常，请重试' },
+  { c: '502', d: 'Bad Gateway — 上游暂时不可用' },
 ]
 
 export default function ApiDocs() {
@@ -97,8 +101,8 @@ export default function ApiDocs() {
               </button>
               <div className="api-side-card">
                 <span className="api-side-base">{t('api.base')}</span>
-                <code>https://api.ecoapi.ai/v1</code>
-                <button className="key-copy" style={{ marginTop: 10 }} onClick={() => copy('https://api.ecoapi.ai/v1', 'base')}>
+                <code>{BASE_URL}</code>
+                <button className="key-copy" style={{ marginTop: 10 }} onClick={() => copy(BASE_URL, 'base')}>
                   {copied === 'base' ? t('profile.copied') : t('profile.copy')}
                 </button>
               </div>
@@ -175,65 +179,80 @@ export default function ApiDocs() {
                   <div className="panel glass">
                     <h2 className="api-h2">{t('api.docsTitle')}</h2>
                     <p className="api-desc">{t('api.docsDesc')}</p>
+                    <div className="key-warn"><WarnIcon /> {t('api.wwwWarn')}</div>
+                    <p className="api-desc">{t('api.needKey')}</p>
 
-                    <h3 className="api-h3">{t('api.authTitle')}</h3>
-                    <p className="api-desc">{t('api.authDesc')}</p>
+                    {/* ---------- Claude Code ---------- */}
+                    <h3 className="api-h3">Claude Code</h3>
+                    <p className="api-desc">{t('api.cfgPath')}</p>
                     <div className="code-block">
-                      <span className="tk-key">Authorization:</span> Bearer <span className="tk-str">sk-eco-xxxxxxxxxxxx</span>
+                      Windows&nbsp;&nbsp;&nbsp;<span className="tk-str">C:\Users\&lt;用户名&gt;\.claude\settings.json</span><br />
+                      macOS / Linux&nbsp;&nbsp;&nbsp;<span className="tk-str">~/.claude/settings.json</span>
                     </div>
-
-                    <h3 className="api-h3">{t('api.endpointTitle')}</h3>
-                    <div className="ep-table">
-                      {endpoints.map((e) => (
-                        <div className="ep-row" key={e.p}>
-                          <span className={`ep-method ${e.m.toLowerCase()}`}>{e.m}</span>
-                          <code className="ep-path">{e.p}</code>
-                          <span className="ep-desc">{e.d}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    <h3 className="api-h3">{t('api.example')}</h3>
+                    <p className="api-desc">{t('api.cfgFill')}</p>
                     <div className="code-block">
-                      <span className="tk-key">curl</span> https://api.ecoapi.ai/v1/chat/completions \<br />
-                      &nbsp;&nbsp;-H <span className="tk-str">"Authorization: Bearer sk-eco-xxxx"</span> \<br />
-                      &nbsp;&nbsp;-H <span className="tk-str">"Content-Type: application/json"</span> \<br />
-                      &nbsp;&nbsp;-d <span className="tk-str">{'\'{ "model": "claude-opus-4-7", "messages": [{"role":"user","content":"Hello!"}] }\''}</span>
+                      {'{'}<br />
+                      &nbsp;&nbsp;<span className="tk-key">"env"</span>: {'{'}<br />
+                      &nbsp;&nbsp;&nbsp;&nbsp;<span className="tk-key">"ANTHROPIC_BASE_URL"</span>: <span className="tk-str">"{BASE_URL}"</span>,<br />
+                      &nbsp;&nbsp;&nbsp;&nbsp;<span className="tk-key">"ANTHROPIC_API_KEY"</span>: <span className="tk-str">"ek-你的密钥"</span><br />
+                      &nbsp;&nbsp;{'}'}<br />
+                      {'}'}
                     </div>
-                    <div className="code-block">
-                      <span className="tk-key">from</span> openai <span className="tk-key">import</span> OpenAI<br /><br />
-                      client = <span className="tk-fn">OpenAI</span>(api_key=<span className="tk-str">"sk-eco-xxxx"</span>, base_url=<span className="tk-str">"https://api.ecoapi.ai/v1"</span>)<br />
-                      resp = client.chat.completions.<span className="tk-fn">create</span>(<br />
-                      &nbsp;&nbsp;model=<span className="tk-str">"gpt-4o"</span>, messages=[{'{'}<span className="tk-str">"role"</span>:<span className="tk-str">"user"</span>,<span className="tk-str">"content"</span>:<span className="tk-str">"Hello!"</span>{'}'}]<br />
-                      )<br />
-                      <span className="tk-fn">print</span>(resp.choices[0].message.content)
-                    </div>
-
-                    <h3 className="api-h3">{t('api.modelsTitle')}</h3>
-                    <div className="model-chips">
-                      {models.map((m) => (
+                    <p className="api-desc">{t('api.ccNote')}</p>
+                    <div className="model-chips" style={{ marginTop: 14 }}>
+                      <span className="api-side-base" style={{ width: '100%', marginBottom: 2 }}>{t('api.modelsCc')}</span>
+                      {CLAUDE_MODELS.map((m) => (
                         <span className="model-chip" key={m.name}>
                           <span className="model-chip-dot" style={{ background: m.color }} />{m.name}
                         </span>
                       ))}
                     </div>
 
-                    <div className="api-two">
-                      <div>
-                        <h3 className="api-h3">{t('api.limitTitle')}</h3>
-                        <p className="api-desc">{t('api.limitDesc')}</p>
-                      </div>
-                      <div>
-                        <h3 className="api-h3">{t('api.errorTitle')}</h3>
-                        <div className="err-table">
-                          {errors.map((e) => (
-                            <div className="err-row" key={e.c}>
-                              <code className="err-code">{e.c}</code>
-                              <span>{e.d}</span>
-                            </div>
-                          ))}
+                    {/* ---------- Codex ---------- */}
+                    <h3 className="api-h3">Codex</h3>
+                    <p className="api-desc">{t('api.cfgPath')}</p>
+                    <div className="code-block">
+                      Windows&nbsp;&nbsp;&nbsp;<span className="tk-str">C:\Users\&lt;用户名&gt;\.codex\config.toml</span><br />
+                      macOS / Linux&nbsp;&nbsp;&nbsp;<span className="tk-str">~/.codex/config.toml</span>
+                    </div>
+                    <p className="api-desc">{t('api.cfgFill')}</p>
+                    <div className="code-block">
+                      <span className="tk-key">model</span> = <span className="tk-str">"gpt-5.6-sol"</span><br />
+                      <span className="tk-key">model_provider</span> = <span className="tk-str">'ecoapi'</span><br />
+                      <span className="tk-key">preferred_auth_method</span> = <span className="tk-str">'apikey'</span><br /><br />
+                      <span className="tk-fn">[model_providers.ecoapi]</span><br />
+                      <span className="tk-key">base_url</span> = <span className="tk-str">'{BASE_URL}'</span><br />
+                      <span className="tk-key">env_key</span> = <span className="tk-str">'CODEX_API_KEY'</span><br />
+                      <span className="tk-key">name</span> = <span className="tk-str">'ecoapi'</span><br />
+                      <span className="tk-key">requires_openai_auth</span> = <span className="tk-str">false</span><br />
+                      <span className="tk-key">wire_api</span> = <span className="tk-str">'responses'</span>
+                    </div>
+                    <p className="api-desc">{t('api.codexEnv')}</p>
+                    <div className="code-block">
+                      <span className="tk-fn"># Windows (PowerShell)</span><br />
+                      <span className="tk-key">setx</span> CODEX_API_KEY <span className="tk-str">"ek-你的密钥"</span><br /><br />
+                      <span className="tk-fn"># macOS / Linux</span><br />
+                      <span className="tk-key">export</span> CODEX_API_KEY=<span className="tk-str">"ek-你的密钥"</span>
+                    </div>
+                    <p className="api-desc">{t('api.codexNote')}</p>
+                    <div className="model-chips" style={{ marginTop: 14 }}>
+                      <span className="api-side-base" style={{ width: '100%', marginBottom: 2 }}>{t('api.modelsCodex')}</span>
+                      {GPT_MODELS.map((m) => (
+                        <span className="model-chip" key={m.name}>
+                          <span className="model-chip-dot" style={{ background: m.color }} />{m.name}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* ---------- Errors ---------- */}
+                    <h3 className="api-h3">{t('api.errorTitle')}</h3>
+                    <div className="err-table">
+                      {errors.map((e) => (
+                        <div className="err-row" key={e.c}>
+                          <code className="err-code">{e.c}</code>
+                          <span>{e.d}</span>
                         </div>
-                      </div>
+                      ))}
                     </div>
                   </div>
                 </motion.div>

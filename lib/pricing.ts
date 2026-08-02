@@ -2,6 +2,7 @@
 // Keyed by substring match against the model id. First match wins.
 const RATES: { match: string; inputPerM: number; outputPerM: number }[] = [
   { match: 'opus', inputPerM: 1500, outputPerM: 7500 },
+  { match: 'fable', inputPerM: 500, outputPerM: 2500 },
   { match: 'sonnet', inputPerM: 300, outputPerM: 1500 },
   { match: 'haiku', inputPerM: 80, outputPerM: 400 },
   // GPT — placeholder at market-average rates until supplier pricing lands.
