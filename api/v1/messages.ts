@@ -5,7 +5,10 @@ import { computeCostCents } from '../../lib/pricing.js'
 
 export const config = { runtime: 'edge' }
 
-const B_ENDPOINT = 'https://api.cloudwise.ai/api/v1/messages'
+// Supplier A (agent-on) serves both Claude (this endpoint, Anthropic
+// protocol) and GPT (api/responses.ts, OpenAI Responses protocol) with a
+// single upstream key.
+const UPSTREAM = 'https://agent-on.com/gateway/v1/messages'
 
 export default async function handler(req: Request): Promise<Response> {
   if (req.method === 'OPTIONS') {
@@ -15,8 +18,8 @@ export default async function handler(req: Request): Promise<Response> {
     return err(405, 'invalid_request_error', 'Method not allowed')
   }
 
-  // The user sends OUR key (ek-xxx). Vercel strips Authorization, so clients
-  // must use ANTHROPIC_API_KEY which sends x-api-key.
+  // The user sends OUR key (ek-xxx) — via x-api-key (ANTHROPIC_API_KEY) or
+  // Authorization: Bearer, both verified to reach this function.
   const userKey =
     req.headers.get('x-api-key') ||
     (req.headers.get('authorization')?.startsWith('Bearer ')
@@ -42,8 +45,8 @@ export default async function handler(req: Request): Promise<Response> {
     return err(402, 'billing_error', 'Insufficient balance. Please top up at ecoapi.ai.')
   }
 
-  // Swap in B's real upstream key (stored only in the environment).
-  const bKey = process.env.B_API_KEY
+  // Swap in the supplier's real upstream key (stored only in the environment).
+  const bKey = process.env.SUPPLIER_A_KEY
   if (!bKey) return err(500, 'api_error', 'Upstream key not configured')
 
   const body = await req.text()
@@ -60,7 +63,7 @@ export default async function handler(req: Request): Promise<Response> {
 
   let upstream: Response
   try {
-    upstream = await fetch(B_ENDPOINT, { method: 'POST', headers: fwd, body })
+    upstream = await fetch(UPSTREAM, { method: 'POST', headers: fwd, body })
   } catch (e) {
     return err(502, 'api_error', `Upstream unreachable: ${e}`)
   }
