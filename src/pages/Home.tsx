@@ -280,10 +280,9 @@ export default function Home() {
                       <h3>{m.name}</h3>
                       <span className="model-vendor">{m.vendor}</span>
                     </div>
-                    <span className="model-tag">{m.tag}</span>
+                    <span className="model-tag">{t(`tag.${m.tag}`)}</span>
                   </div>
                   <div className="model-stats">
-                    <div><span>{t('models.ctx')}</span><strong>{m.ctx}</strong></div>
                     <div><span>{t('models.in')}</span><strong>{m.cin}</strong></div>
                     <div><span>{t('models.out')}</span><strong>{m.cout}</strong></div>
                   </div>
