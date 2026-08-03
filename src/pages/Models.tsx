@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useI18n } from '../i18n/I18nContext'
-import { allModels, catVendors, catCats, catTags, fmtCtx, vendorLabel, CatModel } from '../data'
+import { allModels, catVendors, catCats, catTags, vendorLabel, CatModel } from '../data'
 import './pages.css'
 
 const PAGE_SIZE = 12
@@ -14,7 +14,7 @@ export default function Models() {
   const zh = lang === 'zh'
   const nav = useNavigate()
   const [q, setQ] = useState('')
-  const [sort, setSort] = useState('score')
+  const [sort, setSort] = useState('cheap')
 
   useEffect(() => { document.title = 'ECOAPI - One Key Access Every Top LLM' }, [])
   const [cat, setCat] = useState('all')
@@ -50,10 +50,9 @@ export default function Models() {
       return true
     })
     list = [...list].sort((a, b) => {
-      if (sort === 'cheap') return a.cin - b.cin
-      if (sort === 'ctx') return b.ctxK - a.ctxK
       if (sort === 'name') return a.name.localeCompare(b.name)
-      return b.score - a.score
+      if (sort === 'expensive') return b.cin - a.cin
+      return a.cin - b.cin
     })
     return list
   }, [q, sort, cat, vendors, tags, onlyFav, fav])
@@ -88,9 +87,8 @@ export default function Models() {
             ))}
           </div>
           <select className="cat-sort" value={sort} onChange={(e) => setSort(e.target.value)}>
-            <option value="score">{t('catalog.sortScore')}</option>
             <option value="cheap">{t('catalog.sortCheap')}</option>
-            <option value="ctx">{t('catalog.sortCtx')}</option>
+            <option value="expensive">{t('catalog.sortExpensive')}</option>
             <option value="name">{t('catalog.sortName')}</option>
           </select>
           <div className="cat-view">
@@ -151,7 +149,6 @@ export default function Models() {
                       {m.tags.slice(0, 3).map((tg) => <span key={tg} className="cat-minitag">{t(`tag.${tg}`)}</span>)}
                     </div>
                     <div className="model-stats">
-                      <div><span>{t('models.ctx')}</span><strong>{fmtCtx(m.ctxK)}</strong></div>
                       <div><span>{t('models.in')}</span><strong>${m.cin}</strong></div>
                       <div><span>{t('models.out')}</span><strong>${m.cout}</strong></div>
                     </div>
@@ -159,7 +156,6 @@ export default function Models() {
                       <button className={`cat-cmp-btn ${cmp.includes(m.id) ? 'on' : ''}`} onClick={(e) => { e.stopPropagation(); toggleCmp(m.id) }}>
                         {cmp.includes(m.id) ? `✓ ${t('catalog.added')}` : `+ ${t('catalog.addCompare')}`}
                       </button>
-                      <span className="cat-score">{m.score}</span>
                     </div>
                   </motion.div>
                 ))}
@@ -167,16 +163,14 @@ export default function Models() {
             ) : (
               <div className="cat-list">
                 <div className="cat-list-head">
-                  <span /><span>{t('catalog.vendor')}</span><span>{t('models.ctx')}</span><span>{t('models.in')}</span><span>{t('models.out')}</span><span>{t('catalog.scoreLabel')}</span><span />
+                  <span /><span>{t('catalog.vendor')}</span><span>{t('models.in')}</span><span>{t('models.out')}</span><span />
                 </div>
                 {shown.map((m) => (
                   <motion.div key={m.id} layout className="cat-row" onClick={() => setDetail(m)}>
                     <span className="cr-name"><span className="model-dot" style={{ background: m.color }} />{m.name}</span>
                     <span className="cr-dim">{vendorLabel(m.vendor, zh)}</span>
-                    <span>{fmtCtx(m.ctxK)}</span>
                     <span>${m.cin}</span>
                     <span>${m.cout}</span>
-                    <span className="cr-score">{m.score}</span>
                     <span className="cr-actions">
                       <Star id={m.id} />
                       <button className={`cat-cmp-btn sm ${cmp.includes(m.id) ? 'on' : ''}`} onClick={(e) => { e.stopPropagation(); toggleCmp(m.id) }}>{cmp.includes(m.id) ? '✓' : '+'}</button>
@@ -232,17 +226,32 @@ export default function Models() {
               </div>
               <h4 className="drawer-h">{t('catalog.spec')}</h4>
               <div className="drawer-spec">
-                <div><span>{t('models.ctx')}</span><strong>{fmtCtx(detail.ctxK)}</strong></div>
                 <div><span>{t('models.in')}</span><strong>${detail.cin} / 1M</strong></div>
                 <div><span>{t('models.out')}</span><strong>${detail.cout} / 1M</strong></div>
-                <div><span>{t('catalog.scoreLabel')}</span><strong>{detail.score}</strong></div>
               </div>
               <h4 className="drawer-h">{t('catalog.example')}</h4>
-              <div className="code-block">
-                <span className="tk-key">curl</span> https://api.ecoapi.ai/v1/chat/completions \<br />
-                &nbsp;&nbsp;-H <span className="tk-str">"Authorization: Bearer sk-eco-xxxx"</span> \<br />
-                &nbsp;&nbsp;-d <span className="tk-str">{`'{ "model": "${detail.name}", "messages": [...] }'`}</span>
-              </div>
+              {detail.vendor === 'Anthropic' ? (
+                <div className="code-block">
+                  <span className="tk-fn"># Claude Code · ~/.claude/settings.json</span><br />
+                  <span className="tk-key">"ANTHROPIC_BASE_URL"</span>: <span className="tk-str">"https://www.ecoapi.ai/api"</span><br />
+                  <span className="tk-key">"ANTHROPIC_API_KEY"</span>: <span className="tk-str">"ek-你的密钥"</span><br />
+                  <span className="tk-fn"># 在 Claude Code 内选择 {detail.name}</span>
+                </div>
+              ) : detail.vendor === 'OpenAI' ? (
+                <div className="code-block">
+                  <span className="tk-fn"># Codex · ~/.codex/config.toml</span><br />
+                  <span className="tk-key">model</span> = <span className="tk-str">"{detail.name}"</span><br />
+                  <span className="tk-key">base_url</span> = <span className="tk-str">'https://www.ecoapi.ai/api'</span><br />
+                  <span className="tk-key">wire_api</span> = <span className="tk-str">'responses'</span>
+                </div>
+              ) : (
+                <div className="code-block">
+                  <span className="tk-key">curl</span> https://www.ecoapi.ai/v1/chat/completions \<br />
+                  &nbsp;&nbsp;-H <span className="tk-str">"Authorization: Bearer ek-你的密钥"</span> \<br />
+                  &nbsp;&nbsp;-H <span className="tk-str">"Content-Type: application/json"</span> \<br />
+                  &nbsp;&nbsp;-d <span className="tk-str">{`'{ "model": "${detail.name}", "messages": [...] }'`}</span>
+                </div>
+              )}
               <div className="drawer-foot">
                 <button className={`cat-cmp-btn ${cmp.includes(detail.id) ? 'on' : ''}`} onClick={() => toggleCmp(detail.id)}>
                   {cmp.includes(detail.id) ? `✓ ${t('catalog.added')}` : `+ ${t('catalog.addCompare')}`}
@@ -266,14 +275,10 @@ export default function Models() {
                 {cmpModels.map((m) => <span key={m.id} className="cmp-ch"><span className="model-dot" style={{ background: m.color }} />{m.name}</span>)}
                 <span className="cmp-rh">{t('catalog.vendor')}</span>
                 {cmpModels.map((m) => <span key={m.id}>{vendorLabel(m.vendor, zh)}</span>)}
-                <span className="cmp-rh">{t('models.ctx')}</span>
-                {cmpModels.map((m) => <span key={m.id}>{fmtCtx(m.ctxK)}</span>)}
                 <span className="cmp-rh">{t('models.in')}</span>
                 {cmpModels.map((m) => <span key={m.id}>${m.cin}</span>)}
                 <span className="cmp-rh">{t('models.out')}</span>
                 {cmpModels.map((m) => <span key={m.id}>${m.cout}</span>)}
-                <span className="cmp-rh">{t('catalog.scoreLabel')}</span>
-                {cmpModels.map((m) => <span key={m.id} className="cmp-best" data-best={m.score === Math.max(...cmpModels.map((x) => x.score))}>{m.score}</span>)}
               </div>
             </motion.div>
           </motion.div>
