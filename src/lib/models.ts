@@ -8,12 +8,15 @@
 
 export type Family = 'claude' | 'gpt' | 'gemini' | 'deepseek' | 'qwen'
 
-export const FAMILIES: Record<Family, { label: string; color: string }> = {
-  claude: { label: 'Claude', color: '#d97757' },
-  gpt: { label: 'GPT', color: '#10a37f' },
-  gemini: { label: 'Gemini', color: '#4285f4' },
-  deepseek: { label: 'DeepSeek', color: '#5b6cff' },
-  qwen: { label: 'Qwen', color: '#615ced' },
+// `pattern` is the wildcard that selects the whole family in a key's model
+// restriction. Note qwen ids have no hyphen after the family name
+// (qwen3.7-plus), so its pattern can't carry one either.
+export const FAMILIES: Record<Family, { label: string; color: string; pattern: string }> = {
+  claude: { label: 'Claude', color: '#d97757', pattern: 'claude-*' },
+  gpt: { label: 'GPT', color: '#10a37f', pattern: 'gpt-*' },
+  gemini: { label: 'Gemini', color: '#4285f4', pattern: 'gemini-*' },
+  deepseek: { label: 'DeepSeek', color: '#5b6cff', pattern: 'deepseek-*' },
+  qwen: { label: 'Qwen', color: '#615ced', pattern: 'qwen*' },
 }
 
 export const MODELS: { id: string; family: Family }[] = [

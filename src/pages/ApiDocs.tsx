@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useI18n } from '../i18n/I18nContext'
 import Reveal from '../components/Reveal'
 import { useToast } from '../components/Toast'
+import ModelPicker from '../components/ModelPicker'
 import { isLoggedIn, listKeys, createKey, revokeKey, type ApiKey } from '../lib/auth'
 import { FAMILIES, modelsOf, OPENAI_COMPATIBLE_FAMILIES } from '../lib/models'
 import './pages.css'
@@ -34,6 +35,8 @@ export default function ApiDocs() {
   const [keysLoading, setKeysLoading] = useState(false)
   const [creating, setCreating] = useState(false)
   const [newKey, setNewKey] = useState<string | null>(null)
+  const [pickerOpen, setPickerOpen] = useState(false)
+  const [allowedModels, setAllowedModels] = useState<string[]>([])
   useEffect(() => { document.title = 'ECOAPI - One Key Access Every Top LLM' }, [])
   const [newName, setNewName] = useState('')
   const [copied, setCopied] = useState<string | null>(null)
@@ -56,10 +59,12 @@ export default function ApiDocs() {
   const handleCreate = async () => {
     setCreating(true)
     try {
-      const res = await createKey(newName.trim() || 'Default')
+      const res = await createKey(newName.trim() || 'Default', allowedModels)
       setNewKey(res.key)
       setKeys(await listKeys())
       setNewName('')
+      setAllowedModels([])
+      setPickerOpen(false)
     } catch (e) {
       toast(e instanceof Error ? e.message : '创建失败', 'error')
     } finally {
@@ -126,8 +131,12 @@ export default function ApiDocs() {
                       <>
                         <div className="key-create">
                           <input value={newName} onChange={(e) => setNewName(e.target.value)} placeholder={t('api.newKeyPlaceholder')} onKeyDown={(e) => e.key === 'Enter' && handleCreate()} />
+                          <button className="btn-ghost" style={{ padding: '10px 18px', fontSize: 14, whiteSpace: 'nowrap' }} onClick={() => setPickerOpen((o) => !o)}>
+                            {t('mp.scope')}{allowedModels.length > 0 ? ` (${allowedModels.length})` : ''}
+                          </button>
                           <button className="btn-grad" onClick={handleCreate} disabled={creating}>+ {creating ? '...' : t('api.create')}</button>
                         </div>
+                        {pickerOpen && <ModelPicker value={allowedModels} onChange={setAllowedModels} />}
                         <div className="key-warn"><WarnIcon /> {t('api.keyWarn')}</div>
 
                         {newKey && (
@@ -145,6 +154,7 @@ export default function ApiDocs() {
                           <div className="key-thead">
                             <span>{t('api.colName')}</span>
                             <span>{t('api.colKey')}</span>
+                            <span>{t('mp.scope')}</span>
                             <span>{t('api.colCreated')}</span>
                             <span>{t('api.colStatus')}</span>
                             <span></span>
@@ -159,6 +169,9 @@ export default function ApiDocs() {
                                 <motion.div className="key-trow" key={k.id} layout initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.25 }}>
                                   <span className="kt-name">{k.name}</span>
                                   <span className="kt-key">{k.keyHint}</span>
+                                  <span className="kt-dim" title={k.allowedModels?.join(', ')}>
+                                    {k.allowedModels?.length ? k.allowedModels.join(', ') : t('mp.unrestrictedShort')}
+                                  </span>
                                   <span className="kt-dim">{new Date(k.createdAt).toLocaleDateString()}</span>
                                   <span className="kt-status">● {t('api.active')}</span>
                                   <span className="kt-actions">
