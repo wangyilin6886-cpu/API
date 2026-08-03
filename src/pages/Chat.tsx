@@ -1,30 +1,20 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useI18n } from '../i18n/I18nContext'
+import { FAMILIES, MODELS, type Family } from '../lib/models'
 import './pages.css'
 
 interface Msg { role: 'ai' | 'user'; text: string }
 
 const CHAT_ENABLED = true
 
-// Models offered in the picker. NOTE: /api/chat is still the DeepSeek-backed
-// company assistant, so this choice is not yet routed to the selected model.
-const CHAT_MODELS = [
-  { id: 'claude-opus-4-6', name: 'Claude Opus 4.6' },
-  { id: 'claude-opus-4-7', name: 'Claude Opus 4.7' },
-  { id: 'claude-opus-4-8', name: 'Claude Opus 4.8' },
-  { id: 'claude-opus-5', name: 'Claude Opus 5' },
-  { id: 'claude-fable-5', name: 'Claude Fable 5' },
-  { id: 'gpt-5.4', name: 'GPT-5.4' },
-  { id: 'gpt-5.5', name: 'GPT-5.5' },
-  { id: 'gpt-5.6-luna', name: 'GPT-5.6 Luna' },
-  { id: 'gpt-5.6-sol', name: 'GPT-5.6 Sol' },
-  { id: 'gpt-5.6-terra', name: 'GPT-5.6 Terra' },
-]
+// NOTE: /api/chat is still the DeepSeek-backed company assistant, so this
+// picker does not yet route to the selected model.
+const FAMILY_ORDER = Object.keys(FAMILIES) as Family[]
 
 export default function Chat() {
   const { t } = useI18n()
-  const [model, setModel] = useState('claude-opus-5')
+  const [model, setModel] = useState('claude-opus-4-8')
   const [input, setInput] = useState('')
   const [msgs, setMsgs] = useState<Msg[]>([{ role: 'ai', text: t('chat.welcome') }])
   const [loading, setLoading] = useState(false)
@@ -81,7 +71,13 @@ export default function Chat() {
         <h2 className="gradient-text">{t('chat.title')}</h2>
         {CHAT_ENABLED ? <span className="chat-live">● {t('chat.live')}</span> : <span className="chat-demo-tag">{t('chat.demoTag')}</span>}
         <select className="chat-model-select" value={model} onChange={(e) => setModel(e.target.value)}>
-          {CHAT_MODELS.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}
+          {FAMILY_ORDER.map((f) => (
+            <optgroup key={f} label={FAMILIES[f].label}>
+              {MODELS.filter((m) => m.family === f).map((m) => (
+                <option key={m.id} value={m.id}>{m.id}</option>
+              ))}
+            </optgroup>
+          ))}
         </select>
       </div>
 
