@@ -9,7 +9,13 @@ import './pages.css'
 
 // The www is required: the bare domain 307-redirects, and clients drop
 // credentials across a cross-host redirect.
+//
+// Two base URLs, because clients differ in what they append. Claude Code and
+// Codex append their own protocol path (/v1/messages, /responses), so they
+// take the /api root. OpenAI-style clients append /chat/completions per the
+// OpenAI convention, so they need the /v1 root.
 const BASE_URL = 'https://www.ecoapi.ai/api'
+const BASE_URL_OPENAI = 'https://www.ecoapi.ai/v1'
 
 const CLAUDE_MODELS = [
   { name: 'Claude Opus 4.6', color: '#d97757' },
@@ -25,6 +31,37 @@ const GPT_MODELS = [
   { name: 'GPT-5.6 Luna', color: '#10a37f' },
   { name: 'GPT-5.6 Sol', color: '#10a37f' },
   { name: 'GPT-5.6 Terra', color: '#10a37f' },
+]
+
+const GEMINI_MODELS = [
+  'gemini-3.6-flash',
+  'gemini-3.5-flash',
+  'gemini-3.5-flash-lite',
+  'gemini-3.1-pro-preview',
+  'gemini-3.1-pro-preview-thinking',
+  'gemini-3.1-pro-preview-customtools',
+  'gemini-3.1-pro-preview-cursor',
+  'gemini-3.1-flash-image',
+  'gemini-3.1-flash-image-preview',
+  'gemini-3.1-flash-image-preview-4k',
+  'gemini-3.1-flash-image-preview-sp',
+  'gemini-3.1-flash-lite',
+  'gemini-3.1-flash-lite-image',
+  'gemini-3.1-flash-lite-preview',
+  'gemini-3-pro-preview',
+  'gemini-3-pro-image',
+  'gemini-3-pro-image-preview',
+  'gemini-3-pro-image-preview-sp',
+  'gemini-3-pro-image-preview-spe',
+  'gemini-3-flash-preview',
+  'gemini-3-flash-preview-thinking',
+  'gemini-2.5-pro',
+  'gemini-2.5-pro-thinking',
+  'gemini-2.5-flash',
+  'gemini-2.5-flash-lite',
+  'gemini-2.5-flash-image',
+  'gemini-flash-latest',
+  'gemini-flash-lite-latest',
 ]
 
 const errors = [
@@ -248,6 +285,38 @@ export default function ApiDocs() {
                       {GPT_MODELS.map((m) => (
                         <span className="model-chip" key={m.name}>
                           <span className="model-chip-dot" style={{ background: m.color }} />{m.name}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* ---------- Gemini (OpenAI-compatible clients) ---------- */}
+                    <h3 className="api-h3">Gemini · Cline / OpenAI SDK</h3>
+                    <p className="api-desc">{t('api.geminiDesc')}</p>
+                    <div className="key-warn"><WarnIcon /> {t('api.geminiBaseWarn')}</div>
+                    <div className="code-block">
+                      <span className="tk-key">Base URL</span>&nbsp;&nbsp;&nbsp;<span className="tk-str">{BASE_URL_OPENAI}</span><br />
+                      <span className="tk-key">API Key</span>&nbsp;&nbsp;&nbsp;&nbsp;<span className="tk-str">ek-你的密钥</span><br />
+                      <span className="tk-key">Model ID</span>&nbsp;&nbsp;&nbsp;<span className="tk-str">gemini-3.5-flash</span>
+                    </div>
+                    <p className="api-desc">{t('api.geminiCline')}</p>
+                    <p className="api-desc">{t('api.geminiSdk')}</p>
+                    <div className="code-block">
+                      <span className="tk-key">from</span> openai <span className="tk-key">import</span> OpenAI<br /><br />
+                      client = <span className="tk-fn">OpenAI</span>(<br />
+                      &nbsp;&nbsp;api_key=<span className="tk-str">"ek-你的密钥"</span>,<br />
+                      &nbsp;&nbsp;base_url=<span className="tk-str">"{BASE_URL_OPENAI}"</span>,<br />
+                      )<br />
+                      resp = client.chat.completions.<span className="tk-fn">create</span>(<br />
+                      &nbsp;&nbsp;model=<span className="tk-str">"gemini-3.5-flash"</span>,<br />
+                      &nbsp;&nbsp;messages=[{'{'}<span className="tk-str">"role"</span>: <span className="tk-str">"user"</span>, <span className="tk-str">"content"</span>: <span className="tk-str">"Hello!"</span>{'}'}],<br />
+                      )<br />
+                      <span className="tk-fn">print</span>(resp.choices[0].message.content)
+                    </div>
+                    <div className="model-chips" style={{ marginTop: 14 }}>
+                      <span className="api-side-base" style={{ width: '100%', marginBottom: 2 }}>{t('api.modelsGemini')}</span>
+                      {GEMINI_MODELS.map((m) => (
+                        <span className="model-chip" key={m}>
+                          <span className="model-chip-dot" style={{ background: '#4285f4' }} />{m}
                         </span>
                       ))}
                     </div>
