@@ -21,6 +21,7 @@ export default async function handler(req: Request): Promise<Response> {
         id: apiKeys.id,
         keyHint: apiKeys.keyHint,
         name: apiKeys.name,
+        allowedModels: apiKeys.allowedModels,
         createdAt: apiKeys.createdAt,
       })
       .from(apiKeys)
@@ -31,13 +32,26 @@ export default async function handler(req: Request): Promise<Response> {
 
   // ---- Create a new key (plaintext returned ONCE) ----
   if (req.method === 'POST') {
-    let body: { name?: string } = {}
+    let body: { name?: string; allowedModels?: unknown } = {}
     try {
       body = await req.json()
     } catch {
       // empty body is fine
     }
     const name = (body.name?.trim() || 'Default').slice(0, 40)
+
+    // Optional model restriction. Omitted / empty means unrestricted, which is
+    // stored as NULL so the proxy can skip the check entirely.
+    let allowedModels: string[] | null = null
+    if (Array.isArray(body.allowedModels)) {
+      const cleaned = body.allowedModels
+        .filter((m): m is string => typeof m === 'string')
+        .map((m) => m.trim().slice(0, 80))
+        .filter(Boolean)
+      const unique = [...new Set(cleaned)]
+      if (unique.length > 100) return json({ error: '模型限制最多 100 项' }, 400)
+      if (unique.length > 0) allowedModels = unique
+    }
 
     const key = generateApiKey()
     const id = crypto.randomUUID()
@@ -47,10 +61,11 @@ export default async function handler(req: Request): Promise<Response> {
       keyHash: await hashApiKey(key),
       keyHint: keyHint(key),
       name,
+      allowedModels,
     })
 
     // key is shown only here — never retrievable again
-    return json({ id, name, key }, 201)
+    return json({ id, name, key, allowedModels }, 201)
   }
 
   // ---- Revoke a key: DELETE /api/keys?id=xxx ----

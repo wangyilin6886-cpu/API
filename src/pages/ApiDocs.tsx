@@ -4,7 +4,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useI18n } from '../i18n/I18nContext'
 import Reveal from '../components/Reveal'
 import { useToast } from '../components/Toast'
+import ModelPicker from '../components/ModelPicker'
 import { isLoggedIn, listKeys, createKey, revokeKey, type ApiKey } from '../lib/auth'
+import { FAMILIES, modelsOf, OPENAI_COMPATIBLE_FAMILIES } from '../lib/models'
 import './pages.css'
 
 // The www is required: the bare domain 307-redirects, and clients drop
@@ -16,53 +18,6 @@ import './pages.css'
 // OpenAI convention, so they need the /v1 root.
 const BASE_URL = 'https://www.ecoapi.ai/api'
 const BASE_URL_OPENAI = 'https://www.ecoapi.ai/v1'
-
-const CLAUDE_MODELS = [
-  { name: 'Claude Opus 4.6', color: '#d97757' },
-  { name: 'Claude Opus 4.7', color: '#d97757' },
-  { name: 'Claude Opus 4.8', color: '#d97757' },
-  { name: 'Claude Opus 5', color: '#d97757' },
-  { name: 'Claude Fable 5', color: '#c96442' },
-]
-
-const GPT_MODELS = [
-  { name: 'GPT-5.4', color: '#10a37f' },
-  { name: 'GPT-5.5', color: '#10a37f' },
-  { name: 'GPT-5.6 Luna', color: '#10a37f' },
-  { name: 'GPT-5.6 Sol', color: '#10a37f' },
-  { name: 'GPT-5.6 Terra', color: '#10a37f' },
-]
-
-const GEMINI_MODELS = [
-  'gemini-3.6-flash',
-  'gemini-3.5-flash',
-  'gemini-3.5-flash-lite',
-  'gemini-3.1-pro-preview',
-  'gemini-3.1-pro-preview-thinking',
-  'gemini-3.1-pro-preview-customtools',
-  'gemini-3.1-pro-preview-cursor',
-  'gemini-3.1-flash-image',
-  'gemini-3.1-flash-image-preview',
-  'gemini-3.1-flash-image-preview-4k',
-  'gemini-3.1-flash-image-preview-sp',
-  'gemini-3.1-flash-lite',
-  'gemini-3.1-flash-lite-image',
-  'gemini-3.1-flash-lite-preview',
-  'gemini-3-pro-preview',
-  'gemini-3-pro-image',
-  'gemini-3-pro-image-preview',
-  'gemini-3-pro-image-preview-sp',
-  'gemini-3-pro-image-preview-spe',
-  'gemini-3-flash-preview',
-  'gemini-3-flash-preview-thinking',
-  'gemini-2.5-pro',
-  'gemini-2.5-pro-thinking',
-  'gemini-2.5-flash',
-  'gemini-2.5-flash-lite',
-  'gemini-2.5-flash-image',
-  'gemini-flash-latest',
-  'gemini-flash-lite-latest',
-]
 
 const errors = [
   { c: '401', d: 'Unauthorized — 密钥无效或已撤销' },
@@ -80,6 +35,8 @@ export default function ApiDocs() {
   const [keysLoading, setKeysLoading] = useState(false)
   const [creating, setCreating] = useState(false)
   const [newKey, setNewKey] = useState<string | null>(null)
+  const [pickerOpen, setPickerOpen] = useState(false)
+  const [allowedModels, setAllowedModels] = useState<string[]>([])
   useEffect(() => { document.title = 'ECOAPI - One Key Access Every Top LLM' }, [])
   const [newName, setNewName] = useState('')
   const [copied, setCopied] = useState<string | null>(null)
@@ -102,10 +59,12 @@ export default function ApiDocs() {
   const handleCreate = async () => {
     setCreating(true)
     try {
-      const res = await createKey(newName.trim() || 'Default')
+      const res = await createKey(newName.trim() || 'Default', allowedModels)
       setNewKey(res.key)
       setKeys(await listKeys())
       setNewName('')
+      setAllowedModels([])
+      setPickerOpen(false)
     } catch (e) {
       toast(e instanceof Error ? e.message : '创建失败', 'error')
     } finally {
@@ -172,8 +131,12 @@ export default function ApiDocs() {
                       <>
                         <div className="key-create">
                           <input value={newName} onChange={(e) => setNewName(e.target.value)} placeholder={t('api.newKeyPlaceholder')} onKeyDown={(e) => e.key === 'Enter' && handleCreate()} />
+                          <button className="btn-ghost" style={{ padding: '10px 18px', fontSize: 14, whiteSpace: 'nowrap' }} onClick={() => setPickerOpen((o) => !o)}>
+                            {t('mp.scope')}{allowedModels.length > 0 ? ` (${allowedModels.length})` : ''}
+                          </button>
                           <button className="btn-grad" onClick={handleCreate} disabled={creating}>+ {creating ? '...' : t('api.create')}</button>
                         </div>
+                        {pickerOpen && <ModelPicker value={allowedModels} onChange={setAllowedModels} />}
                         <div className="key-warn"><WarnIcon /> {t('api.keyWarn')}</div>
 
                         {newKey && (
@@ -191,6 +154,7 @@ export default function ApiDocs() {
                           <div className="key-thead">
                             <span>{t('api.colName')}</span>
                             <span>{t('api.colKey')}</span>
+                            <span>{t('mp.scope')}</span>
                             <span>{t('api.colCreated')}</span>
                             <span>{t('api.colStatus')}</span>
                             <span></span>
@@ -205,6 +169,9 @@ export default function ApiDocs() {
                                 <motion.div className="key-trow" key={k.id} layout initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.25 }}>
                                   <span className="kt-name">{k.name}</span>
                                   <span className="kt-key">{k.keyHint}</span>
+                                  <span className="kt-dim" title={k.allowedModels?.join(', ')}>
+                                    {k.allowedModels?.length ? k.allowedModels.join(', ') : t('mp.unrestrictedShort')}
+                                  </span>
                                   <span className="kt-dim">{new Date(k.createdAt).toLocaleDateString()}</span>
                                   <span className="kt-status">● {t('api.active')}</span>
                                   <span className="kt-actions">
@@ -246,9 +213,9 @@ export default function ApiDocs() {
                     <p className="api-desc">{t('api.ccNote')}</p>
                     <div className="model-chips" style={{ marginTop: 14 }}>
                       <span className="api-side-base" style={{ width: '100%', marginBottom: 2 }}>{t('api.modelsCc')}</span>
-                      {CLAUDE_MODELS.map((m) => (
-                        <span className="model-chip" key={m.name}>
-                          <span className="model-chip-dot" style={{ background: m.color }} />{m.name}
+                      {modelsOf('claude').map((id) => (
+                        <span className="model-chip" key={id}>
+                          <span className="model-chip-dot" style={{ background: FAMILIES.claude.color }} />{id}
                         </span>
                       ))}
                     </div>
@@ -282,15 +249,15 @@ export default function ApiDocs() {
                     <p className="api-desc">{t('api.codexNote')}</p>
                     <div className="model-chips" style={{ marginTop: 14 }}>
                       <span className="api-side-base" style={{ width: '100%', marginBottom: 2 }}>{t('api.modelsCodex')}</span>
-                      {GPT_MODELS.map((m) => (
-                        <span className="model-chip" key={m.name}>
-                          <span className="model-chip-dot" style={{ background: m.color }} />{m.name}
+                      {modelsOf('gpt').map((id) => (
+                        <span className="model-chip" key={id}>
+                          <span className="model-chip-dot" style={{ background: FAMILIES.gpt.color }} />{id}
                         </span>
                       ))}
                     </div>
 
-                    {/* ---------- Gemini (OpenAI-compatible clients) ---------- */}
-                    <h3 className="api-h3">Gemini · Cline / OpenAI SDK</h3>
+                    {/* ---------- Gemini / DeepSeek / Qwen (OpenAI-compatible) ---------- */}
+                    <h3 className="api-h3">Gemini · DeepSeek · Qwen — Cline / OpenAI SDK</h3>
                     <p className="api-desc">{t('api.geminiDesc')}</p>
                     <div className="key-warn"><WarnIcon /> {t('api.geminiBaseWarn')}</div>
                     <div className="code-block">
@@ -312,14 +279,18 @@ export default function ApiDocs() {
                       )<br />
                       <span className="tk-fn">print</span>(resp.choices[0].message.content)
                     </div>
-                    <div className="model-chips" style={{ marginTop: 14 }}>
-                      <span className="api-side-base" style={{ width: '100%', marginBottom: 2 }}>{t('api.modelsGemini')}</span>
-                      {GEMINI_MODELS.map((m) => (
-                        <span className="model-chip" key={m}>
-                          <span className="model-chip-dot" style={{ background: '#4285f4' }} />{m}
+                    {OPENAI_COMPATIBLE_FAMILIES.map((f) => (
+                      <div className="model-chips" style={{ marginTop: 14 }} key={f}>
+                        <span className="api-side-base" style={{ width: '100%', marginBottom: 2 }}>
+                          {FAMILIES[f].label}
                         </span>
-                      ))}
-                    </div>
+                        {modelsOf(f).map((id) => (
+                          <span className="model-chip" key={id}>
+                            <span className="model-chip-dot" style={{ background: FAMILIES[f].color }} />{id}
+                          </span>
+                        ))}
+                      </div>
+                    ))}
 
                     {/* ---------- Errors ---------- */}
                     <h3 className="api-h3">{t('api.errorTitle')}</h3>

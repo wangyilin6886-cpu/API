@@ -12,6 +12,7 @@ import { and, eq, isNull, sql } from 'drizzle-orm'
 import { db, apiKeys, users, usageLogs } from '../db/index.js'
 import { hashApiKey } from '../lib/auth.js'
 import { computeCostCents } from '../lib/pricing.js'
+import { isModelAllowed } from '../lib/modelAccess.js'
 
 export const config = { runtime: 'edge' }
 
@@ -33,7 +34,12 @@ export default async function handler(req: Request): Promise<Response> {
 
   const hash = await hashApiKey(userKey)
   const rows = await db
-    .select({ id: apiKeys.id, userId: apiKeys.userId, balanceCents: users.balanceCents })
+    .select({
+      id: apiKeys.id,
+      userId: apiKeys.userId,
+      balanceCents: users.balanceCents,
+      allowedModels: apiKeys.allowedModels,
+    })
     .from(apiKeys)
     .innerJoin(users, eq(apiKeys.userId, users.id))
     .where(and(eq(apiKeys.keyHash, hash), isNull(apiKeys.revokedAt)))
@@ -41,7 +47,7 @@ export default async function handler(req: Request): Promise<Response> {
   if (rows.length === 0) {
     return err(401, 'authentication_error', 'Invalid or revoked API key')
   }
-  const { id: keyId, userId, balanceCents } = rows[0]
+  const { id: keyId, userId, balanceCents, allowedModels } = rows[0]
 
   if (balanceCents <= 0) {
     return err(402, 'billing_error', 'Insufficient balance. Please top up at ecoapi.ai.')
@@ -52,6 +58,14 @@ export default async function handler(req: Request): Promise<Response> {
 
   const body = await req.text()
   const model = parseModel(body)
+
+  if (!isModelAllowed(model, allowedModels)) {
+    return err(
+      403,
+      'permission_error',
+      `This API key is not permitted to use "${model}". Allowed: ${allowedModels!.join(', ')}`,
+    )
+  }
 
   const fwd: Record<string, string> = {
     'content-type': 'application/json',

@@ -68,6 +68,8 @@ export interface ApiKey {
   id: string
   keyHint: string
   name: string
+  /** Model ids / family patterns this key may call. Null or empty = unrestricted. */
+  allowedModels: string[] | null
   createdAt: string
 }
 
@@ -83,11 +85,14 @@ export async function listKeys(): Promise<ApiKey[]> {
   return data.keys
 }
 
-export async function createKey(name: string): Promise<{ id: string; name: string; key: string }> {
+export async function createKey(
+  name: string,
+  allowedModels?: string[],
+): Promise<{ id: string; name: string; key: string }> {
   const res = await fetch('/api/keys', {
     method: 'POST',
     headers: { 'content-type': 'application/json', ...authHeaders() },
-    body: JSON.stringify({ name }),
+    body: JSON.stringify({ name, allowedModels }),
   })
   const data = await res.json().catch(() => ({}))
   if (!res.ok) throw new Error(data.error || '创建 key 失败')

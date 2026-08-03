@@ -5,6 +5,7 @@ import { useI18n } from '../i18n/I18nContext'
 import { useTheme } from '../theme/ThemeContext'
 import { useToast } from '../components/Toast'
 import Reveal from '../components/Reveal'
+import ModelPicker from '../components/ModelPicker'
 import { isLoggedIn, listKeys, createKey, revokeKey, fetchUsage, fetchMe, fetchTransactions, type ApiKey, type UsageStats, type Transaction } from '../lib/auth'
 import './pages.css'
 
@@ -35,6 +36,8 @@ export default function Profile() {
   const [keysLoading, setKeysLoading] = useState(false)
   const [creating, setCreating] = useState(false)
   const [newKey, setNewKey] = useState<string | null>(null)
+  const [pickerOpen, setPickerOpen] = useState(false)
+  const [allowedModels, setAllowedModels] = useState<string[]>([])
 
   // ---- Real usage / balance / billing ----
   const [usageData, setUsageData] = useState<UsageStats | null>(null)
@@ -105,8 +108,10 @@ export default function Profile() {
   const handleCreate = async () => {
     setCreating(true)
     try {
-      const res = await createKey('Default')
+      const res = await createKey('Default', allowedModels)
       setNewKey(res.key)
+      setAllowedModels([])
+      setPickerOpen(false)
       setKeys(await listKeys())
     } catch (e) {
       toast(e instanceof Error ? e.message : '创建失败', 'error')
@@ -217,10 +222,17 @@ export default function Profile() {
               <div className="panel glass">
                 <div className="panel-head">
                   <h3>{t('profile.keys')}</h3>
-                  <button className="btn-ghost" style={{ padding: '8px 18px', fontSize: 14 }} onClick={handleCreate} disabled={creating}>
-                    + {creating ? '...' : t('profile.create')}
-                  </button>
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    <button className="btn-ghost" style={{ padding: '8px 18px', fontSize: 14 }} onClick={() => setPickerOpen((o) => !o)}>
+                      {t('mp.scope')}{allowedModels.length > 0 ? ` (${allowedModels.length})` : ''}
+                    </button>
+                    <button className="btn-ghost" style={{ padding: '8px 18px', fontSize: 14 }} onClick={handleCreate} disabled={creating}>
+                      + {creating ? '...' : t('profile.create')}
+                    </button>
+                  </div>
                 </div>
+
+                {pickerOpen && <ModelPicker value={allowedModels} onChange={setAllowedModels} />}
 
                 {newKey && (
                   <div className="key-reveal">
@@ -241,7 +253,12 @@ export default function Profile() {
                   keys.map((k) => (
                     <div className="key-row" key={k.id}>
                       <span className="key-name">{k.name}</span>
-                      <span className="key-val">{k.keyHint}</span>
+                      <span className="key-val">
+                        {k.keyHint}
+                        <span className="key-scope">
+                          {k.allowedModels?.length ? k.allowedModels.join(', ') : t('mp.unrestrictedShort')}
+                        </span>
+                      </span>
                       <button className="key-copy" style={{ color: 'var(--blue)' }} onClick={() => handleRevoke(k.id)}>{t('profile.revoke')}</button>
                     </div>
                   ))

@@ -20,6 +20,10 @@ export const apiKeys = pgTable('api_keys', {
   // Display hint, e.g. "ek-a1b2...f9e0" — safe to show in the dashboard.
   keyHint: text('key_hint').notNull(),
   name: text('name').notNull().default('Default'),
+  // Model ids or family patterns this key may call, e.g.
+  // ['gemini-*', 'claude-opus-4-8']. NULL or empty means unrestricted.
+  // Fixed at creation — to change the scope, revoke and issue a new key.
+  allowedModels: text('allowed_models').array(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   revokedAt: timestamp('revoked_at'),
 })
