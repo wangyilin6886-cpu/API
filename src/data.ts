@@ -1,15 +1,17 @@
 export const modelCats = ['all', 'text', 'multimodal', 'reasoning', 'cn'] as const
 
+// Homepage showcase — a 9-model slice of the full catalogue in src/lib/models.ts.
+// `tag` is an i18n key (see tag.* in translations); prices mirror lib/pricing.ts.
 export const models = [
-  { name: 'GPT-4o', vendor: 'OpenAI', ctx: '128K', cin: '$2.50', cout: '$10.00', tag: '多模态', color: '#10a37f', cats: ['multimodal'] },
-  { name: 'Claude Opus 4.7', vendor: 'Anthropic', ctx: '200K', cin: '$3.00', cout: '$15.00', tag: '推理王者', color: '#d97757', cats: ['reasoning'] },
-  { name: 'Gemini 2.5 Pro', vendor: 'Google', ctx: '1M', cin: '$1.25', cout: '$5.00', tag: '超长上下文', color: '#4285f4', cats: ['multimodal'] },
-  { name: 'DeepSeek-V3', vendor: 'DeepSeek', ctx: '128K', cin: '$0.27', cout: '$1.10', tag: '极致性价比', color: '#5b6cff', cats: ['reasoning', 'cn'] },
-  { name: 'Qwen-Max', vendor: '阿里云', ctx: '128K', cin: '$1.60', cout: '$6.40', tag: '中文优化', color: '#615ced', cats: ['cn'] },
-  { name: 'Llama 4 405B', vendor: 'Meta', ctx: '128K', cin: '$0.90', cout: '$0.90', tag: '开源旗舰', color: '#0668e1', cats: ['text'] },
-  { name: 'Grok-3', vendor: 'xAI', ctx: '131K', cin: '$2.00', cout: '$10.00', tag: '实时联网', color: '#1a1a1a', cats: ['text', 'reasoning'] },
-  { name: 'Mistral Large', vendor: 'Mistral', ctx: '128K', cin: '$2.00', cout: '$6.00', tag: '欧洲之光', color: '#ff7000', cats: ['text'] },
-  { name: 'GLM-4-Plus', vendor: '智谱', ctx: '128K', cin: '$0.70', cout: '$2.10', tag: '国产强模', color: '#3859ff', cats: ['cn'] },
+  { name: 'claude-opus-4-8', vendor: 'Anthropic', cin: '$15.00', cout: '$75.00', tag: 'reasoning', color: '#d97757', cats: ['text', 'reasoning'] },
+  { name: 'claude-sonnet-5', vendor: 'Anthropic', cin: '$3.00', cout: '$15.00', tag: 'fast', color: '#d97757', cats: ['text', 'reasoning'] },
+  { name: 'gpt-5.6-sol', vendor: 'OpenAI', cin: '$2.50', cout: '$10.00', tag: 'reasoning', color: '#10a37f', cats: ['text', 'reasoning'] },
+  { name: 'gpt-5.5', vendor: 'OpenAI', cin: '$2.50', cout: '$10.00', tag: 'function', color: '#10a37f', cats: ['text', 'reasoning'] },
+  { name: 'gemini-3.1-pro-preview', vendor: 'Google', cin: '$1.50', cout: '$6.00', tag: 'reasoning', color: '#4285f4', cats: ['text', 'multimodal', 'reasoning'] },
+  { name: 'gemini-3.6-flash', vendor: 'Google', cin: '$1.50', cout: '$6.00', tag: 'fast', color: '#4285f4', cats: ['text', 'multimodal'] },
+  { name: 'gemini-3-pro-image', vendor: 'Google', cin: '$1.50', cout: '$6.00', tag: 'vision', color: '#4285f4', cats: ['multimodal'] },
+  { name: 'deepseek-v4-pro', vendor: 'DeepSeek', cin: '$0.30', cout: '$1.20', tag: 'cheap', color: '#5b6cff', cats: ['text', 'reasoning', 'cn'] },
+  { name: 'qwen3.7-max', vendor: '阿里云 Qwen', cin: '$1.00', cout: '$4.00', tag: 'cn', color: '#615ced', cats: ['text', 'reasoning', 'cn'] },
 ]
 
 export const rootWall = [

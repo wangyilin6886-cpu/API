@@ -89,7 +89,6 @@ export const translations: Record<Lang, Dict> = {
 
     'models.title': '模型广场',
     'models.subtitle': '汇聚全球顶尖大模型，一键调用',
-    'models.ctx': '上下文',
     'models.in': '输入',
     'models.out': '输出',
     'models.call': '调用',
@@ -551,7 +550,6 @@ export const translations: Record<Lang, Dict> = {
 
     'models.title': 'Model Plaza',
     'models.subtitle': 'The world’s top LLMs, one call away',
-    'models.ctx': 'Context',
     'models.in': 'Input',
     'models.out': 'Output',
     'models.call': 'Call',
@@ -1013,7 +1011,6 @@ export const translations: Record<Lang, Dict> = {
 
     'models.title': 'Plaza Model',
     'models.subtitle': 'LLM terbaik dunia, satu panggilan saja',
-    'models.ctx': 'Konteks',
     'models.in': 'Input',
     'models.out': 'Output',
     'models.call': 'Panggil',
