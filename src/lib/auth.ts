@@ -6,6 +6,8 @@ export interface AuthUser {
   id: string
   email: string
   balanceCents?: number
+  /** Internal / test account: never charged, balance not shown. */
+  unlimited?: boolean
 }
 
 export function getToken(): string | null {
