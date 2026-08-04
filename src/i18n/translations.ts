@@ -245,6 +245,7 @@ export const translations: Record<Lang, Dict> = {
 
     'profile.title': '个人中心',
     'profile.balance': '账户余额',
+    'profile.unlimited': '不限额度',
     'profile.used': '本月已用',
     'profile.calls': '总调用次数',
     'profile.keys': 'API 密钥管理',
@@ -706,6 +707,7 @@ export const translations: Record<Lang, Dict> = {
 
     'profile.title': 'Dashboard',
     'profile.balance': 'Balance',
+    'profile.unlimited': 'Unlimited',
     'profile.used': 'Used This Month',
     'profile.calls': 'Total Calls',
     'profile.keys': 'API Key Management',
@@ -1167,6 +1169,7 @@ export const translations: Record<Lang, Dict> = {
 
     'profile.title': 'Dasbor',
     'profile.balance': 'Saldo',
+    'profile.unlimited': 'Tanpa batas',
     'profile.used': 'Terpakai Bulan Ini',
     'profile.calls': 'Total Panggilan',
     'profile.keys': 'Manajemen API Key',

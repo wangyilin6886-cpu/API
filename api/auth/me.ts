@@ -17,6 +17,7 @@ export default async function handler(req: Request): Promise<Response> {
       id: users.id,
       email: users.email,
       balanceCents: users.balanceCents,
+      unlimited: users.unlimited,
       createdAt: users.createdAt,
     })
     .from(users)

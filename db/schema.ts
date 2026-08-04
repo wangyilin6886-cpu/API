@@ -1,4 +1,4 @@
-import { pgTable, text, integer, bigint, timestamp } from 'drizzle-orm/pg-core'
+import { pgTable, text, integer, bigint, timestamp, boolean } from 'drizzle-orm/pg-core'
 
 export const users = pgTable('users', {
   id: text('id').primaryKey(),
@@ -6,6 +6,9 @@ export const users = pgTable('users', {
   passwordHash: text('password_hash').notNull(),
   // Account balance in US cents. New users get a small free trial credit.
   balanceCents: integer('balance_cents').notNull().default(500),
+  // Internal / test accounts: never blocked on balance and never charged.
+  // Usage is still logged, since these calls do cost us money upstream.
+  unlimited: boolean('unlimited').notNull().default(false),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 })
 

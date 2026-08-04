@@ -42,6 +42,7 @@ export default function Profile() {
   // ---- Real usage / balance / billing ----
   const [usageData, setUsageData] = useState<UsageStats | null>(null)
   const [balanceCents, setBalanceCents] = useState<number | null>(null)
+  const [unlimited, setUnlimited] = useState(false)
   const [txns, setTxns] = useState<Transaction[]>([])
 
   useEffect(() => {
@@ -50,7 +51,12 @@ export default function Profile() {
 
   useEffect(() => {
     fetchUsage(7).then(setUsageData).catch(() => setUsageData(null))
-    fetchMe().then((u) => setBalanceCents(u?.balanceCents ?? null)).catch(() => {})
+    fetchMe()
+      .then((u) => {
+        setBalanceCents(u?.balanceCents ?? null)
+        setUnlimited(!!u?.unlimited)
+      })
+      .catch(() => {})
   }, [])
 
   useEffect(() => {
@@ -144,7 +150,11 @@ export default function Profile() {
 
         <Reveal>
           <div className="stat-grid">
-            <div className="stat-card glass"><div className="label">{t('profile.balance')}</div><div className="value gradient-text">${balanceUsd}</div><div className="sub">USD</div></div>
+            <div className="stat-card glass">
+              <div className="label">{t('profile.balance')}</div>
+              <div className="value gradient-text">{unlimited ? '∞' : `$${balanceUsd}`}</div>
+              <div className="sub">{unlimited ? t('profile.unlimited') : 'USD'}</div>
+            </div>
             <div className="stat-card glass"><div className="label">{t('profile.used')}</div><div className="value">{fmtTokens(usageData?.totalTokens ?? 0)}</div><div className="sub">Tokens · {usageData?.days ?? 7}d</div></div>
             <div className="stat-card glass"><div className="label">{t('profile.inout')}</div><div className="value gradient-text">{fmtTokens(usageData?.totalInput ?? 0)} / {fmtTokens(usageData?.totalOutput ?? 0)}</div><div className="sub">In / Out</div></div>
           </div>

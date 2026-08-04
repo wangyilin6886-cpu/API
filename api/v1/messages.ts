@@ -36,6 +36,7 @@ export default async function handler(req: Request): Promise<Response> {
       userId: apiKeys.userId,
       balanceCents: users.balanceCents,
       allowedModels: apiKeys.allowedModels,
+      unlimited: users.unlimited,
     })
     .from(apiKeys)
     .innerJoin(users, eq(apiKeys.userId, users.id))
@@ -44,10 +45,10 @@ export default async function handler(req: Request): Promise<Response> {
   if (rows.length === 0) {
     return err(401, 'authentication_error', 'Invalid or revoked API key')
   }
-  const { id: keyId, userId, balanceCents, allowedModels } = rows[0]
+  const { id: keyId, userId, balanceCents, allowedModels, unlimited } = rows[0]
 
   // Reject when the account is out of credit.
-  if (balanceCents <= 0) {
+  if (!unlimited && balanceCents <= 0) {
     return err(402, 'billing_error', 'Insufficient balance. Please top up at ecoapi.ai.')
   }
 
@@ -94,7 +95,7 @@ export default async function handler(req: Request): Promise<Response> {
   // Pass the response through a meter that records token usage when the stream
   // finishes. The DB write happens in flush(), which runs while the function is
   // still alive serving the stream — no waitUntil needed.
-  const metered = upstream.body.pipeThrough(usageMeter(keyId, userId, model, ct))
+  const metered = upstream.body.pipeThrough(usageMeter(keyId, userId, model, ct, unlimited))
   return new Response(metered, { status: upstream.status, headers: out })
 }
 
@@ -108,7 +109,7 @@ function parseModel(body: string): string {
 
 // TransformStream that forwards every chunk untouched while extracting
 // input/output token counts from the Anthropic response (SSE or plain JSON).
-function usageMeter(keyId: string, userId: string, model: string, ct: string | null): TransformStream {
+function usageMeter(keyId: string, userId: string, model: string, ct: string | null, unlimited: boolean): TransformStream {
   const isSSE = (ct || '').includes('text/event-stream')
   const decoder = new TextDecoder()
   let inputTokens = 0
@@ -165,7 +166,7 @@ function usageMeter(keyId: string, userId: string, model: string, ct: string | n
         const costCents = computeCostCents(model, inputTokens, outputTokens)
         try {
           await db.insert(usageLogs).values({ keyId, model, inputTokens, outputTokens, costCents })
-          if (costCents > 0) {
+          if (costCents > 0 && !unlimited) {
             await db
               .update(users)
               .set({ balanceCents: sql`${users.balanceCents} - ${costCents}` })
