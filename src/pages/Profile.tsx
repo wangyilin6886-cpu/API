@@ -65,6 +65,10 @@ export default function Profile() {
   }, [tab])
 
   const balanceUsd = balanceCents != null ? (balanceCents / 100).toFixed(2) : '—'
+  const usageByKey = useMemo(
+    () => new Map((usageData?.byKey ?? []).map((k) => [k.keyId, k])),
+    [usageData],
+  )
 
   // Build the area-chart geometry from real daily data.
   const chart = useMemo(() => {
@@ -225,6 +229,35 @@ export default function Profile() {
                     <div style={{ padding: 30, color: 'var(--ink-soft)', textAlign: 'center' }}>{t('profile.noUsage')}</div>
                   )}
                 </div>
+
+                <div className="panel glass span-2">
+                  <div className="panel-head"><h3>{t('profile.byKey')}</h3></div>
+                  {(usageData?.byKey?.length ?? 0) === 0 ? (
+                    <div style={{ padding: 20, color: 'var(--ink-soft)' }}>{t('profile.noUsage')}</div>
+                  ) : (
+                    <>
+                      <div className="bykey-table">
+                        <div className="bykey-head">
+                          <span>{t('api.colName')}</span>
+                          <span>{t('api.colKey')}</span>
+                          <span>{t('profile.inTokens')}</span>
+                          <span>{t('profile.outTokens')}</span>
+                          <span>{t('profile.total')}</span>
+                        </div>
+                        {usageData!.byKey.map((k) => (
+                          <div className="bykey-row" key={k.keyId}>
+                            <span className="bk-name">{k.name}</span>
+                            <span className="bk-hint">{k.keyHint}</span>
+                            <span>{fmtTokens(k.input)}</span>
+                            <span>{fmtTokens(k.output)}</span>
+                            <strong>{fmtTokens(k.tokens)}</strong>
+                          </div>
+                        ))}
+                      </div>
+                      <p className="bykey-note">{t('profile.byKeyNote')}</p>
+                    </>
+                  )}
+                </div>
               </div>
             )}
 
@@ -268,6 +301,10 @@ export default function Profile() {
                         <span className="key-scope">
                           {k.allowedModels?.length ? k.allowedModels.join(', ') : t('mp.unrestrictedShort')}
                         </span>
+                      </span>
+                      <span className="key-usage">
+                        {fmtTokens(usageByKey.get(k.id)?.tokens ?? 0)}
+                        <span className="key-usage-sub">{t('profile.keyUsage')}</span>
                       </span>
                       <button className="key-copy" style={{ color: 'var(--blue)' }} onClick={() => handleRevoke(k.id)}>{t('profile.revoke')}</button>
                     </div>

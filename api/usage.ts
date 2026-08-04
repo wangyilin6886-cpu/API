@@ -1,4 +1,4 @@
-import { and, eq, gte, sql } from 'drizzle-orm'
+import { and, eq, gte, isNull, sql } from 'drizzle-orm'
 import { db, apiKeys, usageLogs } from '../db/index.js'
 import { requireAuth, json } from '../lib/auth.js'
 
@@ -41,6 +41,21 @@ export default async function handler(req: Request): Promise<Response> {
     .where(userScope)
     .groupBy(usageLogs.model)
 
+  // Per-key totals. Revoked keys are left out here on purpose, so this list
+  // can sum to less than the totals above — the dashboard says as much.
+  const byKey = await db
+    .select({
+      keyId: apiKeys.id,
+      name: apiKeys.name,
+      keyHint: apiKeys.keyHint,
+      input: sql<number>`coalesce(sum(${usageLogs.inputTokens}), 0)`,
+      output: sql<number>`coalesce(sum(${usageLogs.outputTokens}), 0)`,
+    })
+    .from(usageLogs)
+    .innerJoin(apiKeys, eq(usageLogs.keyId, apiKeys.id))
+    .where(and(userScope, isNull(apiKeys.revokedAt)))
+    .groupBy(apiKeys.id, apiKeys.name, apiKeys.keyHint)
+
   const totalInput = daily.reduce((s, d) => s + Number(d.input), 0)
   const totalOutput = daily.reduce((s, d) => s + Number(d.output), 0)
 
@@ -54,5 +69,15 @@ export default async function handler(req: Request): Promise<Response> {
       model: m.model,
       tokens: Number(m.input) + Number(m.output),
     })),
+    byKey: byKey
+      .map((k) => ({
+        keyId: k.keyId,
+        name: k.name,
+        keyHint: k.keyHint,
+        input: Number(k.input),
+        output: Number(k.output),
+        tokens: Number(k.input) + Number(k.output),
+      }))
+      .sort((a, b) => b.tokens - a.tokens),
   })
 }
