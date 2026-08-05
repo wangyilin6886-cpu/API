@@ -1,4 +1,4 @@
-import { pgTable, text, integer, bigint, timestamp, boolean } from 'drizzle-orm/pg-core'
+import { pgTable, text, integer, bigint, timestamp, boolean, index } from 'drizzle-orm/pg-core'
 
 export const users = pgTable('users', {
   id: text('id').primaryKey(),
@@ -42,7 +42,11 @@ export const usageLogs = pgTable('usage_logs', {
   // Amount charged for this request, in US cents.
   costCents: integer('cost_cents').notNull().default(0),
   createdAt: timestamp('created_at').defaultNow().notNull(),
-})
+}, (t) => ({
+  // Every dashboard aggregate scopes by key and filters by date; without this
+  // each one is a full table scan.
+  keyCreatedIdx: index('usage_logs_key_created_idx').on(t.keyId, t.createdAt),
+}))
 
 // Top-ups and bonuses (positive amounts). Per-request deductions are NOT stored
 // here — they live in usage_logs.cost_cents.

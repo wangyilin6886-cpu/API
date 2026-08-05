@@ -114,6 +114,15 @@ export async function revokeKey(id: string): Promise<void> {
 
 // ---------- Usage stats ----------
 
+export interface KeyUsage {
+  keyId: string
+  name: string
+  keyHint: string
+  input: number
+  output: number
+  tokens: number
+}
+
 export interface UsageStats {
   days: number
   totalInput: number
@@ -121,6 +130,8 @@ export interface UsageStats {
   totalTokens: number
   daily: { day: string; tokens: number }[]
   byModel: { model: string; tokens: number }[]
+  /** Active keys only — revoked keys are excluded, so this can sum to less than totalTokens. */
+  byKey: KeyUsage[]
 }
 
 export async function fetchUsage(days = 7): Promise<UsageStats> {
