@@ -6,7 +6,7 @@ import Reveal from '../components/Reveal'
 import { useToast } from '../components/Toast'
 import ModelPicker from '../components/ModelPicker'
 import { isLoggedIn, listKeys, createKey, revokeKey, type ApiKey } from '../lib/auth'
-import { FAMILIES, modelsOf, OPENAI_COMPATIBLE_FAMILIES } from '../lib/models'
+import { FAMILIES, modelsOf, type Family } from '../lib/models'
 import './pages.css'
 
 // The www is required: the bare domain 307-redirects, and clients drop
@@ -18,6 +18,8 @@ import './pages.css'
 // OpenAI convention, so they need the /v1 root.
 const BASE_URL = 'https://www.ecoapi.ai/api'
 const BASE_URL_OPENAI = 'https://www.ecoapi.ai/v1'
+
+const ALL_FAMILIES = Object.keys(FAMILIES) as Family[]
 
 const errors = [
   { c: '401', d: 'Unauthorized — 密钥无效或已撤销' },
@@ -257,7 +259,7 @@ export default function ApiDocs() {
                     </div>
 
                     {/* ---------- Gemini / DeepSeek / Qwen (OpenAI-compatible) ---------- */}
-                    <h3 className="api-h3">Gemini · DeepSeek · Qwen — Cline / OpenAI SDK</h3>
+                    <h3 className="api-h3">Cline / OpenAI SDK — {t('api.allModels')}</h3>
                     <p className="api-desc">{t('api.geminiDesc')}</p>
                     <div className="key-warn"><WarnIcon /> {t('api.geminiBaseWarn')}</div>
                     <div className="code-block">
@@ -279,7 +281,7 @@ export default function ApiDocs() {
                       )<br />
                       <span className="tk-fn">print</span>(resp.choices[0].message.content)
                     </div>
-                    {OPENAI_COMPATIBLE_FAMILIES.map((f) => (
+                    {ALL_FAMILIES.map((f) => (
                       <div className="model-chips" style={{ marginTop: 14 }} key={f}>
                         <span className="api-side-base" style={{ width: '100%', marginBottom: 2 }}>
                           {FAMILIES[f].label}
