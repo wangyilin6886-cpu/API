@@ -1,13 +1,13 @@
-// OpenAI Chat Completions proxy — currently serves Gemini via supplier B.
+// OpenAI Chat Completions proxy — the endpoint every OpenAI-compatible client
+// speaks (Cline, Continue, the OpenAI SDKs). It reaches the whole catalogue:
+// both suppliers expose this protocol, so we pick one by model name.
 //
 // Same mechanics as the other two endpoints (validate ek- key, check balance,
-// swap in the supplier key, stream through with metering). Two differences:
-//
-//  1. Upstream is supplier B (rezeai) with SUPPLIER_B_KEY, not supplier A.
-//  2. This protocol omits token usage from streamed responses unless the
-//     request opts in via stream_options.include_usage. Clients don't set it,
-//     so we inject it — without it we'd never bill for a streamed call while
-//     still paying the supplier for it.
+// swap in the supplier key, stream through with metering), plus one wrinkle:
+// this protocol omits token usage from streamed responses unless the request
+// opts in via stream_options.include_usage. Clients don't set it, so we inject
+// it — without it we'd never bill for a streamed call while still paying the
+// supplier for it.
 
 import { and, eq, isNull, sql } from 'drizzle-orm'
 import { db, apiKeys, users, usageLogs } from '../../../db/index.js'
@@ -17,7 +17,27 @@ import { isModelAllowed } from '../../../lib/modelAccess.js'
 
 export const config = { runtime: 'edge' }
 
-const UPSTREAM = 'https://api.rezeai.com/v1/chat/completions'
+// Supplier A carries Claude and GPT; everything else (Gemini, DeepSeek, Qwen)
+// comes from supplier B.
+const ROUTE_A = {
+  upstream: 'https://agent-on.com/gateway/v1/chat/completions',
+  supplier: 'A' as const,
+}
+const ROUTE_B = {
+  upstream: 'https://api.rezeai.com/v1/chat/completions',
+  supplier: 'B' as const,
+}
+
+function routeFor(model: string) {
+  const m = model.toLowerCase()
+  return m.startsWith('claude') || m.startsWith('gpt') ? ROUTE_A : ROUTE_B
+}
+
+// Read the env vars by literal name — bundlers inline process.env.FOO
+// statically, so a computed lookup can come back undefined at runtime.
+function keyFor(supplier: 'A' | 'B'): string | undefined {
+  return supplier === 'A' ? process.env.SUPPLIER_A_KEY : process.env.SUPPLIER_B_KEY
+}
 
 export default async function handler(req: Request): Promise<Response> {
   if (req.method === 'OPTIONS') {
@@ -55,9 +75,6 @@ export default async function handler(req: Request): Promise<Response> {
     return err(402, 'billing_error', 'Insufficient balance. Please top up at ecoapi.ai.')
   }
 
-  const supplierKey = process.env.SUPPLIER_B_KEY
-  if (!supplierKey) return err(500, 'api_error', 'Upstream key not configured')
-
   const raw = await req.text()
   const model = parseModel(raw)
 
@@ -68,6 +85,12 @@ export default async function handler(req: Request): Promise<Response> {
       `This API key is not permitted to use "${model}". Allowed: ${allowedModels!.join(', ')}`,
     )
   }
+
+  // Which supplier serves this model decides both the upstream and the key.
+  const route = routeFor(model)
+  const supplierKey = keyFor(route.supplier)
+  if (!supplierKey) return err(500, 'api_error', 'Upstream key not configured')
+
   const body = withUsageReporting(raw)
 
   const fwd: Record<string, string> = {
@@ -79,7 +102,7 @@ export default async function handler(req: Request): Promise<Response> {
 
   let upstream: Response
   try {
-    upstream = await fetch(UPSTREAM, { method: 'POST', headers: fwd, body })
+    upstream = await fetch(route.upstream, { method: 'POST', headers: fwd, body })
   } catch (e) {
     return err(502, 'api_error', `Upstream unreachable: ${e}`)
   }

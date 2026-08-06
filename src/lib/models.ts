@@ -20,13 +20,15 @@ export const FAMILIES: Record<Family, { label: string; color: string; pattern: s
 }
 
 export const MODELS: { id: string; family: Family }[] = [
-  // ---- Claude — via Claude Code, /api/v1/messages, supplier A ----
+  // ---- Claude — Claude Code (/api/v1/messages) or any OpenAI-compatible
+  //      client (/api/v1/chat/completions); supplier A either way ----
   { id: 'claude-opus-4-7', family: 'claude' },
   { id: 'claude-opus-4-8', family: 'claude' },
   { id: 'claude-sonnet-4-5', family: 'claude' },
   { id: 'claude-sonnet-5', family: 'claude' },
 
-  // ---- GPT — via Codex, /api/responses, supplier A ----
+  // ---- GPT — Codex (/api/responses) or any OpenAI-compatible client
+  //      (/api/v1/chat/completions); supplier A either way ----
   { id: 'gpt-5.5', family: 'gpt' },
   { id: 'gpt-5.6', family: 'gpt' },
   { id: 'gpt-5.6-luna', family: 'gpt' },
@@ -79,6 +81,3 @@ export const MODELS: { id: string; family: Family }[] = [
 export function modelsOf(family: Family): string[] {
   return MODELS.filter((m) => m.family === family).map((m) => m.id)
 }
-
-// Families reachable through the OpenAI-compatible endpoint (supplier B).
-export const OPENAI_COMPATIBLE_FAMILIES: Family[] = ['gemini', 'deepseek', 'qwen']
