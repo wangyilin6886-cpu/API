@@ -1,5 +1,5 @@
 import { and, eq, isNull, desc } from 'drizzle-orm'
-import { db, apiKeys } from '../../db/index.js'
+import { db, apiKeys, users } from '../../db/index.js'
 import {
   requireAuth,
   generateApiKey,
@@ -7,6 +7,7 @@ import {
   keyHint,
   json,
 } from '../../lib/auth.js'
+import { isPatternWithinScope } from '../../lib/modelAccess.js'
 
 export const config = { runtime: 'edge' }
 
@@ -51,6 +52,23 @@ export default async function handler(req: Request): Promise<Response> {
       const unique = [...new Set(cleaned)]
       if (unique.length > 100) return json({ error: '模型限制最多 100 项' }, 400)
       if (unique.length > 0) allowedModels = unique
+    }
+
+    // A key can only narrow the account's ceiling, never reach past it —
+    // otherwise we'd hand out a key that can never make a successful call.
+    if (allowedModels) {
+      const [acct] = await db
+        .select({ allowedModels: users.allowedModels })
+        .from(users)
+        .where(eq(users.id, claims.userId))
+        .limit(1)
+      const outside = allowedModels.filter((m) => !isPatternWithinScope(m, acct?.allowedModels))
+      if (outside.length > 0) {
+        return json(
+          { error: `你的账号未开通以下模型，无法用于密钥：${outside.join(', ')}` },
+          400,
+        )
+      }
     }
 
     const key = generateApiKey()

@@ -43,6 +43,7 @@ export default function Profile() {
   const [usageData, setUsageData] = useState<UsageStats | null>(null)
   const [balanceCents, setBalanceCents] = useState<number | null>(null)
   const [unlimited, setUnlimited] = useState(false)
+  const [accountScope, setAccountScope] = useState<string[] | null>(null)
   const [txns, setTxns] = useState<Transaction[]>([])
 
   useEffect(() => {
@@ -55,6 +56,7 @@ export default function Profile() {
       .then((u) => {
         setBalanceCents(u?.balanceCents ?? null)
         setUnlimited(!!u?.unlimited)
+        setAccountScope(u?.allowedModels ?? null)
       })
       .catch(() => {})
   }, [])
@@ -275,7 +277,11 @@ export default function Profile() {
                   </div>
                 </div>
 
-                {pickerOpen && <ModelPicker value={allowedModels} onChange={setAllowedModels} />}
+                {accountScope?.length ? (
+                  <div className="key-warn">{t('mp.accountScope')} {accountScope.join(', ')}</div>
+                ) : null}
+
+                {pickerOpen && <ModelPicker value={allowedModels} onChange={setAllowedModels} accountScope={accountScope} />}
 
                 {newKey && (
                   <div className="key-reveal">

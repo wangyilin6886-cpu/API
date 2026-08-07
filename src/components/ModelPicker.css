@@ -58,3 +58,5 @@
 
 /* Individual models a selected family wildcard already covers. */
 .mp-chip.covered { opacity: 0.35; cursor: not-allowed; }
+
+.mp-ceiling { color: var(--blue); font-weight: 600; margin-top: -6px; }

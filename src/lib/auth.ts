@@ -8,6 +8,8 @@ export interface AuthUser {
   balanceCents?: number
   /** Internal / test account: never charged, balance not shown. */
   unlimited?: boolean
+  /** Models this account may call at all. Null = unrestricted. Set by us, not the user. */
+  allowedModels?: string[] | null
 }
 
 export function getToken(): string | null {

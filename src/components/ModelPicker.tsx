@@ -1,5 +1,5 @@
 import { useI18n } from '../i18n/I18nContext'
-import { FAMILIES, MODELS, type Family } from '../lib/models'
+import { FAMILIES, MODELS, isWithinScope, type Family } from '../lib/models'
 import './ModelPicker.css'
 
 const FAMILY_ORDER = Object.keys(FAMILIES) as Family[]
@@ -8,6 +8,8 @@ interface Props {
   /** Selected patterns. Empty array means "no restriction". */
   value: string[]
   onChange: (next: string[]) => void
+  /** The account's ceiling. Anything outside it can't be picked. Null = unrestricted. */
+  accountScope?: string[] | null
 }
 
 /**
@@ -15,9 +17,11 @@ interface Props {
  * (e.g. "gemini-*") and clears the individual picks it already covers, so the
  * stored list stays as short as what the user actually expressed.
  */
-export default function ModelPicker({ value, onChange }: Props) {
+export default function ModelPicker({ value, onChange, accountScope }: Props) {
   const { t } = useI18n()
   const selected = new Set(value)
+  const scoped = !!accountScope?.length
+  const inScope = (pattern: string) => isWithinScope(pattern, accountScope)
 
   const toggle = (pattern: string) => {
     const next = new Set(selected)
@@ -48,16 +52,23 @@ export default function ModelPicker({ value, onChange }: Props) {
         )}
       </div>
       <p className="mp-hint">{value.length === 0 ? t('mp.unrestricted') : t('mp.restricted')}</p>
+      {scoped && (
+        <p className="mp-hint mp-ceiling">
+          {t('mp.accountScope')} {accountScope!.join(', ')}
+        </p>
+      )}
 
       {FAMILY_ORDER.map((f) => {
         const famOn = selected.has(FAMILIES[f].pattern)
+        const famReachable = inScope(FAMILIES[f].pattern)
         return (
           <div className="mp-group" key={f}>
             <button
               type="button"
-              className={`mp-chip mp-fam ${famOn ? 'on' : ''}`}
+              className={`mp-chip mp-fam ${famOn ? 'on' : ''} ${famReachable ? '' : 'covered'}`}
               style={famOn ? { background: FAMILIES[f].color } : undefined}
               onClick={() => toggleFamily(f)}
+              disabled={!famReachable}
             >
               {t('mp.allOf')} {FAMILIES[f].label}
             </button>
@@ -65,10 +76,10 @@ export default function ModelPicker({ value, onChange }: Props) {
               <button
                 type="button"
                 key={m.id}
-                className={`mp-chip ${selected.has(m.id) ? 'on' : ''} ${famOn ? 'covered' : ''}`}
+                className={`mp-chip ${selected.has(m.id) ? 'on' : ''} ${famOn || !inScope(m.id) ? 'covered' : ''}`}
                 style={selected.has(m.id) ? { background: FAMILIES[f].color } : undefined}
                 onClick={() => toggle(m.id)}
-                disabled={famOn}
+                disabled={famOn || !inScope(m.id)}
               >
                 {m.id}
               </button>

@@ -18,6 +18,7 @@ export default async function handler(req: Request): Promise<Response> {
       email: users.email,
       balanceCents: users.balanceCents,
       unlimited: users.unlimited,
+      allowedModels: users.allowedModels,
       createdAt: users.createdAt,
     })
     .from(users)
