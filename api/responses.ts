@@ -40,6 +40,7 @@ export default async function handler(req: Request): Promise<Response> {
       balanceCents: users.balanceCents,
       allowedModels: apiKeys.allowedModels,
       unlimited: users.unlimited,
+      accountModels: users.allowedModels,
     })
     .from(apiKeys)
     .innerJoin(users, eq(apiKeys.userId, users.id))
@@ -48,7 +49,7 @@ export default async function handler(req: Request): Promise<Response> {
   if (rows.length === 0) {
     return err(401, 'authentication_error', 'Invalid or revoked API key')
   }
-  const { id: keyId, userId, balanceCents, allowedModels, unlimited } = rows[0]
+  const { id: keyId, userId, balanceCents, allowedModels, unlimited, accountModels } = rows[0]
 
   if (!unlimited && balanceCents <= 0) {
     return err(402, 'billing_error', 'Insufficient balance. Please top up at ecoapi.ai.')
@@ -60,11 +61,25 @@ export default async function handler(req: Request): Promise<Response> {
   const body = await req.text()
   const model = parseModel(body)
 
+  // Account ceiling first — a customer can't lift this one, so say so plainly
+  // rather than letting them fiddle with key scopes that will never help.
+  // Unlimited (internal) accounts are exempt.
+  if (!unlimited && !isModelAllowed(model, accountModels)) {
+    return err(
+      403,
+      'permission_error',
+      `Your account is not enabled for "${model}". Contact support to add it. ` +
+        `Enabled: ${accountModels!.join(', ')}`,
+    )
+  }
+
+  // Then the scope the customer set on this particular key.
   if (!isModelAllowed(model, allowedModels)) {
     return err(
       403,
       'permission_error',
-      `This API key is not permitted to use "${model}". Allowed: ${allowedModels!.join(', ')}`,
+      `This API key is not permitted to use "${model}". ` +
+        `Allowed: ${allowedModels!.join(', ')}. Create a new key to change this.`,
     )
   }
 

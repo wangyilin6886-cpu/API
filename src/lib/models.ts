@@ -81,3 +81,18 @@ export const MODELS: { id: string; family: Family }[] = [
 export function modelsOf(family: Family): string[] {
   return MODELS.filter((m) => m.family === family).map((m) => m.id)
 }
+
+/**
+ * Display-only mirror of the server's matching rules (lib/modelAccess.ts is
+ * the authority). Used to grey out what an account can't reach — if the two
+ * ever drift the server still refuses, the picker is just less helpful.
+ */
+export function isWithinScope(pattern: string, scope: string[] | null | undefined): boolean {
+  if (!scope || scope.length === 0) return true
+  const target = pattern.trim().toLowerCase()
+  return scope.some((s) => {
+    const p = s.trim().toLowerCase()
+    if (!p) return false
+    return p.endsWith('*') ? target.startsWith(p.slice(0, -1)) : target === p
+  })
+}

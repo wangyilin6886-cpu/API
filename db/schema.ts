@@ -6,9 +6,14 @@ export const users = pgTable('users', {
   passwordHash: text('password_hash').notNull(),
   // Account balance in US cents. New users get a small free trial credit.
   balanceCents: integer('balance_cents').notNull().default(500),
-  // Internal / test accounts: never blocked on balance and never charged.
-  // Usage is still logged, since these calls do cost us money upstream.
+  // Internal / test accounts: never blocked on balance and never charged, and
+  // exempt from the account model ceiling below. Usage is still logged, since
+  // these calls do cost us money upstream.
   unlimited: boolean('unlimited').notNull().default(false),
+  // Models this account may call at all — the ceiling we set, which the
+  // customer cannot raise. NULL means unrestricted. Set via SQL; there is no
+  // self-service UI for it, by design.
+  allowedModels: text('allowed_models').array(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 })
 

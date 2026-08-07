@@ -5,7 +5,7 @@ import { useI18n } from '../i18n/I18nContext'
 import Reveal from '../components/Reveal'
 import { useToast } from '../components/Toast'
 import ModelPicker from '../components/ModelPicker'
-import { isLoggedIn, listKeys, createKey, revokeKey, type ApiKey } from '../lib/auth'
+import { isLoggedIn, listKeys, createKey, revokeKey, fetchMe, type ApiKey } from '../lib/auth'
 import { FAMILIES, modelsOf, type Family } from '../lib/models'
 import './pages.css'
 
@@ -39,6 +39,7 @@ export default function ApiDocs() {
   const [newKey, setNewKey] = useState<string | null>(null)
   const [pickerOpen, setPickerOpen] = useState(false)
   const [allowedModels, setAllowedModels] = useState<string[]>([])
+  const [accountScope, setAccountScope] = useState<string[] | null>(null)
   useEffect(() => { document.title = 'ECOAPI - One Key Access Every Top LLM' }, [])
   const [newName, setNewName] = useState('')
   const [copied, setCopied] = useState<string | null>(null)
@@ -48,6 +49,11 @@ export default function ApiDocs() {
     setCopied(id)
     setTimeout(() => setCopied(null), 1500)
   }
+
+  useEffect(() => {
+    if (!isLoggedIn()) return
+    fetchMe().then((u) => setAccountScope(u?.allowedModels ?? null)).catch(() => {})
+  }, [])
 
   useEffect(() => {
     if (tab !== 'keys' || !isLoggedIn()) return
@@ -138,7 +144,7 @@ export default function ApiDocs() {
                           </button>
                           <button className="btn-grad" onClick={handleCreate} disabled={creating}>+ {creating ? '...' : t('api.create')}</button>
                         </div>
-                        {pickerOpen && <ModelPicker value={allowedModels} onChange={setAllowedModels} />}
+                        {pickerOpen && <ModelPicker value={allowedModels} onChange={setAllowedModels} accountScope={accountScope} />}
                         <div className="key-warn"><WarnIcon /> {t('api.keyWarn')}</div>
 
                         {newKey && (
