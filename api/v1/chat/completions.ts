@@ -3,11 +3,29 @@
 // both suppliers expose this protocol, so we pick one by model name.
 //
 // Same mechanics as the other two endpoints (validate ek- key, check balance,
-// swap in the supplier key, stream through with metering), plus one wrinkle:
-// this protocol omits token usage from streamed responses unless the request
-// opts in via stream_options.include_usage. Clients don't set it, so we inject
-// it — without it we'd never bill for a streamed call while still paying the
-// supplier for it.
+// swap in the supplier key, stream through with metering), plus two wrinkles.
+//
+// One: this protocol omits token usage from streamed responses unless the
+// request opts in via stream_options.include_usage. Clients don't set it, so we
+// inject it — without it we'd never bill for a streamed call while still paying
+// the supplier for it.
+//
+// Two: supplier A takes about 19 seconds to produce a first token here, and
+// Vercel's edge gateway gives a function 25 seconds to produce a first byte
+// (after which it may stream for up to 300). That is a 6-second margin on a
+// number that moves with their load, so requests crossed it and died as 504s.
+//
+// They do stream once they start. Measured end to end through this proxy: first
+// byte at 19.40s, response complete at 213.48s — 91% of the wall clock spent
+// streaming. An earlier measurement suggested they buffered instead (17.51s to
+// first byte, 18.80s total), but that prompt had been mangled by an ascii
+// round-trip, so the model answered in one line. The slow first token is the
+// real problem; the buffering was an artifact.
+//
+// So for streaming requests we let them have almost the whole budget, and only
+// if it is nearly spent do we open the SSE response ourselves and hold it with
+// comment frames. That starts the gateway's clock and hands the upstream the
+// full 300-second streaming window instead of the 25-second one.
 
 import { and, eq, isNull, sql } from 'drizzle-orm'
 import { db, apiKeys, users, usageLogs } from '../../../db/index.js'
@@ -16,6 +34,50 @@ import { computeCostCents } from '../../../lib/pricing.js'
 import { isModelAllowed } from '../../../lib/modelAccess.js'
 
 export const config = { runtime: 'edge' }
+
+// How long we let the upstream answer on its own before we commit to a 200 and
+// start holding the connection open.
+//
+// Committing costs error fidelity: once we have promised 200, a failure can only
+// reach the client as an in-stream frame, and a client that retries on 429 or
+// 503 will not see a status to retry on. So we want to commit as late as we
+// safely can, not as early as possible — a request answered at 19s keeps full
+// fidelity and loses nothing by our waiting.
+//
+// 20s sits past supplier A's observed ~19s first token and leaves Vercel's 25s
+// cutoff several seconds to spare, most of which our own DB lookups have already
+// spent by this point. Lower it if the cutoff ever proves tighter than 25s.
+const FIRST_BYTE_GRACE_MS = Number(process.env.FIRST_BYTE_GRACE_MS) || 20_000
+
+// Cadence of the comment frames we send while waiting. SSE comments (lines
+// starting with ":") are ignored by every conforming parser, including the ones
+// in the OpenAI SDKs and the Vercel AI SDK.
+const KEEPALIVE_INTERVAL_MS = 10_000
+
+// How long we wait for the upstream's response HEADERS before giving up. Once
+// they arrive the body may take as long as it likes — this is not a cap on
+// generation time.
+//
+// Holding the connection open means we now wait as long as the supplier does,
+// and they have been observed hanging for 239s before answering 503. Vercel
+// cuts a streaming function off at 300s, which would leave the client with a
+// truncated stream and nothing explaining it. Stopping first turns that into a
+// stated error with time to spare. Override with UPSTREAM_DEADLINE_MS.
+const UPSTREAM_DEADLINE_MS = Number(process.env.UPSTREAM_DEADLINE_MS) || 270_000
+
+// Raised when the upstream blew UPSTREAM_DEADLINE_MS, so the three places that
+// report a failed call can tell it apart from a connection that never formed.
+class UpstreamDeadline extends Error {}
+
+function upstreamFailure(e: unknown): string {
+  return e instanceof UpstreamDeadline ? e.message : `Upstream unreachable: ${e}`
+}
+
+// Outcome of racing the upstream against the grace timer.
+type Raced =
+  | { kind: 'response'; response: Response }
+  | { kind: 'error'; error: unknown }
+  | { kind: 'timeout' }
 
 // Supplier A carries Claude and GPT; everything else (Gemini, DeepSeek, Qwen)
 // comes from supplier B.
@@ -106,7 +168,7 @@ export default async function handler(req: Request): Promise<Response> {
   const supplierKey = keyFor(route.supplier)
   if (!supplierKey) return err(500, 'api_error', 'Upstream key not configured')
 
-  const body = withUsageReporting(raw)
+  const { body, stream } = withUsageReporting(raw)
 
   const fwd: Record<string, string> = {
     'content-type': 'application/json',
@@ -115,13 +177,82 @@ export default async function handler(req: Request): Promise<Response> {
   const accept = req.headers.get('accept')
   if (accept) fwd.accept = accept
 
-  let upstream: Response
-  try {
-    upstream = await fetch(route.upstream, { method: 'POST', headers: fwd, body })
-  } catch (e) {
-    return err(502, 'api_error', `Upstream unreachable: ${e}`)
+  const ctl = new AbortController()
+  let expired = false
+  const deadline = setTimeout(() => {
+    expired = true
+    ctl.abort()
+  }, UPSTREAM_DEADLINE_MS)
+
+  const pending = fetch(route.upstream, {
+    method: 'POST',
+    headers: fwd,
+    body,
+    signal: ctl.signal,
+  })
+    .catch((e) => {
+      // An abort surfaces as a bare AbortError, which tells nobody anything.
+      if (expired) {
+        throw new UpstreamDeadline(
+          `Upstream sent no response within ${UPSTREAM_DEADLINE_MS / 1000}s`,
+        )
+      }
+      throw e
+    })
+    .finally(() => clearTimeout(deadline))
+
+  // Non-streaming callers have nothing to hold open — they are waiting for one
+  // complete JSON body either way, so the gateway budget is all they get.
+  if (!stream) {
+    let upstream: Response
+    try {
+      upstream = await pending
+    } catch (e) {
+      return err(502, 'api_error', upstreamFailure(e))
+    }
+    return forward(upstream, keyId, userId, model, unlimited)
   }
 
+  // Streaming: give the upstream its grace period, and fall back to holding the
+  // connection open ourselves if it hasn't answered by then.
+  const settled: Raced = await Promise.race([
+    pending.then(
+      (response): Raced => ({ kind: 'response', response }),
+      (error): Raced => ({ kind: 'error', error }),
+    ),
+    delay(FIRST_BYTE_GRACE_MS).then((): Raced => ({ kind: 'timeout' })),
+  ])
+
+  if (settled.kind === 'error') {
+    return err(502, 'api_error', upstreamFailure(settled.error))
+  }
+  if (settled.kind === 'response') {
+    return forward(settled.response, keyId, userId, model, unlimited)
+  }
+
+  return new Response(holdOpenSSE(pending, keyId, userId, model, unlimited), {
+    status: 200,
+    headers: {
+      'content-type': 'text/event-stream; charset=utf-8',
+      'cache-control': 'no-cache, no-transform',
+      'access-control-allow-origin': '*',
+    },
+  })
+}
+
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+// The original pass-through: real status code, upstream's content-type, body
+// metered on its way to the client.
+function forward(
+  upstream: Response,
+  keyId: string,
+  userId: string,
+  model: string,
+  unlimited: boolean,
+): Response {
   const out = new Headers({ 'access-control-allow-origin': '*' })
   const ct = upstream.headers.get('content-type')
   if (ct) out.set('content-type', ct)
@@ -134,6 +265,128 @@ export default async function handler(req: Request): Promise<Response> {
   return new Response(metered, { status: upstream.status, headers: out })
 }
 
+// Emits a byte immediately — which is the whole point, it starts Vercel's
+// stream clock — then comment frames until the upstream produces something,
+// then the upstream's own bytes.
+//
+// The cost of committing early is that we have already promised HTTP 200 by the
+// time a late upstream failure arrives, so those surface as an in-stream error
+// frame instead of a status code. That only applies to failures slower than the
+// grace period; fast rejections (401, 403, 400) still come back as themselves.
+function holdOpenSSE(
+  pending: Promise<Response>,
+  keyId: string,
+  userId: string,
+  model: string,
+  unlimited: boolean,
+): ReadableStream<Uint8Array> {
+  const enc = new TextEncoder()
+  const { readable, writable } = new TransformStream<Uint8Array, Uint8Array>()
+  const writer = writable.getWriter()
+
+  // Fire-and-forget: a client that has already hung up makes these reject, and
+  // there is nothing useful to do about that beyond stopping.
+  const push = (s: string) => writer.write(enc.encode(s)).catch(() => {})
+
+  push(': ecoapi connected\n\n')
+  const beat = setInterval(() => push(': ecoapi waiting for upstream\n\n'), KEEPALIVE_INTERVAL_MS)
+
+  const drain = async () => {
+    let upstream: Response
+    try {
+      upstream = await pending
+    } catch (e) {
+      clearInterval(beat)
+      push(sseError('api_error', upstreamFailure(e)))
+      await writer.close().catch(() => {})
+      return
+    }
+    clearInterval(beat)
+
+    if (!upstream.ok) {
+      const detail = await upstream.text().catch(() => '')
+      push(sseError('api_error', `Upstream ${upstream.status}: ${detail.slice(0, 500)}`))
+      await writer.close().catch(() => {})
+      return
+    }
+    if (!upstream.body) {
+      push(sseError('api_error', `Upstream ${upstream.status} returned no body`))
+      await writer.close().catch(() => {})
+      return
+    }
+
+    const ct = upstream.headers.get('content-type') || ''
+
+    // The upstream ignored `stream: true` and sent one complete JSON body. We
+    // are already framed as SSE, so re-frame it as a single chunk rather than
+    // handing the client a shape its parser cannot read.
+    if (!ct.includes('text/event-stream')) {
+      const text = await upstream.text().catch(() => '')
+      push(reframeAsChunk(text, model))
+      push('data: [DONE]\n\n')
+      // Bill before closing, the way usageMeter's flush() does: once the
+      // response ends the runtime is free to tear the function down, and a
+      // write started after that point is a call we served but never charged.
+      const usage = parseUsage(text)
+      if (usage) await recordUsage(keyId, userId, model, unlimited, usage.input, usage.output)
+      await writer.close().catch(() => {})
+      return
+    }
+
+    writer.releaseLock()
+    await upstream.body
+      .pipeThrough(usageMeter(keyId, userId, model, ct, unlimited))
+      .pipeTo(writable)
+      .catch(() => {})
+  }
+
+  void drain()
+  return readable
+}
+
+// OpenAI reports mid-stream failures as a data frame carrying `error` and then
+// closes without [DONE]; clients treat a missing [DONE] as a failed stream,
+// which is exactly what this is.
+function sseError(type: string, message: string): string {
+  return `data: ${JSON.stringify({ error: { type, message } })}\n\n`
+}
+
+// Turn a complete chat.completion into the one chat.completion.chunk a
+// streaming client expects.
+function reframeAsChunk(text: string, model: string): string {
+  let obj: any
+  try {
+    obj = JSON.parse(text)
+  } catch {
+    return sseError('api_error', `Upstream sent an unreadable body: ${text.slice(0, 500)}`)
+  }
+  if (obj?.error) {
+    return `data: ${JSON.stringify({ error: obj.error })}\n\n`
+  }
+  const choice = obj?.choices?.[0]
+  const delta: Record<string, unknown> = { role: 'assistant', content: choice?.message?.content ?? '' }
+  if (choice?.message?.tool_calls) delta.tool_calls = choice.message.tool_calls
+  const chunk = {
+    id: obj?.id ?? 'chatcmpl-ecoapi',
+    object: 'chat.completion.chunk',
+    created: obj?.created ?? Math.floor(Date.now() / 1000),
+    model: obj?.model ?? model,
+    choices: [{ index: 0, delta, finish_reason: choice?.finish_reason ?? 'stop' }],
+    ...(obj?.usage ? { usage: obj.usage } : {}),
+  }
+  return `data: ${JSON.stringify(chunk)}\n\n`
+}
+
+function parseUsage(text: string): { input: number; output: number } | null {
+  try {
+    const u = JSON.parse(text)?.usage
+    if (!u) return null
+    return { input: u.prompt_tokens ?? u.input_tokens ?? 0, output: u.completion_tokens ?? u.output_tokens ?? 0 }
+  } catch {
+    return null
+  }
+}
+
 function parseModel(body: string): string {
   try {
     return (JSON.parse(body).model as string) || 'unknown'
@@ -142,20 +395,46 @@ function parseModel(body: string): string {
   }
 }
 
-// Ask the upstream to report token usage on streamed responses. Only touches
-// a streaming request that hasn't already opted in; anything unparseable is
-// forwarded byte-for-byte.
-function withUsageReporting(raw: string): string {
+// Ask the upstream to report token usage on streamed responses, and tell the
+// caller whether this is a streaming request at all. Only touches a streaming
+// request that hasn't already opted in; anything unparseable is forwarded
+// byte-for-byte.
+function withUsageReporting(raw: string): { body: string; stream: boolean } {
   try {
     const obj = JSON.parse(raw)
-    if (obj?.stream === true && obj?.stream_options?.include_usage !== true) {
+    const stream = obj?.stream === true
+    if (stream && obj?.stream_options?.include_usage !== true) {
       obj.stream_options = { ...obj.stream_options, include_usage: true }
-      return JSON.stringify(obj)
+      return { body: JSON.stringify(obj), stream }
     }
+    return { body: raw, stream }
   } catch {
     // not JSON — leave it alone and let the upstream reject it
+    return { body: raw, stream: false }
   }
-  return raw
+}
+
+async function recordUsage(
+  keyId: string,
+  userId: string,
+  model: string,
+  unlimited: boolean,
+  inputTokens: number,
+  outputTokens: number,
+): Promise<void> {
+  if (inputTokens <= 0 && outputTokens <= 0) return
+  const costCents = computeCostCents(model, inputTokens, outputTokens)
+  try {
+    await db.insert(usageLogs).values({ keyId, model, inputTokens, outputTokens, costCents })
+    if (costCents > 0 && !unlimited) {
+      await db
+        .update(users)
+        .set({ balanceCents: sql`${users.balanceCents} - ${costCents}` })
+        .where(eq(users.id, userId))
+    }
+  } catch {
+    // never fail the user's request because logging failed
+  }
 }
 
 // Forwards every chunk untouched while reading usage from the OpenAI Chat
@@ -209,20 +488,7 @@ function usageMeter(keyId: string, userId: string, model: string, ct: string | n
           // ignore
         }
       }
-      if (inputTokens > 0 || outputTokens > 0) {
-        const costCents = computeCostCents(model, inputTokens, outputTokens)
-        try {
-          await db.insert(usageLogs).values({ keyId, model, inputTokens, outputTokens, costCents })
-          if (costCents > 0 && !unlimited) {
-            await db
-              .update(users)
-              .set({ balanceCents: sql`${users.balanceCents} - ${costCents}` })
-              .where(eq(users.id, userId))
-          }
-        } catch {
-          // never fail the user's request because logging failed
-        }
-      }
+      await recordUsage(keyId, userId, model, unlimited, inputTokens, outputTokens)
     },
   })
 }
