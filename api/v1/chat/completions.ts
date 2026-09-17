@@ -10,14 +10,20 @@
 // inject it — without it we'd never bill for a streamed call while still paying
 // the supplier for it.
 //
-// Two: supplier A does not stream on this path. Measured against them directly,
-// a 500-word answer took 17.51s to first byte and 18.80s in total — silence,
-// then the whole answer at once. Vercel's edge gateway gives a function 25
-// seconds to produce its first byte (after which it may stream for up to 300),
-// so any answer longer than that 500-word probe blew the budget and the client
-// got a 504 instead of its reply. We therefore open the SSE response ourselves
-// once a grace period lapses and hold it with comment frames until the upstream
-// finally speaks. See scripts/probe-stream.mjs for the measurement.
+// Two: supplier A is slow to first byte here, and Vercel's edge gateway gives a
+// function 25 seconds to produce one (after which it may stream for up to 300).
+// Answers that needed longer than that got the client a 504 instead of a reply.
+//
+// One direct measurement had a 500-word answer at 17.51s to first byte and
+// 18.80s in total — silence, then everything at once, which looks like they
+// buffer rather than stream on this route. That is unconfirmed: a later probe of
+// their Anthropic-native endpoint hung for 239s and returned 503, so they also
+// have spells of being slow everywhere, and one sample cannot separate the two.
+// scripts/probe-stream.mjs settles it once they are healthy.
+//
+// The mitigation does not depend on which it is. For streaming requests we open
+// the SSE response ourselves once a grace period lapses and hold it with comment
+// frames, which starts the gateway's clock whatever is slow upstream.
 
 import { and, eq, isNull, sql } from 'drizzle-orm'
 import { db, apiKeys, users, usageLogs } from '../../../db/index.js'
