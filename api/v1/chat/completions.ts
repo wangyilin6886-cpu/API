@@ -38,6 +38,25 @@ const FIRST_BYTE_GRACE_MS = 5_000
 // in the OpenAI SDKs and the Vercel AI SDK.
 const KEEPALIVE_INTERVAL_MS = 10_000
 
+// How long we wait for the upstream's response HEADERS before giving up. Once
+// they arrive the body may take as long as it likes — this is not a cap on
+// generation time.
+//
+// Holding the connection open means we now wait as long as the supplier does,
+// and they have been observed hanging for 239s before answering 503. Vercel
+// cuts a streaming function off at 300s, which would leave the client with a
+// truncated stream and nothing explaining it. Stopping first turns that into a
+// stated error with time to spare. Override with UPSTREAM_DEADLINE_MS.
+const UPSTREAM_DEADLINE_MS = Number(process.env.UPSTREAM_DEADLINE_MS) || 270_000
+
+// Raised when the upstream blew UPSTREAM_DEADLINE_MS, so the three places that
+// report a failed call can tell it apart from a connection that never formed.
+class UpstreamDeadline extends Error {}
+
+function upstreamFailure(e: unknown): string {
+  return e instanceof UpstreamDeadline ? e.message : `Upstream unreachable: ${e}`
+}
+
 // Outcome of racing the upstream against the grace timer.
 type Raced =
   | { kind: 'response'; response: Response }
@@ -142,7 +161,29 @@ export default async function handler(req: Request): Promise<Response> {
   const accept = req.headers.get('accept')
   if (accept) fwd.accept = accept
 
-  const pending = fetch(route.upstream, { method: 'POST', headers: fwd, body })
+  const ctl = new AbortController()
+  let expired = false
+  const deadline = setTimeout(() => {
+    expired = true
+    ctl.abort()
+  }, UPSTREAM_DEADLINE_MS)
+
+  const pending = fetch(route.upstream, {
+    method: 'POST',
+    headers: fwd,
+    body,
+    signal: ctl.signal,
+  })
+    .catch((e) => {
+      // An abort surfaces as a bare AbortError, which tells nobody anything.
+      if (expired) {
+        throw new UpstreamDeadline(
+          `Upstream sent no response within ${UPSTREAM_DEADLINE_MS / 1000}s`,
+        )
+      }
+      throw e
+    })
+    .finally(() => clearTimeout(deadline))
 
   // Non-streaming callers have nothing to hold open — they are waiting for one
   // complete JSON body either way, so the gateway budget is all they get.
@@ -151,7 +192,7 @@ export default async function handler(req: Request): Promise<Response> {
     try {
       upstream = await pending
     } catch (e) {
-      return err(502, 'api_error', `Upstream unreachable: ${e}`)
+      return err(502, 'api_error', upstreamFailure(e))
     }
     return forward(upstream, keyId, userId, model, unlimited)
   }
@@ -167,7 +208,7 @@ export default async function handler(req: Request): Promise<Response> {
   ])
 
   if (settled.kind === 'error') {
-    return err(502, 'api_error', `Upstream unreachable: ${settled.error}`)
+    return err(502, 'api_error', upstreamFailure(settled.error))
   }
   if (settled.kind === 'response') {
     return forward(settled.response, keyId, userId, model, unlimited)
@@ -240,7 +281,7 @@ function holdOpenSSE(
       upstream = await pending
     } catch (e) {
       clearInterval(beat)
-      push(sseError('api_error', `Upstream unreachable: ${e}`))
+      push(sseError('api_error', upstreamFailure(e)))
       await writer.close().catch(() => {})
       return
     }
