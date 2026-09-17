@@ -162,16 +162,30 @@ async function probe(name) {
   }
 }
 
-// The verdict. A stream is real when the text keeps coming for a meaningful
-// share of the wall clock; it is buffered when the output window is a blip at
-// the end of a long silence.
-function verdict(r) {
+// Two independent questions, which an earlier version of this script ran
+// together and so called a plainly real stream "inconclusive":
+//
+//   SHAPE    does the text arrive over the wall clock, or all at the end?
+//   LATENCY  how long until the first token, against Vercel's 25s budget?
+//
+// A stream can be real and still be far too slow to start, which is exactly
+// what supplier A turned out to be doing. Report them separately.
+function shape(r) {
   if (r.tFirstToken === null) return 'NO TOKENS — nothing decodable arrived'
-  const window = r.tLastToken - r.tFirstToken
-  const spread = r.tTotal > 0 ? window / r.tTotal : 0
-  if (r.tFirstToken < 3 && spread > 0.4) return 'REAL STREAM'
-  if (spread < 0.25 && r.tFirstToken > 5) return 'BUFFERED — upstream withheld the answer until it was complete'
-  return 'INCONCLUSIVE — rerun with a longer prompt'
+  const spread = r.tTotal > 0 ? (r.tLastToken - r.tFirstToken) / r.tTotal : 0
+  if (spread > 0.4) return `REAL STREAM — output spread over ${(spread * 100).toFixed(0)}% of the wall clock`
+  if (spread < 0.25) return `BUFFERED — the whole answer landed in the last ${(spread * 100).toFixed(0)}% of the wall clock`
+  return `UNCLEAR — ${(spread * 100).toFixed(0)}% spread; rerun asking for a longer answer`
+}
+
+// Vercel kills an edge function that has produced no byte in 25s. What matters
+// is not whether a probe passed but how much room it had left.
+function latency(r) {
+  if (r.tFirstByte === null) return 'no first byte'
+  const left = 25 - r.tFirstByte
+  if (r.tFirstByte < 5) return `HEALTHY — first byte at ${r.tFirstByte.toFixed(1)}s`
+  if (left > 0) return `AT RISK — first byte at ${r.tFirstByte.toFixed(1)}s, ${left.toFixed(1)}s of the 25s budget left; a busier upstream crosses it`
+  return `OVER BUDGET — first byte at ${r.tFirstByte.toFixed(1)}s, past Vercel's 25s cutoff`
 }
 
 // Name the party that produced a failure, which the status code alone does not.
@@ -209,11 +223,8 @@ function report(r) {
     const window = r.tLastToken - r.tFirstToken
     console.log(`  output window ${window.toFixed(2)}s (${((window / r.tTotal) * 100).toFixed(0)}% of the wall clock)`)
   }
-  // Vercel's edge gateway gives a function 25s to produce its first byte.
-  if (r.tFirstByte > 15) {
-    console.log(`  ⚠ first byte at ${r.tFirstByte.toFixed(1)}s — only ${(25 - r.tFirstByte).toFixed(1)}s of Vercel's 25s budget left`)
-  }
-  console.log(`  VERDICT: ${verdict(r)}`)
+  console.log(`  SHAPE:   ${shape(r)}`)
+  console.log(`  LATENCY: ${latency(r)}`)
 }
 
 const requested = process.argv.slice(2)

@@ -10,20 +10,22 @@
 // inject it — without it we'd never bill for a streamed call while still paying
 // the supplier for it.
 //
-// Two: supplier A is slow to first byte here, and Vercel's edge gateway gives a
-// function 25 seconds to produce one (after which it may stream for up to 300).
-// Answers that needed longer than that got the client a 504 instead of a reply.
+// Two: supplier A takes about 19 seconds to produce a first token here, and
+// Vercel's edge gateway gives a function 25 seconds to produce a first byte
+// (after which it may stream for up to 300). That is a 6-second margin on a
+// number that moves with their load, so requests crossed it and died as 504s.
 //
-// One direct measurement had a 500-word answer at 17.51s to first byte and
-// 18.80s in total — silence, then everything at once, which looks like they
-// buffer rather than stream on this route. That is unconfirmed: a later probe of
-// their Anthropic-native endpoint hung for 239s and returned 503, so they also
-// have spells of being slow everywhere, and one sample cannot separate the two.
-// scripts/probe-stream.mjs settles it once they are healthy.
+// They do stream once they start. Measured end to end through this proxy: first
+// byte at 19.40s, response complete at 213.48s — 91% of the wall clock spent
+// streaming. An earlier measurement suggested they buffered instead (17.51s to
+// first byte, 18.80s total), but that prompt had been mangled by an ascii
+// round-trip, so the model answered in one line. The slow first token is the
+// real problem; the buffering was an artifact.
 //
-// The mitigation does not depend on which it is. For streaming requests we open
-// the SSE response ourselves once a grace period lapses and hold it with comment
-// frames, which starts the gateway's clock whatever is slow upstream.
+// So for streaming requests we let them have almost the whole budget, and only
+// if it is nearly spent do we open the SSE response ourselves and hold it with
+// comment frames. That starts the gateway's clock and hands the upstream the
+// full 300-second streaming window instead of the 25-second one.
 
 import { and, eq, isNull, sql } from 'drizzle-orm'
 import { db, apiKeys, users, usageLogs } from '../../../db/index.js'
@@ -34,10 +36,18 @@ import { isModelAllowed } from '../../../lib/modelAccess.js'
 export const config = { runtime: 'edge' }
 
 // How long we let the upstream answer on its own before we commit to a 200 and
-// start holding the connection open. Comfortably past a real stream's first
-// token (1-2s) and far short of Vercel's 25s cutoff, so a prompt failure still
-// reaches the client as a real HTTP status code rather than an in-stream error.
-const FIRST_BYTE_GRACE_MS = 5_000
+// start holding the connection open.
+//
+// Committing costs error fidelity: once we have promised 200, a failure can only
+// reach the client as an in-stream frame, and a client that retries on 429 or
+// 503 will not see a status to retry on. So we want to commit as late as we
+// safely can, not as early as possible — a request answered at 19s keeps full
+// fidelity and loses nothing by our waiting.
+//
+// 20s sits past supplier A's observed ~19s first token and leaves Vercel's 25s
+// cutoff several seconds to spare, most of which our own DB lookups have already
+// spent by this point. Lower it if the cutoff ever proves tighter than 25s.
+const FIRST_BYTE_GRACE_MS = Number(process.env.FIRST_BYTE_GRACE_MS) || 20_000
 
 // Cadence of the comment frames we send while waiting. SSE comments (lines
 // starting with ":") are ignored by every conforming parser, including the ones
