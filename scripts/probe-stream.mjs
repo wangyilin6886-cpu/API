@@ -97,9 +97,20 @@ async function probe(name) {
   })
   const tHeaders = since()
 
+  // Who produced this response matters as much as what it says. Vercel stamps
+  // its own failures; a body we forwarded from the supplier carries neither
+  // header, and the firewall's challenge page is HTML rather than an API error
+  // at all.
+  const vercel = {
+    error: res.headers.get('x-vercel-error'),
+    id: res.headers.get('x-vercel-id'),
+    cache: res.headers.get('x-vercel-cache'),
+  }
+
   if (!res.ok || !res.body) {
     const detail = await res.text().catch(() => '')
-    return { name, status: res.status, tHeaders, error: detail.slice(0, 600) }
+    const challenge = detail.includes('Vercel Security Checkpoint')
+    return { name, status: res.status, tHeaders, vercel, challenge, error: detail.slice(0, 600) }
   }
 
   const decoder = new TextDecoder()
@@ -137,6 +148,7 @@ async function probe(name) {
   return {
     name,
     status: res.status,
+    vercel,
     contentType: res.headers.get('content-type'),
     tHeaders,
     tFirstByte,
@@ -162,11 +174,28 @@ function verdict(r) {
   return 'INCONCLUSIVE — rerun with a longer prompt'
 }
 
+// Name the party that produced a failure, which the status code alone does not.
+function attribute(r) {
+  if (r.challenge) {
+    return 'OUR VERCEL FIREWALL — a browser challenge page, the request never reached our function'
+  }
+  if (r.vercel?.error) {
+    return `VERCEL — ${r.vercel.error}, our function was cut off before it answered`
+  }
+  if (r.status >= 500) {
+    return 'UPSTREAM — we forwarded the supplier\'s own failure (no x-vercel-error on it)'
+  }
+  return null
+}
+
 function report(r) {
   console.log(`\n=== ${r.name} ===`)
+  if (r.vercel?.id) console.log(`  x-vercel-id: ${r.vercel.id}`)
   if (r.error !== undefined) {
     console.log(`  HTTP ${r.status} after ${r.tHeaders.toFixed(2)}s`)
-    console.log(`  body: ${r.error}`)
+    const who = attribute(r)
+    if (who) console.log(`  BLAME: ${who}`)
+    console.log(`  body: ${r.challenge ? '(HTML challenge page, suppressed)' : r.error}`)
     return
   }
   console.log(`  HTTP ${r.status}  ${r.contentType || '(no content-type)'}`)
