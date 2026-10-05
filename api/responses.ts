@@ -1,5 +1,5 @@
 // OpenAI Responses API proxy — the endpoint Codex talks to.
-// Codex config: base_url = 'https://ecoapi.ai/api', wire_api = 'responses'
+// Codex config: base_url = 'https://www.ecoapi.ai/api', wire_api = 'responses'
 // → it POSTs to {base}/responses, i.e. this function.
 //
 // Same core mechanics as api/v1/messages.ts (validate ek- key, check balance,
@@ -16,7 +16,10 @@ import { isModelAllowed } from '../lib/modelAccess.js'
 
 export const config = { runtime: 'edge' }
 
-const UPSTREAM = 'https://agent-on.com/gateway/responses'
+// Versioned like the other two upstreams (/gateway/v1/messages,
+// /gateway/v1/chat/completions). The unversioned /gateway/responses now
+// answers 404, which this proxy passed straight through to Codex.
+const UPSTREAM = 'https://agent-on.com/gateway/v1/responses'
 
 export default async function handler(req: Request): Promise<Response> {
   if (req.method === 'OPTIONS') {
